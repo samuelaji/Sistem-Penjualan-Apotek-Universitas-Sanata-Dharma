@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->constrained('users');
             $table->dateTime('waktu_mulai');
             $table->dateTime('waktu_selesai');
+            $table->decimal('saldo_awal');
+            $table->decimal('saldo_akhir');
             $table->timestamps();
         });
     }
