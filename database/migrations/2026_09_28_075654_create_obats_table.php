@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('obat', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('id_obat')->primary(); // String & Primary Key
+            $table->string('nama_obat');          // String
+            $table->string('kategori');           // String
+            $table->integer('stok');              // Integer
+            $table->double('harga');              // Double
+            $table->date('tgl_kadaluwarsa');      // Date
+            $table->timestamps();                 // created_at & updated_at bawaan laravel
         });
     }
 
@@ -24,4 +29,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('obat');
     }
+
+
 };
