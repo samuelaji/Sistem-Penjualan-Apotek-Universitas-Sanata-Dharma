@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pasiens', function (Blueprint $table) {
-            $table->string('id_pasien')->primary(); // String & Primary Key
-            $table->string('nama_pasien');          // String
-            $table->string('tipe_pasien');          // String
-            $table->string('no_identitas');         // String
+        Schema::create('staff', function (Blueprint $table) {
+            $table->id('id_pengguna');
+            $table->string('nama', 100);
+            $table->string('role_akses', 20);
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pasiens');
+        Schema::dropIfExists('staff');
     }
 };

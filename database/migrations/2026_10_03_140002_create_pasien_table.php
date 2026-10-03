@@ -8,16 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('stafs', function (Blueprint $table) {
-            $table->string('id_staf')->primary();
-            $table->string('nama_staf');
-            $table->enum('role_akses', ['kasir', 'apoteker', 'manajemen']); // Membedakan hak akses di 1 kolom
+        Schema::create('pasien', function (Blueprint $table) {
+            $table->id('id_pasien');
+            $table->string('nama_pasien', 100);
+            $table->string('tipe_pasien', 20);
+            $table->string('no_identitas', 20);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('stafs');
+        Schema::dropIfExists('pasien');
     }
 };

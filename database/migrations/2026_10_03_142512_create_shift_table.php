@@ -6,27 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('shifts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('id_pengguna')->constrained('users');
+        Schema::create('shift', function (Blueprint $table) {
+            $table->id('id_shift');
+            $table->foreignId('id_pengguna')->constrained('staff', 'id_pengguna')->onDelete('cascade');
             $table->dateTime('waktu_mulai');
             $table->dateTime('waktu_selesai');
-            $table->decimal('saldo_awal');
-            $table->decimal('saldo_akhir');
+            $table->decimal('saldo_awal', 15, 2);
+            $table->decimal('saldo_akhir', 15, 2);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('shifts');
+        Schema::dropIfExists('shift');
     }
 };
