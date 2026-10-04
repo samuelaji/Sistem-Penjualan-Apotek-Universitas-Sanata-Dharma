@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id('id_resep');
             $table->string('nama_dokter', 100);
             $table->string('nama_klinik', 100);
-            $table->date('tgl_resep');
+            $table->date('tanggal_resep');
             $table->timestamps();
         });
     }

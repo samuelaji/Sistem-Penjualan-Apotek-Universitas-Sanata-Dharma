@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('kategori', 50);
             $table->integer('stok');
             $table->decimal('harga', 15, 2);
-            $table->date('tgl_kadaluwarsa');
+            $table->date('tanggal_kadaluwarsa');
             $table->timestamps();
         });
     }

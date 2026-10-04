@@ -18,6 +18,6 @@ class Obat extends Model
         'kategori',
         'stok',
         'harga',
-        'tgl_kadaluwarsa',
+        'tanggal_kadaluwarsa',
     ];
 }

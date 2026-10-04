@@ -15,6 +15,6 @@ class Resep extends Model
     protected $fillable = [
         'nama_dokter',
         'nama_klinik',
-        'tgl_resep',
+        'tanggal_resep',
     ];
 }

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('id_shift')->constrained('shift', 'id_shift')->onDelete('cascade');
             $table->foreignId('id_pasien')->constrained('pasien', 'id_pasien')->onDelete('cascade');
             $table->foreignId('id_resep')->constrained('resep', 'id_resep')->onDelete('cascade');
-            $table->dateTime('tgl_transaksi');
+            $table->dateTime('tanggal_transaksi');
             $table->decimal('total_harga', 15, 2);
             $table->decimal('nominal_bayar', 15, 2);
             $table->timestamps();

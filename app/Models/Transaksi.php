@@ -16,7 +16,7 @@ class Transaksi extends Model
         'id_shift',
         'id_pasien',
         'id_resep',
-        'tgl_transaksi',
+        'tanggal_transaksi',
         'total_harga',
         'nominal_bayar',
     ];
