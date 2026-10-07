@@ -20,4 +20,14 @@ class DetailTransaksi extends Model
         'jumlah_beli',
         'subtotal',
     ];
+
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'id_transaksi', 'id_transaksi');
+    }
+
+    public function obat()
+    {
+        return $this->belongsTo(Obat::class, 'id_obat', 'id_obat');
+    }
 }
