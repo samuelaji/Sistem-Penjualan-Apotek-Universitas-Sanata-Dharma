@@ -20,4 +20,8 @@ class Obat extends Model
         'harga',
         'tanggal_kadaluwarsa',
     ];
+
+    puclic function detail_transaksi(){
+        return $this->hasMany(DetailTransaksi::class, 'id_transaksi', 'id_transaksi');
+}
 }
