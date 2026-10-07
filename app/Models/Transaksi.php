@@ -20,4 +20,21 @@ class Transaksi extends Model
         'total_harga',
         'nominal_bayar',
     ];
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'id_shift', 'id_shift');
+    }
+
+    public function pasien(){
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien');
+    }
+
+    public function resep(){
+        return $this->belongsTo(Resep::class, 'id_resep', 'id_resep');
+    }
+
+    public function detail_transaksi(){
+        return $this->hasMany(DetailTransaksi::class, 'id_transaksi', 'id_transaksi');
+    }
 }
