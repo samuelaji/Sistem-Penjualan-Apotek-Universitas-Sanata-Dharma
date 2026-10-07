@@ -21,8 +21,8 @@ class Transaksi extends Model
         'nominal_bayar',
     ];
 
-    public function shift()
-    {
+    public function shift(){
+
         return $this->belongsTo(Shift::class, 'id_shift', 'id_shift');
     }
 
@@ -37,4 +37,5 @@ class Transaksi extends Model
     public function detail_transaksi(){
         return $this->hasMany(DetailTransaksi::class, 'id_transaksi', 'id_transaksi');
     }
+
 }

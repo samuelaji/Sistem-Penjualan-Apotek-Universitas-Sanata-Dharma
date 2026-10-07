@@ -17,4 +17,9 @@ class Pasien extends Model
         'tipe_pasien',
         'no_identitas',
     ];
+
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'id_pasien', 'id_pasien');
+    }
 }
