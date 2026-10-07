@@ -20,4 +20,16 @@ class Obat extends Model
         'harga',
         'tanggal_kadaluwarsa',
     ];
-}
+
+    public function staff()
+    {
+        return $this->belongsTo(related: staff::class, foreignKey:'id_pengguna', ownerKey:'id_pengguna');
+    }
+    
+    public function detailTransaksi()
+    {
+        return $this->hasMany(related: DetailTransaksi::class, foreignKey:'id_transaksi', ownerKey: 'id_transaksi');
+
+
+}       
+         }
