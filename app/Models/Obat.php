@@ -30,3 +30,4 @@ class Obat extends Model
     {
         return $this->belongsTo(Staff::class, 'id_pengguna', 'id_pengguna');
     }
+}
