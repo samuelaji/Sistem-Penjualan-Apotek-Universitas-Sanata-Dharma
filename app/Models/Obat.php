@@ -21,15 +21,12 @@ class Obat extends Model
         'tanggal_kadaluwarsa',
     ];
 
-    public function staff()
-    {
-        return $this->belongsTo(related: staff::class, foreignKey:'id_pengguna', ownerKey:'id_pengguna');
-    }
-    
     public function detailTransaksi()
     {
-        return $this->hasMany(related: DetailTransaksi::class, foreignKey:'id_transaksi', ownerKey: 'id_transaksi');
+        return $this->hasMany(DetailTransaksi::class, 'id_obat', 'id_obat');
+    }
 
-
-}       
-         }
+    public function pengelola()
+    {
+        return $this->belongsTo(Staff::class, 'id_pengguna', 'id_pengguna');
+    }
