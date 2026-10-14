@@ -11,8 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('obat', function (Blueprint $table) {
+        Schema::create('obats', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
+            $table->string('name');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
+            $table->string('unit')->default('strip');
+            $table->decimal('purchase_price', 12, 2)->default(0);
+            $table->decimal('selling_price', 12, 2);
+            $table->unsignedInteger('stock')->default(0);
+            $table->unsignedInteger('minimum_stock')->default(0);
+            $table->date('expired_at')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -22,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('obat');
+        Schema::dropIfExists('obats');
     }
 };

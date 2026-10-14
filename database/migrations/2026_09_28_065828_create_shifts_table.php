@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pengguna')->constrained('users');
-            $table->dateTime('waktu_mulai');
-            $table->dateTime('waktu_selesai');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->dateTime('started_at');
+            $table->dateTime('ended_at')->nullable();
             $table->timestamps();
         });
     }
