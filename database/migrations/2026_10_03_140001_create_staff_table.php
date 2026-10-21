@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->id('id_pengguna');
             $table->string('nama', 100);
+            $table->string('password', 100);
             $table->string('role_akses', 20);
             $table->timestamps();
         });

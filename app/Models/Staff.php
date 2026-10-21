@@ -14,6 +14,7 @@ class Staff extends Model
 
     protected $fillable = [
         'nama',
+        'password',
         'role_akses',
     ];
 }
