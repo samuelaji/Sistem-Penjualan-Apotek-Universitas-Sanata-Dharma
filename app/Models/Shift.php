@@ -11,6 +11,7 @@ class Shift extends Model
 
     protected $table = 'shift';
     protected $primaryKey = 'id_shift';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_pengguna',
@@ -18,5 +19,9 @@ class Shift extends Model
         'waktu_selesai',
         'saldo_awal',
         'saldo_akhir',
+    ];
+    protected $casts = [
+        'waktu_mulai'   => 'datetime',
+        'waktu_selesai' => 'datetime',
     ];
 }
