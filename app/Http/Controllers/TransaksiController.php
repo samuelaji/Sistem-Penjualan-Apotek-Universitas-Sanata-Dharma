@@ -48,7 +48,7 @@ class TransaksiController
 
         if (!$shift) {
             return back()->with('error', 'Buka shift terlebih dahulu.');
-
+        }
             // Hitung total + cek stok
         $total = 0;
         foreach ($request->items as $item) {
