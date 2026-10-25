@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Obat;
 use App\Models\Shift;
-use App\Models\Transaksi;
+use App\Models\Transaksi; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class TransaksiController
+class TransaksiController extends Controller
 {
     /**
      * Riwayat transaksi
@@ -42,7 +43,7 @@ class TransaksiController
         ]);
 
         // Transaksi harus di dalam shift yang aktif
-        $shift = Shift::where('id_pengguna', auth()->id())
+        $shift = Shift::where('id_pengguna', Auth::id())
             ->whereNull('waktu_selesai')
             ->first();
 
@@ -50,8 +51,8 @@ class TransaksiController
             return back()->with('error', 'Buka shift terlebih dahulu.');
         }
             // Hitung total + cek stok
-        $total = 0;
-        foreach ($request->items as $item) {
+            $total = 0;
+            foreach ($request->items as $item) {
             $obat = Obat::findOrFail($item['id_obat']);
 
             if ($obat->stok < $item['jumlah_beli']) {
@@ -127,3 +128,4 @@ class TransaksiController
         //
     }
 }
+
