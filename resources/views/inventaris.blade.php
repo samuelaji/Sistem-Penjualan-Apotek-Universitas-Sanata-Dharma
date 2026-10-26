@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
+
     <!-- Header Bagian Atas -->
+
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Laporan Inventaris</h1>
         <div class="space-x-4 text-sm font-medium text-gray-600">
@@ -17,6 +19,7 @@
     </div>
 
     <!-- Banner Informasi Utama -->
+
     <div class="bg-white shadow-sm rounded-lg p-8 text-center mb-8 border border-gray-100">
         <h2 class="text-xl font-bold text-gray-800 mb-2">Laporan Pengelolaan Inventaris</h2>
         <p class="text-gray-500 text-sm mb-6">Pantau nilai stok, kategori obat, dan pergerakan barang secara sekilas.</p>
@@ -31,10 +34,13 @@
     </div>
 
     <!-- Bagian Grafik / Rincian Penilaian Stok -->
+
     <div class="mb-10">
         <h3 class="text-lg font-bold text-gray-800 text-center mb-6">Rincian Penilaian Stok</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
             <!-- Kotak Grafik 1 -->
+
             <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm flex flex-col items-center justify-center h-64">
                 <p class="text-xs font-semibold text-gray-500 self-start mb-2">Nilai Berdasarkan Kategori</p>
                 <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-green-500 via-yellow-400 to-red-700 shadow-inner"></div>
@@ -42,6 +48,7 @@
             </div>
 
             <!-- Kotak Grafik 2 -->
+
             <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm flex flex-col justify-between h-64">
                 <p class="text-xs font-semibold text-gray-500">Kategori Teratas Berdasarkan Nilai</p>
                 <div class="flex items-end justify-around h-40 pt-4 px-2">
@@ -59,6 +66,7 @@
     </div>
 
     <!-- Tabel Data Dinamis Inventaris (Dari Database) -->
+     
     <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm mb-10">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Tabel Data Inventaris (Dinamis)</h3>
         <div class="overflow-x-auto">
@@ -88,6 +96,7 @@
     </div>
 
     <!-- Filter & Opsi Tabel Mutasi Stok -->
+     
     <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
         <h3 class="text-lg font-bold text-gray-800 text-center mb-2">Opsi Tabel Mutasi Stok</h3>
         <p class="text-xs text-gray-500 text-center mb-6">Pilih data yang akan ditampilkan pada tabel mendetail di bawah ini.</p>
