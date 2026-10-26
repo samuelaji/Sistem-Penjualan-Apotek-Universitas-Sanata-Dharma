@@ -21,9 +21,12 @@ class ObatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_obat' => 'required|string|max:255',
-            'harga'     => 'required|numeric|min:0',
-            'stok'      => 'required|integer|min:0',
+            'id_pengguna'        => 'required|integer', // Asumsi didapat dari sesi login (Auth::id())
+            'nama_obat'          => 'required|string|max:100',
+            'kategori'           => 'required|string|max:50',
+            'stok'               => 'required|integer|min:0',
+            'harga'              => 'required|numeric|min:0',
+            'tanggal_kadaluarsa' => 'required|date',
         ]);
 
         Obat::create($validated);
@@ -43,9 +46,12 @@ class ObatController extends Controller
     public function update(Request $request, Obat $obat)
     {
         $validated = $request->validate([
-            'nama_obat' => 'required|string|max:255',
-            'harga'     => 'required|numeric|min:0',
-            'stok'      => 'required|integer|min:0',
+            'id_pengguna'        => 'required|integer',
+            'nama_obat'          => 'required|string|max:100',
+            'kategori'           => 'required|string|max:50',
+            'stok'               => 'required|integer|min:0',
+            'harga'              => 'required|numeric|min:0',
+            'tanggal_kadaluarsa' => 'required|date',
         ]);
 
         $obat->update($validated);
