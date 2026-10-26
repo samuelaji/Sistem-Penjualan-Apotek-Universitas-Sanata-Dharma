@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 abstract class Controller
 {
 
@@ -15,8 +14,9 @@ abstract class Controller
     {
         // Validasi input dari form
         $credentials = $request->validate([
-            'username' => ['required'],
+            'nama' => ['required'],
             'password' => ['required'],
+            'role_akses' => ['required'],
         ]);
 
         // Cek kecocokan data ke database
@@ -28,8 +28,8 @@ abstract class Controller
 
         // Jika gagal login
         return back()->withErrors([
-            'username' => 'Username atau password yang kamu masukkan salah.',
-        ])->onlyInput('username');
+            'nama' => 'Username atau password yang kamu masukkan salah.',
+        ])->onlyInput('nama');
     }
 
     public function logout(Request $request)
