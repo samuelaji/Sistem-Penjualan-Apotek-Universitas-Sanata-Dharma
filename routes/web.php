@@ -17,3 +17,7 @@ Route::get('/validasi-blu', function () {
 Route::get('/resep', function () {
     return view('resep.create');
 });
+
+Route::get('/inventaris', function () {
+    return view('inventaris'); 
+});
