@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 abstract class Controller
 {
-    // 1. Tampilkan form/halaman login
+
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // 2. Proses validasi & verifikasi login
+
     public function login(Request $request)
     {
         // Validasi input dari form
         $credentials = $request->validate([
-            'username' => ['required'], 
+            'username' => ['required'],
             'password' => ['required'],
         ]);
 
@@ -23,7 +23,6 @@ abstract class Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Berhasil login, arahkan ke halaman utama/transaksi
             return redirect()->intended('/transaksi');
         }
 
@@ -33,7 +32,6 @@ abstract class Controller
         ])->onlyInput('username');
     }
 
-    // 3. Proses logout
     public function logout(Request $request)
     {
         Auth::logout();
