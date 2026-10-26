@@ -19,5 +19,5 @@ Route::get('/resep', function () {
 });
 
 Route::get('/inventaris', function () {
-    return view('inventaris'); 
+    return view('inventaris.inventaris');
 });
