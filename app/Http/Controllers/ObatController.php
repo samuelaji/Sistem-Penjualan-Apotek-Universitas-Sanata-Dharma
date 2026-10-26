@@ -21,7 +21,7 @@ class ObatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_pengguna'        => 'required|integer', // Asumsi didapat dari sesi login (Auth::id())
+            'id_pengguna'        => 'required|integer',
             'nama_obat'          => 'required|string|max:100',
             'kategori'           => 'required|string|max:50',
             'stok'               => 'required|integer|min:0',
