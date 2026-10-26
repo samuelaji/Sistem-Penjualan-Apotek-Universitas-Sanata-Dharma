@@ -1,11 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LaporanController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/inventaris', function () {
+    return view('inventaris'); 
 });
-
-// Rute Laporan Inventaris
-Route::get('/laporan/inventaris', [LaporanController::class, 'inventaris']);
