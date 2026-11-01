@@ -7,12 +7,19 @@ use App\Models\Obat; // Panggil model Obat
 
 class LaporanController extends Controller
 {
-    public function inventaris()
+    public function inventaris(Request $request)
     {
         // Mengambil seluruh data obat dari database
         $listObat = Obat::all(); 
 
-        // Mengirim data ke view laporan.inventaris menggunakan compact()
-        return view('laporan.inventaris', compact('listObat'));
+        // Data untuk grafik mengelompokkan stok berdasarkan kategori
+        $chartData = Obat::select('kategori', \DB::raw('SUM(stok) as total_stok'))
+                        ->groupBy('kategori')
+                        ->get();
+
+        $categories = $chartData->pluck('kategori');
+        $totals = $chartData->pluck('total_stok');
+
+        return view('inventaris.inventaris', compact('listObat', 'categories', 'totals'));
     }
 }
