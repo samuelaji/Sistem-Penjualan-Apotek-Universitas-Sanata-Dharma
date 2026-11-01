@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Resep; 
 
-class BLUController
+class BLUController extends Controller
 {
     public function index()
     {
@@ -13,10 +14,14 @@ class BLUController
         return view('blu.index', compact('reseps'));
     }
 
+        //Menampilkan form untuk membuat/menambahkan data validasi BLU baru.
+
     public function create()
     {
         return view('blu.create');
     }
+   
+       //Menyimpan data validasi BLU baru ke database.
 
     public function store(Request $request)
     {
@@ -30,12 +35,16 @@ class BLUController
         return redirect()->route('blu.index')->with('success', 'Validasi BLU berhasil disimpan.');
     }
 
+        //Menampilkan detail spesifik data validasi BLU.
+
     public function show(string $id)
     {
         //
         $resep = Resep::findOrFail($id);
         return view('blu.show', compact('resep'));
     }
+
+        //Menampilkan form untuk mengedit status validasi BLU.
 
     public function edit(string $id)
     {
@@ -44,29 +53,21 @@ class BLUController
         return view('blu.edit', compact('resep'));
     }
 
+        //Memperbarui status validasi pasien BLU di database.
+     
     public function update(Request $request, string $id)
     {
-        //
         $request->validate([
             'status_validasi' => 'required|in:Pending,Disetujui,Ditolak',
         ]);
 
         $resep = Resep::findOrFail($id);
-        // Logika memperbarui status validasi BLU di tabel resep/transaksi
+        
+        // Memperbarui status validasi BLU pada data resep/pasien
         $resep->update([
             'status_validasi' => $request->status_validasi,
         ]);
 
         return redirect()->route('blu.index')->with('success', 'Status validasi BLU berhasil diperbarui.');
-    }
-
-    public function destroy(string $id)
-    {
-        //
-        $resep = Resep::findOrFail($id);
-        // Hapus data atau batalkan klaim BLU
-        $resep->delete();
-
-        return redirect()->route('blu.index')->with('success', 'Data BLU berhasil dihapus.');
     }
 }
