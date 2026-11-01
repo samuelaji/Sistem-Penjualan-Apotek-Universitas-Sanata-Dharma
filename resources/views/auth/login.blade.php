@@ -41,11 +41,17 @@
 
         <!-- Kanan, Form Input -->
         <div class="col-md-7 col-lg-5">
-            <form action="#" method="POST">
+            <form action="{{ route('login.process') }}" method="POST">
                 @csrf
+                @error('username')
+                <div class="alert alert-danger py-2 box-sharp mb-3 small">
+                    {{ $message }}
+                </div>
+                @enderror
+
                 <div class="mb-4">
                     <label for="username" class="form-label fw-bold">Username</label>
-                    <input type="text" class="form-control box-sharp py-2" id="username" name="username" placeholder="Masukkan username" required>
+                    <input type="text" class="form-control box-sharp py-2" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username" required>
                     <div class="form-text">Gunakan akun staf Anda.</div>
                 </div>
 
