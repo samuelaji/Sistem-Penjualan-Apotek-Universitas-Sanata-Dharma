@@ -48,7 +48,7 @@
 
     <div class="container py-5">
 
-        <!-- ================= BANNER INFORMASI UTAMA ================= -->
+        <!--banner informasi utama-->
         <div class="card shadow-sm border box-sharp mb-4 p-4 text-center">
             <div class="card-body">
                 <h3 class="card-title fw-bold mb-2">Laporan Pengelolaan Inventaris</h3>
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <!-- ================= BAGIAN GRAFIK DINAMIS (CHART.JS) ================= -->
+        <!--grafik dinamis-->
         <div class="mb-4">
             <h4 class="text-center fw-bold mb-3">Rincian Penilaian Stok Berdasarkan Database</h4>
             <div class="row g-3">
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <!-- ================= TABEL DATA DINAMIS DARI DATABASE ================= -->
+        <!--tabel data inventaris-->
         <div class="card shadow-sm border box-sharp mb-4 p-3">
             <div class="card-body">
                 <h4 class="card-title fw-bold mb-3">Tabel Data Inventaris (Dinamis dari Database)</h4>
@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <!-- ================= FORM FILTER & OPSI TABEL MUTASI STOK ================= -->
+        <!--tabel opsi mutasi stok-->
         <div class="card shadow-sm border box-sharp p-4">
             <h4 class="text-center fw-bold mb-1">Opsi Tabel Mutasi Stok</h4>
             <p class="text-center text-muted small mb-4">Pilih data yang akan ditampilkan pada tabel mendetail di bawah ini.</p>
@@ -132,7 +132,7 @@
                         <div class="form-text text-muted" style="font-size: 10px;">Penerimaan, Pengeluaran, Transfer, Penyesuaian</div>
                     </div>
 
-                    <!-- Pilihan Filter: Mode Tampilan (Ditambahkan kembali) -->
+                    <!-- Pilihan Filter: Mode Tampilan -->
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Mode Tampilan</label>
                         <select name="mode_tampilan" class="form-select form-select-sm box-sharp">
@@ -141,7 +141,7 @@
                         <div class="form-text text-muted" style="font-size: 10px;">Beralih antara Saat Ini / Rerata Bulanan</div>
                     </div>
 
-                    <!-- Pilihan Filter: Urutkan Berdasarkan (Ditambahkan kembali) -->
+                    <!-- Pilihan Filter: Urutkan Berdasarkan -->
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Urutkan Berdasarkan</label>
                         <select name="urutkan" class="form-select form-select-sm box-sharp">
@@ -152,7 +152,7 @@
 
                 </div>
 
-                <!-- Tombol Aksi Form (Atur Ulang & Perbarui Tabel) -->
+                <!-- Tombol Aksi Form Atur Ulang & Perbarui Tabel -->
                 <div class="text-center border-top pt-3">
                     <button type="reset" class="btn btn-outline-maroon px-4 me-2 box-sharp">Atur Ulang</button>
                     <button type="submit" class="btn btn-maroon px-4 box-sharp">Perbarui Tabel</button>
@@ -162,7 +162,7 @@
 
     </div>
 
-    <!-- Script Chart.js dengan warna batang grafik menyesuaikan warna marun manajer -->
+    <!-- Script Chart.js dengan warna batang grafik -->
     <script>
         const ctx = document.getElementById('inventarisChart').getContext('2d');
         const inventarisChart = new Chart(ctx, {
