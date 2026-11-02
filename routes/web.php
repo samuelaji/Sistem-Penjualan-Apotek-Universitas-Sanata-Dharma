@@ -21,3 +21,7 @@ Route::get('/resep', function () {
 Route::get('/inventaris', function () {
     return view('inventaris.inventaris');
 });
+
+Route::get('/penjualan', function () {
+    return view('laporan.penjualan');
+});

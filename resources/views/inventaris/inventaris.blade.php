@@ -33,15 +33,15 @@
         $totals = $chartData->pluck('total_stok');
     ?>
 
-    <!-- Header Navigasi Atas dengan Tema Marun Manajer -->
+ <!-- Header Navigasi Atas dengan Tema Marun Manajer -->
     <nav class="navbar navbar-expand-lg bg-maroon navbar-dark py-1">
         <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold fs-6" href="#">Laporan Inventaris</a>
             <div class="d-flex ms-auto gap-3 text-white small" style="font-size: 0.75rem;">
                 <span style="cursor: pointer;">Dasbor</span>
-                <span style="cursor: pointer;">Penjualan</span>
+                <a href="{{ url('/penjualan') }}" class="text-white text-decoration-none">Penjualan</a>
                 <a href="{{ url('/inventaris') }}" class="text-white text-decoration-none fw-bold">Inventaris</a>
-                <span style="cursor: pointer;">Logout</span>
+                <a href="{{ url('/login') }}" class="text-white text-decoration-none">Logout</a>
             </div>
         </div>
     </nav>
