@@ -47,7 +47,7 @@ class AuthController extends Controller
         if ($role === 'Kasir') {
             return redirect('/transaksi');
         } elseif ($role === 'Apoteker') {
-            return redirect('/resep');
+            return redirect('/apoteker');
         } elseif ($role === 'Manajemen') {
             return redirect('/inventaris');
         }

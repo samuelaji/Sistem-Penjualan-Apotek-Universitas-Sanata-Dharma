@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS Terminal - Apotek Sanata Dharma</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -842,12 +843,93 @@
         }
     });
 
-    document.getElementById('btnCompletePayment').addEventListener('click', function() {
+    document.getElementById('btnCompletePayment').addEventListener('click', async function() {
+        // 1. Validasi Keranjang Kosong
         if (activeTransaction.length === 0) {
             alert('Belum ada obat yang dimasukkan ke dalam nota transaksi!');
             return;
         }
-        alert('Transaksi valid! Siap disimpan ke database.');
+
+        // 2. Ambil semua data dari formulir di layar
+        const patientType = document.querySelector('input[name="patient_type"]:checked').value;
+        const recipeType = document.querySelector('input[name="recipe_type"]:checked').value;
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash';
+
+        let cashReceived = 0;
+        let changeAmount = 0;
+
+        // 3. Logika Uang Tunai vs Non-Tunai/BLU
+        if (patientType === 'Umum' && paymentMethod === 'Cash') {
+            cashReceived = parseFloat(cashInput.value) || 0;
+            changeAmount = cashReceived - grandTotal;
+
+            if (cashReceived < grandTotal) {
+                alert('Maaf, nominal uang tunai yang diterima kurang dari total tagihan!');
+                cashInput.focus();
+                return;
+            }
+        } else {
+            // Jika QRIS/Transfer atau Pasien BLU, uang dianggap PAS
+            cashReceived = grandTotal;
+            changeAmount = 0;
+        }
+
+        // 4. Ubah tombol jadi "Loading" agar kasir tidak klik 2 kali
+        const btn = this;
+        const originalBtnHTML = btn.innerHTML;
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Memproses...`;
+        btn.disabled = true;
+
+        // 5. Susun paket data (Payload) untuk dikirim ke Backend
+        const payload = {
+            cart: activeTransaction,
+            patient_type: patientType,
+            nim_nip: document.getElementById('nimNipInput').value,
+            recipe_type: recipeType,
+            recipe_no: document.getElementById('recipeNoInput').value,
+            recipe_date: document.getElementById('recipeDateInput').value,
+            doctor_name: document.getElementById('doctorNameInput').value,
+            clinic_name: document.getElementById('clinicNameInput').value,
+            payment_method: paymentMethod,
+            grand_total: grandTotal,
+            cash_received: cashReceived,
+            change_amount: changeAmount
+        };
+
+        // 6. Tembakkan ke Controller menggunakan Fetch API (AJAX)
+        try {
+            const response = await fetch("{{ route('transaksi.store') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Kunci Keamanan
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // Beritahu kasir jika transaksi berhasil
+                let successMsg = result.message;
+                if(result.status_transaksi === 'Pending') {
+                    successMsg += '\n(Resep dokter dikirim ke panel Apoteker untuk divalidasi)';
+                }
+                alert(successMsg);
+
+                // Refresh halaman untuk transaksi berikutnya
+                window.location.reload();
+            } else {
+                alert('Gagal memproses transaksi: ' + (result.message || 'Error tidak diketahui'));
+                btn.innerHTML = originalBtnHTML;
+                btn.disabled = false;
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menghubungi server. Pastikan koneksi stabil.');
+            btn.innerHTML = originalBtnHTML;
+            btn.disabled = false;
+        }
     });
 </script>
 
