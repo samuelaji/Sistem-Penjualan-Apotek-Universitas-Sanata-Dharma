@@ -14,10 +14,13 @@ class Obat extends Model
 
     protected $fillable = [
         'id_pengguna',
+        'sku',
         'nama_obat',
         'kategori',
+        'jenis_obat',
         'stok',
-        'harga',
+        'batas_minimum',
+        'harga_obat',
         'tanggal_kadaluwarsa',
     ];
 

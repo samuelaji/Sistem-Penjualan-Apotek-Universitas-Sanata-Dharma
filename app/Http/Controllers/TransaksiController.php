@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Obat;
 
-class TransaksiController
+class TransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+
+        $obatList = Obat::all();
+        return view('transaksi.index', compact('obatList'));
     }
 
     /**

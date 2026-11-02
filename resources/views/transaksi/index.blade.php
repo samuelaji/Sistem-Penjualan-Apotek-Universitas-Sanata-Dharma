@@ -3,343 +3,853 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasir POS - Apotek Sanata Dharma</title>
-    <!-- Bootstrap 5 & Icons -->
+    <title>POS Terminal - Apotek Sanata Dharma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Google Font: Inter / Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg-workspace: #f1f5f9;
+            --surface: #ffffff;
+            --border-soft: #e2e8f0;
+            --maroon: #8B0000;
+            --maroon-dark: #6e0000;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f4f6f9;
-        }
-        .bg-maroon { background-color: #8B0000 !important; }
-        .text-maroon { color: #8B0000 !important; }
-        .btn-maroon {
-            background-color: #8B0000;
-            color: #ffffff;
-            font-weight: 600;
-            border: none;
-            transition: all 0.2s;
-        }
-        .btn-maroon:hover {
-            background-color: #6d0000;
-            color: #ffffff;
-            transform: translateY(-1px);
-        }
-        /* Card & UI modern */
-        .card-custom {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            transition: all 0.2s ease-in-out;
-        }
-        .card-product:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border: 1px solid #8B0000;
-        }
-        .category-pill {
-            cursor: pointer;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid #dee2e6;
-            background: #fff;
-            color: #495057;
-            transition: all 0.2s;
-        }
-        .category-pill.active, .category-pill:hover {
-            background: #8B0000;
-            color: white;
-            border-color: #8B0000;
-        }
-        /* Keranjang Sticky di sisi kanan */
-        .cart-sticky {
-            position: sticky;
-            top: 20px;
-            height: calc(100vh - 100px);
+            background-color: var(--bg-workspace);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+            margin: 0;
         }
-        .cart-items-container {
-            flex-grow: 1;
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        @keyframes rowAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-row {
+            animation: rowAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .pos-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-soft);
+            padding: 0.65rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .cashier-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cashier-avatar {
+            width: 36px;
+            height: 36px;
+            background: rgba(139, 0, 0, 0.08);
+            color: var(--maroon);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .pos-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .workspace-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            overflow: hidden;
+        }
+
+        .search-container {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            border: 1.5px solid var(--border-soft);
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .search-container:focus-within {
+            border-color: var(--maroon);
+            box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.08);
+        }
+
+        .search-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .search-results-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            max-height: 340px;
             overflow-y: auto;
-            max-height: 380px;
+            z-index: 100;
+            display: none;
+            animation: rowAppear 0.2s ease;
         }
-        .btn-qty {
-            width: 28px;
-            height: 28px;
-            padding: 0;
+
+        .search-item {
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f8fafc;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .search-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .search-item:last-child {
+            border-bottom: none;
+        }
+
+        .table-card {
+            flex: 1;
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .table-custom {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-custom thead th {
+            background-color: #f8fafc;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-soft);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .table-custom tbody td {
+            padding: 0.9rem 1.25rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #fafbfc;
+        }
+
+        .table-qty-btn {
+            width: 26px;
+            height: 26px;
+            border: 1px solid var(--border-soft);
+            background: #ffffff;
+            border-radius: 6px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
-            font-weight: bold;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .table-qty-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: scale(1.05);
+        }
+
+        .shortcut-bar {
+            padding: 0.2rem 0.5rem;
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .key-badge {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--text-dark);
+        }
+
+        .panel-right {
+            width: 380px;
+            min-width: 380px;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .segmented-selector {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .segmented-selector input[type="radio"] {
+            display: none;
+        }
+
+        .segmented-selector label {
+            flex: 1;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .segmented-selector input[type="radio"]:checked + label {
+            background: var(--maroon);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(139, 0, 0, 0.2);
+        }
+
+        .smooth-accordion {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-4px);
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.25s ease,
+            transform 0.25s ease,
+            margin-top 0.3s ease;
+            margin-top: 0;
+        }
+
+        .smooth-accordion.active {
+            max-height: 300px;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 0.6rem;
+        }
+
+        .expandable-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            padding: 0.85rem;
+        }
+
+        .total-display-box {
+            background: #fff5f5;
+            border: 1.5px solid #fed7d7;
+            border-left: 5px solid var(--maroon);
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .total-label {
+            color: #991b1b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .total-amount {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--maroon);
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .cash-input-group {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--border-soft);
+            border-radius: 10px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .cash-input-group:focus-within {
+            border-color: var(--maroon);
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.08);
+        }
+
+        .cash-prefix {
+            padding: 0.55rem 0.85rem;
+            background: #f8fafc;
+            border-right: 1.5px solid var(--border-soft);
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .cash-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 0.55rem 0.85rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            background: transparent;
+        }
+
+        .btn-pay {
+            background: var(--maroon);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.95rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.15);
+        }
+
+        .btn-pay:hover {
+            background: var(--maroon-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.25);
+        }
+
+        .btn-pay:active {
+            transform: scale(0.99);
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar Modern -->
-<nav class="navbar navbar-expand-lg bg-maroon navbar-dark shadow-sm py-2 px-3">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
-            <i class="bi bi-capsule fs-4"></i>
-            <span>Apotek USD <span class="badge bg-danger text-white fs-6 fw-normal ms-1">POS Kasir</span></span>
-        </a>
-        <div class="d-flex align-items-center gap-3 text-white">
-            <div class="d-none d-md-block text-end">
-                <small class="d-block opacity-75" style="font-size: 0.75rem;">Petugas Aktif:</small>
-                <span class="fw-semibold small"><i class="bi bi-person-circle me-1"></i> {{ Auth::user()->nama_pengguna ?? 'Kasir Pelayanan' }}</span>
-            </div>
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
-                @csrf
-                <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                    <i class="bi bi-box-arrow-right me-1"></i> Keluar
-                </button>
-            </form>
+<header class="pos-header">
+    <div class="cashier-info">
+        <div class="cashier-avatar">
+            <i class="bi bi-person-fill"></i>
         </div>
+        <div class="fw-bold text-dark fs-6">{{ Auth::user()->nama_pengguna ?? 'Kasir Pelayanan' }}</div>
     </div>
-</nav>
 
-<!-- Main POS Layout: Split Screen -->
-<div class="container-fluid py-4 px-4">
-    <div class="row g-4">
+    <div class="d-flex align-items-center gap-2">
+        <span class="text-muted small me-2" id="headerLiveClock">--:--:--</span>
+        <form action="{{ route('logout') }}" method="POST" class="m-0">
+            @csrf
+            <button type="submit" class="btn btn-sm btn-outline-danger border-0 rounded-circle" title="Keluar">
+                <i class="bi bi-box-arrow-right fs-5"></i>
+            </button>
+        </form>
+    </div>
+</header>
 
-        <!-- ================= SISI KIRI: KATALOG OBAT & PENCARIAN (65%) ================= -->
-        <div class="col-lg-8">
-
-            <!-- Header Pencarian & Kategori -->
-            <div class="card card-custom p-3 mb-3">
-                <div class="row g-2 align-items-center mb-3">
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control border-start-0 ps-0" placeholder="Ketik nama obat atau scan SKU..." autofocus>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <span class="badge bg-light text-secondary border p-2 w-100 text-truncate">
-                            <i class="bi bi-calendar3 me-1"></i> {{ date('d F Y') }}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Filter Kategori Pill -->
-                <div class="d-flex gap-2 overflow-auto pb-1">
-                    <span class="category-pill active">Semua Obat</span>
-                    <span class="category-pill">Antibiotik</span>
-                    <span class="category-pill">Analgesik & Antipiretik</span>
-                    <span class="category-pill">Vitamin & Suplemen</span>
-                    <span class="category-pill">Sirup & Tetes</span>
-                </div>
+<main class="pos-container">
+    <section class="workspace-left">
+        <div class="search-container">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-search text-muted fs-5"></i>
+                <input
+                    type="text"
+                    class="search-input"
+                    id="medicineSearchInput"
+                    placeholder="Cari nama obat atau kategori..."
+                    autocomplete="off"
+                    autofocus
+                >
             </div>
+            <div class="search-results-dropdown" id="searchResults"></div>
+        </div>
 
-            <!-- Grid Kartu Obat -->
-            <div class="row g-3">
-
-                <!-- Contoh Obat 1 -->
-                <div class="col-6 col-md-4 col-xl-3">
-                    <div class="card card-custom card-product h-100 p-3 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">Stok: 45</span>
-                                <small class="text-muted font-monospace" style="font-size: 0.65rem;">AMO-500</small>
-                            </div>
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted mb-2" style="height: 100px;">
-                                <i class="bi bi-capsule fs-1 text-secondary opacity-50"></i>
-                            </div>
-                            <h6 class="fw-bold mb-1 text-truncate" title="Amoxicillin 500mg">Amoxicillin 500mg</h6>
-                            <p class="text-muted small mb-2" style="font-size: 0.75rem;">12 Kapsul / Strip</p>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="fw-bold text-maroon">Rp 18.000</span>
-                            <button class="btn btn-sm btn-maroon rounded-circle btn-qty" title="Tambah ke Pesanan">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contoh Obat 2 -->
-                <div class="col-6 col-md-4 col-xl-3">
-                    <div class="card card-custom card-product h-100 p-3 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">Stok: 24</span>
-                                <small class="text-muted font-monospace" style="font-size: 0.65rem;">PARA-SYR</small>
-                            </div>
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted mb-2" style="height: 100px;">
-                                <i class="bi bi-prescription2 fs-1 text-secondary opacity-50"></i>
-                            </div>
-                            <h6 class="fw-bold mb-1 text-truncate" title="Paracetamol Sirup 60ml">Paracetamol Sirup</h6>
-                            <p class="text-muted small mb-2" style="font-size: 0.75rem;">Botol 60ml</p>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="fw-bold text-maroon">Rp 27.000</span>
-                            <button class="btn btn-sm btn-maroon rounded-circle btn-qty" title="Tambah ke Pesanan">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contoh Obat 3 -->
-                <div class="col-6 col-md-4 col-xl-3">
-                    <div class="card card-custom card-product h-100 p-3 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill" style="font-size: 0.7rem;">Stok Tipis: 5</span>
-                                <small class="text-muted font-monospace" style="font-size: 0.65rem;">CET-10</small>
-                            </div>
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted mb-2" style="height: 100px;">
-                                <i class="bi bi-capsule fs-1 text-secondary opacity-50"></i>
-                            </div>
-                            <h6 class="fw-bold mb-1 text-truncate" title="Cetirizine 10mg">Cetirizine 10mg</h6>
-                            <p class="text-muted small mb-2" style="font-size: 0.75rem;">10 Tablet</p>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="fw-bold text-maroon">Rp 12.500</span>
-                            <button class="btn btn-sm btn-maroon rounded-circle btn-qty" title="Tambah ke Pesanan">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contoh Obat 4 -->
-                <div class="col-6 col-md-4 col-xl-3">
-                    <div class="card card-custom card-product h-100 p-3 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">Stok: 80</span>
-                                <small class="text-muted font-monospace" style="font-size: 0.65rem;">VIT-C500</small>
-                            </div>
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted mb-2" style="height: 100px;">
-                                <i class="bi bi-capsule fs-1 text-secondary opacity-50"></i>
-                            </div>
-                            <h6 class="fw-bold mb-1 text-truncate" title="Vitamin C 500mg">Vitamin C 500mg</h6>
-                            <p class="text-muted small mb-2" style="font-size: 0.75rem;">10 Tablet Hisap</p>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="fw-bold text-maroon">Rp 10.000</span>
-                            <button class="btn btn-sm btn-maroon rounded-circle btn-qty" title="Tambah ke Pesanan">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table class="table-custom">
+                    <thead>
+                    <tr>
+                        <th style="width: 5%;">No</th>
+                        <th style="width: 15%;">Kode/SKU</th>
+                        <th style="width: 35%;">Nama Item & Bentuk</th>
+                        <th style="width: 15%;">Harga Satuan</th>
+                        <th style="width: 15%; text-align: center;">Jumlah (Qty)</th>
+                        <th style="width: 15%; text-align: right;">Subtotal</th>
+                        <th style="width: 5%; text-align: center;"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                    <tr id="emptyTableRow">
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-receipt fs-1 d-block opacity-25 mb-2"></i>
+                            <span class="fw-medium">Belum ada obat dalam nota transaksi saat ini.</span>
+                            <small class="d-block text-muted opacity-75">Ketik nama obat pada kolom pencarian di atas untuk memasukkan item.</small>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- ================= SISI KANAN: KERANJANG & CHECKOUT (35%) ================= -->
-        <div class="col-lg-4">
-            <div class="card card-custom p-3 cart-sticky">
+        <div class="shortcut-bar">
+            <span><span class="key-badge">/</span> Cari Obat</span>
+            <span><span class="key-badge">F8</span> Kosongkan Nota</span>
+            <span><span class="key-badge">F9</span> Selesaikan Transaksi</span>
+            <span class="ms-auto text-dark fw-semibold" id="tableItemCounter">0 Baris Item</span>
+        </div>
+    </section>
 
-                <!-- Header Keranjang -->
-                <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-3">
-                    <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
-                        <i class="bi bi-cart3 text-maroon"></i> Keranjang Transaksi
-                    </h5>
-                    <button class="btn btn-link text-danger text-decoration-none p-0 small" style="font-size: 0.8rem;">
-                        <i class="bi bi-trash"></i> Kosongkan
-                    </button>
+    <aside class="panel-right">
+        <div class="panel-section">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">TIPE PASIEN</label>
+            <div class="segmented-selector mb-1">
+                <input type="radio" name="patient_type" id="pasien-umum" value="Umum" checked onchange="updatePaymentVisibility()">
+                <label for="pasien-umum">Pasien Umum</label>
+
+                <input type="radio" name="patient_type" id="pasien-blu" value="BLU" onchange="updatePaymentVisibility()">
+                <label for="pasien-blu">Sivitas BLU USD</label>
+            </div>
+
+            <div class="smooth-accordion" id="bluExpandableArea">
+                <div class="expandable-box">
+                    <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.75rem;">NIM / NIP</label>
+                    <input type="text" class="form-control form-control-sm border-1" id="nimNipInput" placeholder="Masukkan NIM / NIP">
                 </div>
+            </div>
 
-                <!-- Informasi Pelanggan & Resep -->
-                <div class="bg-light p-2 rounded-3 mb-3 border">
-                    <div class="row g-2">
+            <label class="form-label text-muted fw-bold mb-1 mt-3" style="font-size: 0.7rem; letter-spacing: 0.5px;">STATUS RESEP</label>
+            <div class="segmented-selector mb-1">
+                <input type="radio" name="recipe_type" id="resep-non" value="Non-Resep" checked onchange="toggleRecipeType()">
+                <label for="resep-non">Tanpa Resep</label>
+
+                <input type="radio" name="recipe_type" id="resep-ada" value="Resep" onchange="toggleRecipeType()">
+                <label for="resep-ada">Resep Dokter</label>
+            </div>
+
+            <div class="smooth-accordion" id="recipeExpandableArea">
+                <div class="expandable-box">
+                    <div class="row g-2 mb-2">
                         <div class="col-6">
-                            <label class="form-label text-muted small mb-1" style="font-size: 0.75rem;">Tipe Pasien</label>
-                            <select class="form-select form-select-sm border-0 fw-semibold">
-                                <option value="Umum">Umum</option>
-                                <option value="BLU">Pasien BLU</option>
-                            </select>
+                            <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nomor Resep</label>
+                            <input type="text" class="form-control form-control-sm border-1" id="recipeNoInput" placeholder="No. Resep">
                         </div>
                         <div class="col-6">
-                            <label class="form-label text-muted small mb-1" style="font-size: 0.75rem;">Status Resep</label>
-                            <select class="form-select form-select-sm border-0 fw-semibold">
-                                <option value="Tanpa Resep">Non-Resep</option>
-                                <option value="Resep Dokter">Ada Resep</option>
-                            </select>
+                            <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Tanggal Resep</label>
+                            <input type="date" class="form-control form-control-sm border-1" id="recipeDateInput" value="{{ date('Y-m-d') }}">
                         </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Dokter Penulis</label>
+                        <input type="text" class="form-control form-control-sm border-1" id="doctorNameInput" placeholder="Contoh: dr. Budi Santoso">
+                    </div>
+                    <div>
+                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Klinik / RS</label>
+                        <input type="text" class="form-control form-control-sm border-1" id="clinicNameInput" placeholder="Contoh: RS Panti Rapih">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-section flex-grow-1 d-flex flex-column justify-content-between">
+            <div>
+                <div class="total-display-box">
+                    <span class="total-label" id="totalLabelText">Total Tagihan</span>
+                    <div class="total-amount" id="grandTotalDisplay">Rp 0</div>
+                </div>
+
+                <div class="smooth-accordion" id="paymentMethodSection">
+                    <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">METODE BAYAR</label>
+                    <div class="segmented-selector mb-3">
+                        <input type="radio" name="payment_method" id="pay-cash" value="Cash" checked onchange="updatePaymentVisibility()">
+                        <label for="pay-cash">Tunai</label>
+
+                        <input type="radio" name="payment_method" id="pay-qris" value="QRIS" onchange="updatePaymentVisibility()">
+                        <label for="pay-qris">QRIS</label>
+
+                        <input type="radio" name="payment_method" id="pay-transfer" value="Transfer" onchange="updatePaymentVisibility()">
+                        <label for="pay-transfer">Transfer</label>
                     </div>
                 </div>
 
-                <!-- Daftar Item Belanja (Bisa di-scroll) -->
-                <div class="cart-items-container pe-1">
-
-                    <!-- Item 1 -->
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <div style="max-width: 60%;">
-                            <h6 class="fw-semibold mb-0 small text-truncate">Amoxicillin 500mg</h6>
-                            <small class="text-muted" style="font-size: 0.75rem;">Rp 18.000 / strip</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <button class="btn btn-sm btn-outline-secondary btn-qty"><i class="bi bi-dash"></i></button>
-                            <span class="fw-bold small px-1">2</span>
-                            <button class="btn btn-sm btn-outline-secondary btn-qty"><i class="bi bi-plus"></i></button>
-                            <span class="fw-bold small text-maroon ms-2">Rp 36.000</span>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <div style="max-width: 60%;">
-                            <h6 class="fw-semibold mb-0 small text-truncate">Paracetamol Sirup</h6>
-                            <small class="text-muted" style="font-size: 0.75rem;">Rp 27.000 / botol</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <button class="btn btn-sm btn-outline-secondary btn-qty"><i class="bi bi-dash"></i></button>
-                            <span class="fw-bold small px-1">1</span>
-                            <button class="btn btn-sm btn-outline-secondary btn-qty"><i class="bi bi-plus"></i></button>
-                            <span class="fw-bold small text-maroon ms-2">Rp 27.000</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Bagian Total & Pembayaran (Selalu ada di bawah) -->
-                <div class="pt-3 border-top mt-auto">
-                    <div class="d-flex justify-content-between mb-1 text-muted small">
-                        <span>Subtotal</span>
-                        <span>Rp 63.000</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="fw-bold fs-5">Total Bayar</span>
-                        <span class="fw-bold fs-4 text-maroon">Rp 63.000</span>
-                    </div>
-
+                <div class="smooth-accordion" id="cashCalcArea">
                     <div class="mb-3">
-                        <label class="form-label text-muted small mb-1" style="font-size: 0.75rem;">Metode Pembayaran</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="btnradio" id="cash" checked>
-                            <label class="btn btn-outline-secondary btn-sm fw-semibold" for="cash"><i class="bi bi-cash me-1"></i> Cash</label>
-
-                            <input type="radio" class="btn-check" name="btnradio" id="qris">
-                            <label class="btn btn-outline-secondary btn-sm fw-semibold" for="qris"><i class="bi bi-qr-code me-1"></i> QRIS</label>
-
-                            <input type="radio" class="btn-check" name="btnradio" id="transfer">
-                            <label class="btn btn-outline-secondary btn-sm fw-semibold" for="transfer"><i class="bi bi-bank me-1"></i> Transfer</label>
+                        <label class="form-label text-muted small fw-semibold mb-1">Uang Diterima dari Pembeli</label>
+                        <div class="cash-input-group">
+                            <span class="cash-prefix">Rp</span>
+                            <input
+                                type="number"
+                                class="cash-input"
+                                id="cashReceivedInput"
+                                placeholder="0"
+                                autocomplete="off"
+                            >
                         </div>
                     </div>
 
-                    <button class="btn btn-maroon w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>Proses Pembayaran (F9)</span>
-                    </button>
+                    <div class="d-flex justify-content-between align-items-center p-2 px-3 rounded-3 bg-light border">
+                        <span class="text-muted small fw-semibold">Uang Kembalian:</span>
+                        <span class="fw-bold text-success fs-6" id="changeAmountDisplay">Rp 0</span>
+                    </div>
                 </div>
+            </div>
 
+            <div class="pt-3">
+                <button class="btn-pay" id="btnCompletePayment">
+                    Selesaikan Transaksi
+                </button>
             </div>
         </div>
+    </aside>
+</main>
 
-    </div>
-</div>
+<script>
+    const masterObatList = @json($obatList);
+
+    let activeTransaction = [];
+    let grandTotal = 0;
+
+    const formatRupiah = (val) => {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
+    };
+
+    const searchInput = document.getElementById('medicineSearchInput');
+    const searchDropdown = document.getElementById('searchResults');
+    const tableBody = document.getElementById('transactionTableBody');
+    const emptyRow = document.getElementById('emptyTableRow');
+    const cashInput = document.getElementById('cashReceivedInput');
+
+    function updateHeaderClock() {
+        const now = new Date();
+        document.getElementById('headerLiveClock').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+    }
+    setInterval(updateHeaderClock, 1000);
+    updateHeaderClock();
+
+    function toggleRecipeType() {
+        const isRecipe = document.getElementById('resep-ada').checked;
+        const recipeArea = document.getElementById('recipeExpandableArea');
+        recipeArea.classList.toggle('active', isRecipe);
+    }
+
+    function updatePaymentVisibility() {
+        const isBlu = document.getElementById('pasien-blu').checked;
+        const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash';
+
+        const paymentSection = document.getElementById('paymentMethodSection');
+        const cashArea = document.getElementById('cashCalcArea');
+        const bluExpandable = document.getElementById('bluExpandableArea');
+
+        bluExpandable.classList.toggle('active', isBlu);
+
+        if (isBlu) {
+            paymentSection.classList.remove('active');
+            cashArea.classList.remove('active');
+            document.getElementById('totalLabelText').innerText = 'Nilai Penjaminan BLU';
+        } else {
+            paymentSection.classList.add('active');
+            document.getElementById('totalLabelText').innerText = 'Total Tagihan';
+            cashArea.classList.toggle('active', selectedPayment === 'Cash');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updatePaymentVisibility();
+        toggleRecipeType();
+    });
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        searchDropdown.innerHTML = '';
+
+        if (query.length === 0) {
+            searchDropdown.style.display = 'none';
+            return;
+        }
+
+        const filtered = masterObatList.filter(o =>
+            o.nama_obat.toLowerCase().includes(query) ||
+            o.sku.toLowerCase().includes(query)
+        );
+
+        if (filtered.length > 0) {
+            filtered.forEach(obat => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'search-item';
+                itemDiv.innerHTML = `
+                    <div>
+                        <span class="fw-bold text-dark d-block">${obat.nama_obat}</span>
+                        <small class="text-muted font-monospace">${obat.sku} • ${obat.jenis_obat}</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="fw-bold text-dark d-block" style="color: #8B0000 !important;">${formatRupiah(obat.harga_obat)}</span>
+                        <small class="badge ${obat.stok <= obat.batas_minimum ? 'bg-warning-subtle text-warning-emphasis' : 'bg-success-subtle text-success'} rounded-pill">
+                            Stok: ${obat.stok}
+                        </small>
+                    </div>
+                `;
+                itemDiv.onclick = () => {
+                    addItemToTransaction(obat);
+                    searchInput.value = '';
+                    searchDropdown.style.display = 'none';
+                    searchInput.focus();
+                };
+                searchDropdown.appendChild(itemDiv);
+            });
+            searchDropdown.style.display = 'block';
+        } else {
+            searchDropdown.innerHTML = `<div class="p-3 text-center text-muted small">Obat tidak ditemukan.</div>`;
+            searchDropdown.style.display = 'block';
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-container')) {
+            searchDropdown.style.display = 'none';
+        }
+    });
+
+    function addItemToTransaction(obat) {
+        if (obat.stok <= 0) {
+            alert('Maaf, stok obat ini sudah habis!');
+            return;
+        }
+
+        const exist = activeTransaction.find(item => item.id_obat === obat.id_obat);
+        if (exist) {
+            if (exist.qty < obat.stok) {
+                exist.qty += 1;
+            } else {
+                alert('Maksimal stok yang tersedia sudah tercapai!');
+            }
+        } else {
+            activeTransaction.push({
+                id_obat: obat.id_obat,
+                sku: obat.sku,
+                nama: obat.nama_obat,
+                jenis: obat.jenis_obat,
+                harga: parseFloat(obat.harga_obat),
+                qty: 1,
+                max_stok: obat.stok
+            });
+        }
+        renderTable();
+    }
+
+    function renderTable() {
+        tableBody.innerHTML = '';
+        grandTotal = 0;
+
+        if (activeTransaction.length === 0) {
+            tableBody.appendChild(emptyRow);
+            document.getElementById('tableItemCounter').innerText = '0 Baris Item';
+            updateTotals();
+            return;
+        }
+
+        activeTransaction.forEach((item, index) => {
+            const subtotal = item.harga * item.qty;
+            grandTotal += subtotal;
+
+            const tr = document.createElement('tr');
+            tr.className = 'animate-row';
+            tr.innerHTML = `
+                <td class="text-muted fw-bold">${index + 1}</td>
+                <td><span class="font-monospace text-muted small">${item.sku}</span></td>
+                <td>
+                    <span class="fw-bold text-dark d-block">${item.nama}</span>
+                    <small class="text-muted" style="font-size: 0.75rem;">${item.jenis}</small>
+                </td>
+                <td class="fw-medium">${formatRupiah(item.harga)}</td>
+                <td class="text-center">
+                    <div class="d-inline-flex align-items-center gap-2">
+                        <button class="table-qty-btn" onclick="updateItemQty(${index}, -1)"><i class="bi bi-dash"></i></button>
+                        <span class="fw-bold px-1" style="min-width: 22px;">${item.qty}</span>
+                        <button class="table-qty-btn" onclick="updateItemQty(${index}, 1)"><i class="bi bi-plus"></i></button>
+                    </div>
+                </td>
+                <td class="text-end fw-bold text-dark">${formatRupiah(subtotal)}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm text-danger border-0 p-1" onclick="removeItem(${index})" title="Hapus Baris">
+                        <i class="bi bi-x-circle fs-6"></i>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        document.getElementById('tableItemCounter').innerText = `${activeTransaction.length} Baris Item`;
+        updateTotals();
+    }
+
+    function updateItemQty(index, delta) {
+        const item = activeTransaction[index];
+        const newQty = item.qty + delta;
+        if (newQty > 0 && newQty <= item.max_stok) {
+            item.qty = newQty;
+        } else if (newQty === 0) {
+            removeItem(index);
+            return;
+        } else if (newQty > item.max_stok) {
+            alert('Maksimal stok tercapai!');
+        }
+        renderTable();
+    }
+
+    function removeItem(index) {
+        activeTransaction.splice(index, 1);
+        renderTable();
+    }
+
+    function clearTransaction() {
+        if (activeTransaction.length > 0 && confirm('Kosongkan semua data transaksi saat ini?')) {
+            activeTransaction = [];
+            renderTable();
+        }
+    }
+
+    function updateTotals() {
+        document.getElementById('grandTotalDisplay').innerText = formatRupiah(grandTotal);
+        calculateChange();
+    }
+
+    function calculateChange() {
+        const received = parseFloat(cashInput.value) || 0;
+        const change = received - grandTotal;
+        const changeDisplay = document.getElementById('changeAmountDisplay');
+
+        if (received >= grandTotal && grandTotal > 0) {
+            changeDisplay.innerText = formatRupiah(change);
+            changeDisplay.className = 'fw-bold text-success fs-6';
+        } else if (received > 0 && received < grandTotal) {
+            changeDisplay.innerText = 'Kurang ' + formatRupiah(Math.abs(change));
+            changeDisplay.className = 'fw-bold text-danger fs-6';
+        } else {
+            changeDisplay.innerText = 'Rp 0';
+            changeDisplay.className = 'fw-bold text-muted fs-6';
+        }
+    }
+
+    cashInput.addEventListener('input', calculateChange);
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && document.activeElement !== searchInput && document.activeElement !== cashInput) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+        if (e.key === 'F8') {
+            e.preventDefault();
+            clearTransaction();
+        }
+        if (e.key === 'F9') {
+            e.preventDefault();
+            document.getElementById('btnCompletePayment').click();
+        }
+    });
+
+    document.getElementById('btnCompletePayment').addEventListener('click', function() {
+        if (activeTransaction.length === 0) {
+            alert('Belum ada obat yang dimasukkan ke dalam nota transaksi!');
+            return;
+        }
+        alert('Transaksi valid! Siap disimpan ke database.');
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

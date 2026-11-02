@@ -2,14 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TransaksiController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/transaksi', function () {
-    return view('transaksi.index');
-});
+Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
 
 Route::get('/validasi-blu', function () {
     return view('blu.validasi');
