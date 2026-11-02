@@ -36,7 +36,7 @@
 
     <div class="container py-5">
 
-        <!-- ================= FILTER LAPORAN ================= -->
+        <!--filter laporan-->
         <div class="text-center mb-4">
             <h3 class="fw-bold mb-1">Filter Laporan</h3>
             <p class="text-muted small">Pilih periode waktu dan perbaiki hasilnya.</p>
@@ -72,7 +72,7 @@
             </form>
         </div>
 
-        <!-- ================= TREN PENJUALAN & KATEGORI TERATAS ================= -->
+        <!--tren penjualan dan kategori teratas-->
         <div class="text-center mb-3">
             <h3 class="fw-bold">Tren Penjualan</h3>
             <p class="text-muted small">Visualisasikan pergerakan pendapatan untuk jangka waktu yang dipilih.</p>
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <!-- ================= RINGKASAN SINGKAT ================= -->
+        <!--ringkasan singkat-->
         <div class="text-center mb-3">
             <h3 class="fw-bold">Ringkasan Singkat</h3>
             <p class="text-muted small">Kondisi cepat sebelum meninjau detail transaksi.</p>
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-        <!-- ================= OBAT DENGAN PENJUALAN TERTINGGI ================= -->
+        <!--obat dengan penjualan tertinggi-->
         <div class="text-center mb-4">
             <h3 class="fw-bold">Obat dengan Penjualan Tertinggi</h3>
             <p class="text-muted small">Diurutkan berdasarkan total penjualan periode terpilih. Prioritas pengadaan obat berdasarkan peringkat dan momentum.</p>
