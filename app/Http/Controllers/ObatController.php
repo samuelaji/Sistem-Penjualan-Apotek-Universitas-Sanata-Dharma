@@ -4,63 +4,78 @@ namespace App\Http\Controllers;
 
 use App\Models\Obat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ObatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $obat = Obat::all();
-        return view('obat.index', compact('obat'));
-    }
+        $query = Obat::query();
 
-    public function create()
-    {
-        return view('obat.create');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_obat', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('kategori', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('kategori') && $request->kategori !== 'Semua') {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $obatList = $query->latest()->paginate(10)->withQueryString();
+        $kategoriList = Obat::select('kategori')->distinct()->pluck('kategori');
+
+        return view('apoteker.obat', compact('obatList', 'kategoriList'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_pengguna'        => 'required|integer',
-            'nama_obat'          => 'required|string|max:100',
-            'kategori'           => 'required|string|max:50',
-            'stok'               => 'required|integer|min:0',
-            'harga'              => 'required|numeric|min:0',
-            'tanggal_kadaluarsa' => 'required|date',
+            'sku'                 => 'required|string|max:50|unique:obat,sku',
+            'nama_obat'           => 'required|string|max:100',
+            'kategori'            => 'required|string|max:50',
+            'jenis_obat'          => 'required|string|max:100',
+            'stok'                => 'required|integer|min:0',
+            'batas_minimum'       => 'required|integer|min:1',
+            'harga_obat'          => 'required|numeric|min:0',
+            'tanggal_kadaluwarsa' => 'required|date',
         ]);
 
+        $validated['id_pengguna'] = Auth::id() ?? 1;
+
         Obat::create($validated);
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil ditambahkan.');
+
+        return redirect()->route('apoteker.obat.index')->with('success', 'Obat baru berhasil ditambahkan ke katalog.');
     }
 
-    public function show(Obat $obat)
+    public function update(Request $request, $id)
     {
-        return view('obat.show', compact('obat'));
-    }
+        $obat = Obat::findOrFail($id);
 
-    public function edit(Obat $obat)
-    {
-        return view('obat.edit', compact('obat'));
-    }
-
-    public function update(Request $request, Obat $obat)
-    {
         $validated = $request->validate([
-            'id_pengguna'        => 'required|integer',
-            'nama_obat'          => 'required|string|max:100',
-            'kategori'           => 'required|string|max:50',
-            'stok'               => 'required|integer|min:0',
-            'harga'              => 'required|numeric|min:0',
-            'tanggal_kadaluarsa' => 'required|date',
+            'sku'                 => 'required|string|max:50|unique:obat,sku,' . $obat->id_obat . ',id_obat',
+            'nama_obat'           => 'required|string|max:100',
+            'kategori'            => 'required|string|max:50',
+            'jenis_obat'          => 'required|string|max:100',
+            'stok'                => 'required|integer|min:0',
+            'batas_minimum'       => 'required|integer|min:1',
+            'harga_obat'          => 'required|numeric|min:0',
+            'tanggal_kadaluwarsa' => 'required|date',
         ]);
 
         $obat->update($validated);
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil diperbarui.');
+
+        return redirect()->route('apoteker.obat.index')->with('success', 'Data obat berhasil diperbarui.');
     }
 
-    public function destroy(Obat $obat)
+    public function destroy($id)
     {
+        $obat = Obat::findOrFail($id);
         $obat->delete();
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil dihapus.');
+
+        return redirect()->route('apoteker.obat.index')->with('success', 'Obat berhasil dihapus dari katalog.');
     }
 }

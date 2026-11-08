@@ -910,14 +910,17 @@
             const result = await response.json();
 
             if (response.ok && result.success) {
-                // Beritahu kasir jika transaksi berhasil
+
                 let successMsg = result.message;
                 if(result.status_transaksi === 'Pending') {
-                    successMsg += '\n(Resep dokter dikirim ke panel Apoteker untuk divalidasi)';
+                    successMsg += '\n(Resep dikirim ke Apoteker untuk validasi)';
                 }
                 alert(successMsg);
 
-                // Refresh halaman untuk transaksi berikutnya
+                const strukUrl = `/transaksi/${result.id_transaksi}/struk`;
+                window.open(strukUrl, 'StrukWindow', 'width=350,height=600,scrollbars=yes');
+
+                // 3. Refresh halaman untuk transaksi berikutnya
                 window.location.reload();
             } else {
                 alert('Gagal memproses transaksi: ' + (result.message || 'Error tidak diketahui'));

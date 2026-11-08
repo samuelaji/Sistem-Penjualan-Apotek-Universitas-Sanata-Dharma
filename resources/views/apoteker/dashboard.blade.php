@@ -344,7 +344,7 @@
 
         <nav class="nav-segmented ms-2">
             <a href="{{ route('apoteker.dashboard') }}" class="active">Dashboard Validasi</a>
-            <a href="#" onclick="alert('Katalog Obat segera dihubungkan!')">Katalog Obat</a>
+            <a href="{{ route('apoteker.obat.index') }}">Katalog Obat</a>
         </nav>
     </div>
 
@@ -367,17 +367,7 @@
             <div class="table-card-header">
                 <div>
                     <span class="fw-bold text-dark fs-6">Antrean Validasi Resep Dokter</span>
-                    <small class="text-muted d-block" style="font-size: 0.75rem;">Resep aktif dari kasir yang memerlukan verifikasi legalitas farmasi</small>
                 </div>
-                @if($totalPending > 0)
-                    <span class="badge bg-danger rounded-pill px-2.5 py-1 fw-bold" style="font-size: 0.72rem;">
-                        {{ $totalPending }} Resep Menunggu
-                    </span>
-                @else
-                    <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.72rem;">
-                        Semua Terverifikasi
-                    </span>
-                @endif
             </div>
 
             <div class="table-wrapper">
@@ -452,8 +442,7 @@
 
         <div class="panel-section-distinct">
             <div class="section-header-wrap">
-                <span class="section-heading">Ringkasan Farmasi</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Status Hari Ini</span>
+                <span class="section-heading">Ringkasan</span>
             </div>
             <div class="kpi-grid">
 
@@ -463,18 +452,18 @@
                 </div>
 
                 <div class="kpi-box">
+                    <span class="kpi-label">Katalog Obat</span>
+                    <div class="kpi-value text-dark">{{ $totalObat }}</div>
+                </div>
+
+                <div class="kpi-box">
                     <span class="kpi-label">Stok Menipis</span>
                     <div class="kpi-value {{ $totalKritis > 0 ? 'text-warning' : 'text-dark' }}">{{ $totalKritis }}</div>
                 </div>
 
                 <div class="kpi-box">
                     <span class="kpi-label">Hampir Expired</span>
-                    <div class="kpi-value text-dark">{{ $totalExpiredAlert }}</div>
-                </div>
-
-                <div class="kpi-box">
-                    <span class="kpi-label">Katalog Obat</span>
-                    <div class="kpi-value text-dark">{{ $totalObat }}</div>
+                    <div class="kpi-value text-danger">{{ $totalExpiredAlert }}</div>
                 </div>
 
             </div>
@@ -483,7 +472,6 @@
         <div class="panel-section-distinct">
             <div class="section-header-wrap">
                 <span class="section-heading">Stok Menipis</span>
-                <span class="badge bg-danger-subtle text-danger rounded-pill px-2" style="font-size: 0.65rem;">Perlu Restock</span>
             </div>
 
             <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">

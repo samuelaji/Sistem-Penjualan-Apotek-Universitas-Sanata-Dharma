@@ -79,12 +79,18 @@ class TransaksiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Transaksi berhasil disimpan!',
-                'status_transaksi' => $transaksi->status_transaksi
+                'status_transaksi' => $transaksi->status_transaksi,
+                'id_transaksi' => $transaksi->id_transaksi
             ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Terjadi kesalahan sistem: ' . $e->getMessage()], 500);
         }
+    }
+    public function struk($id)
+    {
+        $transaksi = Transaksi::with(['detail_transaksi.obat', 'shift.staff'])->findOrFail($id);
+        return view('transaksi.struk', compact('transaksi'));
     }
 }

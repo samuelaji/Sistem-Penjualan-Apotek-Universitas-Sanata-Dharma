@@ -14,23 +14,23 @@ class DatabaseSeeder extends Seeder
     {
 
         $manajemen = Staff::create([
-            'nama_pengguna' => 'Budi',
+            'nama_pengguna' => 'satria',
             'username' => 'manajemen',
-            'password' => Hash::make('rahasia123'),
+            'password' => Hash::make('12345678'),
             'role_akses' => 'Manajemen',
         ]);
 
         $apoteker = Staff::create([
-            'nama_pengguna' => 'Adi',
+            'nama_pengguna' => 'samuel',
             'username' => 'apoteker',
-            'password' => Hash::make('rahasia123'),
+            'password' => Hash::make('12345678'),
             'role_akses' => 'Apoteker',
         ]);
 
         $kasir = Staff::create([
-            'nama_pengguna' => 'Loney',
+            'nama_pengguna' => 'aji',
             'username' => 'kasir',
-            'password' => Hash::make('rahasia123'),
+            'password' => Hash::make('12345678'),
             'role_akses' => 'Kasir',
         ]);
 
