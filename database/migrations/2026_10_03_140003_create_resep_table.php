@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama_dokter', 100);
             $table->string('nama_klinik', 100);
             $table->date('tanggal_resep');
+            $table->string('status_validasi')->default('Menunggu Validasi');
             $table->timestamps();
         });
     }

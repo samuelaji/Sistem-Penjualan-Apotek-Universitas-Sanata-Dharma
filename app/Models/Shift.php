@@ -18,5 +18,13 @@ class Shift extends Model
         'waktu_selesai',
         'saldo_awal',
         'saldo_akhir',
+        'total_penjualan',
+        'selisih',
+        'status',
     ];
+
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class, 'id_pengguna', 'id_pengguna');
+    }
 }

@@ -11,10 +11,13 @@ return new class extends Migration
         Schema::create('obat', function (Blueprint $table) {
             $table->id('id_obat');
             $table->foreignId('id_pengguna')->constrained('staff', 'id_pengguna')->onDelete('cascade');
+            $table->string('sku');
             $table->string('nama_obat', 100);
             $table->string('kategori', 50);
+            $table->string('jenis_obat', 100);
             $table->integer('stok');
-            $table->decimal('harga', 15, 2);
+            $table->integer('batas_minimum');
+            $table->decimal('harga_obat', 15, 2);
             $table->date('tanggal_kadaluwarsa');
             $table->timestamps();
         });
