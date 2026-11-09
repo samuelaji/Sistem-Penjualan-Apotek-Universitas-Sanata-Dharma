@@ -19,7 +19,7 @@ Route::post('/apoteker/resep/{id}/approve', [ApotekerController::class, 'approve
 Route::post('/apoteker/resep/{id}/reject', [ApotekerController::class, 'reject'])->name('apoteker.resep.reject');
 
 Route::get('/apoteker/obat', [ObatController::class, 'index'])->name('apoteker.obat.index');
-Route::post('/apoteker/obat', [ObatController::class, 'store'])->name('apoteker.obat.store');
+Route::post('/apoteker/oba`t', [ObatController::class, 'store'])->name('apoteker.obat.store');
 Route::put('/apoteker/obat/{id}', [ObatController::class, 'update'])->name('apoteker.obat.update');
 Route::delete('/apoteker/obat/{id}', [ObatController::class, 'destroy'])->name('apoteker.obat.destroy');
 
