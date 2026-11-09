@@ -516,8 +516,11 @@
 
             <label class="form-label text-muted fw-bold mb-1 mt-3" style="font-size: 0.7rem; letter-spacing: 0.5px;">STATUS RESEP</label>
             <div class="segmented-selector mb-1">
-                <input type="radio" name="recipe_type" id="resep-non" value="Non-Resep" checked onchange="toggleRecipeType()">
-                <label for="resep-non">Tanpa Resep</label>
+                <!-- Wrapper Tanpa Resep agar bisa disembunyikan utuh khusus BLU -->
+                <div id="tanpaResepWrapper" style="display: contents;">
+                    <input type="radio" name="recipe_type" id="resep-non" value="Non-Resep" checked onchange="toggleRecipeType()">
+                    <label for="resep-non">Tanpa Resep</label>
+                </div>
 
                 <input type="radio" name="recipe_type" id="resep-ada" value="Resep" onchange="toggleRecipeType()">
                 <label for="resep-ada">Resep Dokter</label>
@@ -635,6 +638,9 @@
         const paymentSection = document.getElementById('paymentMethodSection');
         const cashArea = document.getElementById('cashCalcArea');
         const bluExpandable = document.getElementById('bluExpandableArea');
+        const tanpaResepWrapper = document.getElementById('tanpaResepWrapper');
+        const radioTanpaResep = document.getElementById('resep-non');
+        const radioResepAda = document.getElementById('resep-ada');
 
         bluExpandable.classList.toggle('active', isBlu);
 
@@ -642,10 +648,20 @@
             paymentSection.classList.remove('active');
             cashArea.classList.remove('active');
             document.getElementById('totalLabelText').innerText = 'Nilai Penjaminan BLU';
+
+            // Sembunyikan tombol "Tanpa Resep" dan otomatis paksa pilih Resep Dokter
+            tanpaResepWrapper.style.display = 'none';
+            radioResepAda.checked = true;
+            toggleRecipeType();
         } else {
             paymentSection.classList.add('active');
             document.getElementById('totalLabelText').innerText = 'Total Tagihan';
             cashArea.classList.toggle('active', selectedPayment === 'Cash');
+
+            // Tampilkan kembali tombol "Tanpa Resep"
+            tanpaResepWrapper.style.display = 'contents';
+            radioTanpaResep.checked = true;
+            toggleRecipeType();
         }
     }
 
@@ -844,13 +860,11 @@
     });
 
     document.getElementById('btnCompletePayment').addEventListener('click', async function() {
-        // 1. Validasi Keranjang Kosong
         if (activeTransaction.length === 0) {
             alert('Belum ada obat yang dimasukkan ke dalam nota transaksi!');
             return;
         }
 
-        // 2. Ambil semua data dari formulir di layar
         const patientType = document.querySelector('input[name="patient_type"]:checked').value;
         const recipeType = document.querySelector('input[name="recipe_type"]:checked').value;
         const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash';
@@ -858,7 +872,6 @@
         let cashReceived = 0;
         let changeAmount = 0;
 
-        // 3. Logika Uang Tunai vs Non-Tunai/BLU
         if (patientType === 'Umum' && paymentMethod === 'Cash') {
             cashReceived = parseFloat(cashInput.value) || 0;
             changeAmount = cashReceived - grandTotal;
@@ -869,18 +882,15 @@
                 return;
             }
         } else {
-            // Jika QRIS/Transfer atau Pasien BLU, uang dianggap PAS
             cashReceived = grandTotal;
             changeAmount = 0;
         }
 
-        // 4. Ubah tombol jadi "Loading" agar kasir tidak klik 2 kali
         const btn = this;
         const originalBtnHTML = btn.innerHTML;
         btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Memproses...`;
         btn.disabled = true;
 
-        // 5. Susun paket data (Payload) untuk dikirim ke Backend
         const payload = {
             cart: activeTransaction,
             patient_type: patientType,
@@ -896,40 +906,27 @@
             change_amount: changeAmount
         };
 
-        // 6. Tembakkan ke Controller menggunakan Fetch API (AJAX)
         try {
-            const response = await fetch("{{ route('transaksi.store') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Kunci Keamanan
-                },
-                body: JSON.stringify(payload)
-            });
-
+            const response = await fetch('/transaksi/simpan', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify(payload)
+});
             const result = await response.json();
-
             if (response.ok && result.success) {
-
-                let successMsg = result.message;
-                if(result.status_transaksi === 'Pending') {
-                    successMsg += '\n(Resep dikirim ke Apoteker untuk validasi)';
-                }
-                alert(successMsg);
-
-                const strukUrl = `/transaksi/${result.id_transaksi}/struk`;
-                window.open(strukUrl, 'StrukWindow', 'width=350,height=600,scrollbars=yes');
-
-                // 3. Refresh halaman untuk transaksi berikutnya
+                alert('Transaksi berhasil diselesaikan!');
                 window.location.reload();
             } else {
-                alert('Gagal memproses transaksi: ' + (result.message || 'Error tidak diketahui'));
+                alert('Gagal memproses transaksi: ' + (result.message || 'Terjadi kesalahan pada server.'));
                 btn.innerHTML = originalBtnHTML;
                 btn.disabled = false;
             }
         } catch (error) {
-            console.error(error);
-            alert('Gagal menghubungi server. Pastikan koneksi stabil.');
+            console.error('Error:', error);
+            alert('Terjadi kesalahan jaringan atau server.');
             btn.innerHTML = originalBtnHTML;
             btn.disabled = false;
         }
