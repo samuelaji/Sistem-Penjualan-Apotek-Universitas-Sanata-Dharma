@@ -172,6 +172,11 @@
             background-color: #f8fafc;
         }
 
+        .search-item.active {
+            background-color: #fff1f2;
+             border-left: 4px solid var(--maroon);
+        }
+
         .search-item:last-child {
             border-bottom: none;
         }
@@ -510,7 +515,7 @@
             <div class="smooth-accordion" id="bluExpandableArea">
                 <div class="expandable-box">
                     <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.75rem;">NIM / NIP</label>
-                    <input type="text" class="form-control form-control-sm border-1" id="nimNipInput" placeholder="Masukkan NIM / NIP">
+                    <input type="text" class="form-control form-control-sm border-1" id="nimNipInput" placeholder="Masukkan NIM/NIP">
                 </div>
             </div>
 
@@ -536,11 +541,11 @@
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Dokter Penulis</label>
+                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Penulis</label>
                         <input type="text" class="form-control form-control-sm border-1" id="doctorNameInput" placeholder="Contoh: dr. Budi Santoso">
                     </div>
                     <div>
-                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Klinik / RS</label>
+                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Faskes</label>
                         <input type="text" class="form-control form-control-sm border-1" id="clinicNameInput" placeholder="Contoh: RS Panti Rapih">
                     </div>
                 </div>
@@ -555,7 +560,7 @@
                 </div>
 
                 <div class="smooth-accordion" id="paymentMethodSection">
-                    <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">METODE BAYAR</label>
+                    <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">METODE PEMBAYARAN</label>
                     <div class="segmented-selector mb-3">
                         <input type="radio" name="payment_method" id="pay-cash" value="Cash" checked onchange="updatePaymentVisibility()">
                         <label for="pay-cash">Tunai</label>
@@ -570,21 +575,22 @@
 
                 <div class="smooth-accordion" id="cashCalcArea">
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-semibold mb-1">Uang Diterima dari Pembeli</label>
+                        <label class="form-label text-muted small fw-semibold mb-1">Total Uang Diterima dari Pembeli</label>
                         <div class="cash-input-group">
                             <span class="cash-prefix">Rp</span>
                             <input
-                                type="number"
+                                type="text"
                                 class="cash-input"
                                 id="cashReceivedInput"
                                 placeholder="0"
+                                inputmode="text"
                                 autocomplete="off"
                             >
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center p-2 px-3 rounded-3 bg-light border">
-                        <span class="text-muted small fw-semibold">Uang Kembalian:</span>
+                        <span class="text-muted small fw-semibold">Kembalian:</span>
                         <span class="fw-bold text-success fs-6" id="changeAmountDisplay">Rp 0</span>
                     </div>
                 </div>
@@ -608,6 +614,17 @@
     const formatRupiah = (val) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
     };
+
+    function parseNominal(value) {
+        return Number(value.replace(/\D/g, '')) || 0;
+    }
+
+    function formatNominal(value) {
+        const angka = parseNominal(String(value));
+
+        return angka.toLocaleString('id-ID');
+    }
+
 
     const searchInput = document.getElementById('medicineSearchInput');
     const searchDropdown = document.getElementById('searchResults');
@@ -654,50 +671,143 @@
         toggleRecipeType();
     });
 
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase();
-        searchDropdown.innerHTML = '';
+    
+let filteredMedicines = [];
+let activeIndex = -1;
 
-        if (query.length === 0) {
-            searchDropdown.style.display = 'none';
-            return;
-        }
+searchInput.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
 
-        const filtered = masterObatList.filter(o =>
-            o.nama_obat.toLowerCase().includes(query) ||
-            o.sku.toLowerCase().includes(query)
-        );
+    searchDropdown.innerHTML = '';
+    filteredMedicines = [];
+    activeIndex = -1;
 
-        if (filtered.length > 0) {
-            filtered.forEach(obat => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'search-item';
-                itemDiv.innerHTML = `
-                    <div>
-                        <span class="fw-bold text-dark d-block">${obat.nama_obat}</span>
-                        <small class="text-muted font-monospace">${obat.sku} • ${obat.jenis_obat}</small>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold text-dark d-block" style="color: #8B0000 !important;">${formatRupiah(obat.harga_obat)}</span>
-                        <small class="badge ${obat.stok <= obat.batas_minimum ? 'bg-warning-subtle text-warning-emphasis' : 'bg-success-subtle text-success'} rounded-pill">
-                            Stok: ${obat.stok}
-                        </small>
-                    </div>
-                `;
-                itemDiv.onclick = () => {
-                    addItemToTransaction(obat);
-                    searchInput.value = '';
-                    searchDropdown.style.display = 'none';
-                    searchInput.focus();
-                };
-                searchDropdown.appendChild(itemDiv);
-            });
-            searchDropdown.style.display = 'block';
-        } else {
-            searchDropdown.innerHTML = `<div class="p-3 text-center text-muted small">Obat tidak ditemukan.</div>`;
-            searchDropdown.style.display = 'block';
-        }
+    if (query.length === 0) {
+        searchDropdown.style.display = 'none';
+        return;
+    }
+
+    filteredMedicines = masterObatList.filter(o =>
+        o.nama_obat.toLowerCase().includes(query) ||
+        o.sku.toLowerCase().includes(query)
+    );
+
+    if (filteredMedicines.length > 0) {
+        filteredMedicines.forEach((obat, index) => {
+            const itemDiv = document.createElement('div');
+
+            itemDiv.className = 'search-item';
+
+            itemDiv.innerHTML = `
+                <div>
+                    <span class="fw-bold text-dark d-block">
+                        ${obat.nama_obat}
+                    </span>
+                    <small class="text-muted font-monospace">
+                        ${obat.sku} • ${obat.jenis_obat}
+                    </small>
+                </div>
+
+                <div class="text-end">
+                    <span class="fw-bold text-dark d-block"
+                        style="color: #8B0000 !important;">
+                        ${formatRupiah(obat.harga_obat)}
+                    </span>
+
+                    <small class="badge ${
+                        obat.stok <= obat.batas_minimum
+                        ? 'bg-warning-subtle text-warning-emphasis'
+                        : 'bg-success-subtle text-success'
+                    } rounded-pill">
+                        Stok: ${obat.stok}
+                    </small>
+                </div>
+            `;
+
+            itemDiv.onclick = () => selectMedicine(index);
+
+            searchDropdown.appendChild(itemDiv);
+        });
+
+        searchDropdown.style.display = 'block';
+
+    } else {
+        searchDropdown.innerHTML = `
+            <div class="p-3 text-center text-muted small">
+                Obat tidak ditemukan.
+            </div>
+        `;
+
+        searchDropdown.style.display = 'block';
+    }
+});
+
+function updateActiveMedicine() {
+    const items = searchDropdown.querySelectorAll('.search-item');
+
+    items.forEach((item, index) => {
+        item.classList.toggle('active', index === activeIndex);
     });
+
+    if (activeIndex >= 0 && items[activeIndex]) {
+        items[activeIndex].scrollIntoView({
+            block: 'nearest'
+        });
+    }
+}
+
+function selectMedicine(index) {
+    const obat = filteredMedicines[index];
+
+    if (!obat) return;
+
+    addItemToTransaction(obat);
+
+    searchInput.value = '';
+    searchDropdown.style.display = 'none';
+
+    filteredMedicines = [];
+    activeIndex = -1;
+
+    searchInput.focus();
+}
+
+searchInput.addEventListener('keydown', function(e) {
+
+    if (
+        ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.key) &&
+        filteredMedicines.length > 0
+    ) {
+        e.preventDefault();
+
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+            activeIndex = Math.min(
+                activeIndex + 1,
+                filteredMedicines.length - 1
+            );
+        }
+
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            activeIndex = Math.max(
+                activeIndex - 1,
+                0
+            );
+        }
+
+        updateActiveMedicine();
+    }
+
+    //pilih obat pakai enter
+    if (e.key === 'Enter' && activeIndex >= 0) {
+        e.preventDefault();
+        selectMedicine(activeIndex);
+    }
+
+    if (e.key === 'Escape') {
+        searchDropdown.style.display = 'none';
+        activeIndex = -1;
+    }
+});
 
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-container')) {
@@ -810,23 +920,35 @@
     }
 
     function calculateChange() {
-        const received = parseFloat(cashInput.value) || 0;
-        const change = received - grandTotal;
-        const changeDisplay = document.getElementById('changeAmountDisplay');
+    const received = parseNominal(cashInput.value);
+    const change = received - grandTotal;
 
-        if (received >= grandTotal && grandTotal > 0) {
-            changeDisplay.innerText = formatRupiah(change);
-            changeDisplay.className = 'fw-bold text-success fs-6';
-        } else if (received > 0 && received < grandTotal) {
-            changeDisplay.innerText = 'Kurang ' + formatRupiah(Math.abs(change));
-            changeDisplay.className = 'fw-bold text-danger fs-6';
-        } else {
-            changeDisplay.innerText = 'Rp 0';
-            changeDisplay.className = 'fw-bold text-muted fs-6';
-        }
+    const changeDisplay = document.getElementById('changeAmountDisplay');
+
+    if (received >= grandTotal && grandTotal > 0) {
+        changeDisplay.innerText = formatRupiah(change);
+        changeDisplay.className = 'fw-bold text-success fs-6';
+
+    } else if (received > 0 && received < grandTotal) {
+        changeDisplay.innerText = 'Kurang ' + formatRupiah(Math.abs(change));
+        changeDisplay.className = 'fw-bold text-danger fs-6';
+
+    } else {
+        changeDisplay.innerText = 'Rp 0';
+        changeDisplay.className = 'fw-bold text-muted fs-6';
     }
+}
 
-    cashInput.addEventListener('input', calculateChange);
+    
+    cashInput.addEventListener('input', function() {
+        const angka = parseNominal(this.value);
+
+        this.value = angka > 0
+            ? angka.toLocaleString('id-ID')
+            : '';
+
+        calculateChange();
+    });
 
     document.addEventListener('keydown', function(e) {
         if (e.key === '/' && document.activeElement !== searchInput && document.activeElement !== cashInput) {
@@ -860,11 +982,11 @@
 
         // 3. Logika Uang Tunai vs Non-Tunai/BLU
         if (patientType === 'Umum' && paymentMethod === 'Cash') {
-            cashReceived = parseFloat(cashInput.value) || 0;
+            cashReceived = parseNominal(cashInput.value);
             changeAmount = cashReceived - grandTotal;
 
             if (cashReceived < grandTotal) {
-                alert('Maaf, nominal uang tunai yang diterima kurang dari total tagihan!');
+                alert('Nominal uang tunai yang diterima kurang dari total tagihan!');
                 cashInput.focus();
                 return;
             }
