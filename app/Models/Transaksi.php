@@ -11,6 +11,8 @@ class Transaksi extends Model
 
     protected $table = 'transaksi';
     protected $primaryKey = 'id_transaksi';
+    // Hapus baris ini jika migration memakai $table->timestamps()
+    public $timestamps = false;
 
     protected $fillable = [
         'id_shift',
@@ -21,7 +23,12 @@ class Transaksi extends Model
         'nominal_bayar',
     ];
 
+    protected $casts = [
+        'tanggal_transaksi' => 'datetime',
+    ];
+
     public function shift(){
+
 
         return $this->belongsTo(Shift::class, 'id_shift', 'id_shift');
     }
