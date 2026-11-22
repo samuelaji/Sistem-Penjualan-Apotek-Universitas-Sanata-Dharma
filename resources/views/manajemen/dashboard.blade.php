@@ -225,7 +225,7 @@
     </div>
 
     <div class="d-flex align-items-center gap-3">
-        <span class="text-muted small fw-semibold font-monospace" id="liveClock">--:--:--</span>
+        <span class="text-muted small fw-semibold" id="liveClock">--:--:--</span>
         <form action="{{ route('logout') }}" method="POST" class="m-0">
             @csrf
             <button type="submit" class="btn btn-sm btn-outline-danger border-0 rounded-circle" title="Keluar">
@@ -356,7 +356,6 @@
 
 </main>
 
-<!-- JAVASCRIPT: Jam & Chart.js -->
 <script>
     // 1. Live Clock
     function updateClock() {

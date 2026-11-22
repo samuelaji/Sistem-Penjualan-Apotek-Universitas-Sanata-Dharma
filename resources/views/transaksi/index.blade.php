@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Transaksi</title>
+    <title>Terminal POS - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,13 +16,13 @@
             --border-soft: #e2e8f0;
             --maroon: #8B0000;
             --maroon-dark: #6e0000;
+            --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
             --text-muted: #64748b;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -33,6 +33,7 @@
             display: flex;
             flex-direction: column;
             margin: 0;
+            font-size: 16px;
         }
 
         input[type=number]::-webkit-inner-spin-button,
@@ -40,103 +41,127 @@
             -webkit-appearance: none;
             margin: 0;
         }
-
         input[type=number] {
             -moz-appearance: textfield;
+            appearance: textfield;
         }
 
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        @keyframes pageEntrance {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 8px;
-        }
-
         @keyframes rowAppear {
-            from {
-                opacity: 0;
-                transform: translateY(-6px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .animate-row {
-            animation: rowAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: rowAppear 0.25s var(--ease-out) forwards;
         }
 
+        .text-maroon { color: var(--maroon) !important; }
+
+        /* ---------- Header ---------- */
         .pos-header {
             background: var(--surface);
             border-bottom: 1px solid var(--border-soft);
-            padding: 0.65rem 1.5rem;
+            padding: 0.85rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 20;
         }
 
-        .cashier-info {
+        .user-identity {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .user-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            line-height: 1.25;
+            text-transform: capitalize;
+        }
+        .user-id {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            line-height: 1.25;
         }
 
-        .cashier-avatar {
-            width: 36px;
-            height: 36px;
-            background: rgba(139, 0, 0, 0.08);
-            color: var(--maroon);
-            border-radius: 50%;
+        .nav-segmented {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            background: #e2e8f0;
+            border-radius: 10px;
+            padding: 4px;
+            gap: 4px;
+        }
+        .nav-segmented a {
+            text-decoration: none;
+            padding: 6px 15px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 8px;
+            transition: all 0.2s var(--ease-out);
+        }
+        .nav-segmented a:hover { color: var(--text-dark); }
+        .nav-segmented a.active {
+            background: var(--maroon);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(139, 0, 0, 0.2);
         }
 
+        .header-clock {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---------- Tata Letak Utama ---------- */
         .pos-container {
             flex: 1;
             display: flex;
             overflow: hidden;
-            padding: 1rem;
-            gap: 1rem;
+            padding: 0.85rem 1.15rem;
+            gap: 0.85rem;
+            animation: pageEntrance 0.35s var(--ease-out) forwards;
         }
 
         .workspace-left {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.65rem;
             overflow: hidden;
         }
 
+        /* ---------- Pencarian Obat ---------- */
         .search-container {
             background: var(--surface);
             border-radius: 12px;
-            padding: 0.75rem 1.25rem;
+            padding: 0.75rem 1.15rem;
             border: 1.5px solid var(--border-soft);
             position: relative;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
-
         .search-container:focus-within {
             border-color: var(--maroon);
-            box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.08);
+            box-shadow: 0 0 0 3px var(--maroon-soft);
         }
 
         .search-input {
             width: 100%;
             border: none;
             outline: none;
-            font-size: 1rem;
+            font-size: 0.98rem;
             background: transparent;
             font-weight: 500;
             color: var(--text-dark);
@@ -144,14 +169,14 @@
 
         .search-results-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
+            top: calc(100% + 6px);
             left: 0;
             right: 0;
             background: var(--surface);
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-            max-height: 340px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+            max-height: 360px;
             overflow-y: auto;
             z-index: 100;
             display: none;
@@ -159,33 +184,57 @@
         }
 
         .search-item {
-            padding: 0.85rem 1.25rem;
+            padding: 0.85rem 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #f8fafc;
+            gap: 1rem;
+            border-bottom: 1px solid #f1f5f9;
             cursor: pointer;
             transition: background 0.15s ease;
         }
-
-        .search-item:hover {
-            background-color: #f8fafc;
-        }
-
+        .search-item:hover { background-color: #f8fafc; }
         .search-item.active {
-            background-color: #fff1f2;
-             border-left: 4px solid var(--maroon);
+            background-color: #f8fafc;
+            border-left: 3px solid var(--maroon);
         }
+        .search-item:last-child { border-bottom: none; }
 
-        .search-item:last-child {
-            border-bottom: none;
+        .search-item-title {
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: block;
         }
+        .search-item-meta {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+        }
+        .search-item-price {
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: block;
+            font-variant-numeric: tabular-nums;
+        }
+        .search-item-stock {
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+        .stock-safe { color: #047857; }
+        .stock-low  { color: #b45309; }
+        .stock-out  { color: #dc2626; }
 
+        /* ---------- Tabel Transaksi ---------- */
         .table-card {
             flex: 1;
             background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border-soft);
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -206,80 +255,130 @@
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.75rem;
+            font-size: 0.86rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0.85rem 1.25rem;
-            border-bottom: 1px solid var(--border-soft);
+            padding: 0.85rem 1.1rem;
+            border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
+            white-space: nowrap;
         }
 
         .table-custom tbody td {
-            padding: 0.9rem 1.25rem;
+            padding: 0.9rem 1.1rem;
             vertical-align: middle;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
+            font-size: 0.96rem;
+            transition: background-color 0.15s ease;
         }
 
-        .table-custom tbody tr:hover {
+        .table-custom tbody tr:hover td {
             background-color: #fafbfc;
         }
 
+        .sku-code {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .packaging-text {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            text-transform: capitalize;
+        }
+
         .table-qty-btn {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             border: 1px solid var(--border-soft);
             background: #ffffff;
-            border-radius: 6px;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: var(--text-dark);
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.15s ease;
         }
-
         .table-qty-btn:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            transform: scale(1.05);
+            background: var(--maroon-soft);
+            border-color: var(--maroon);
+            color: var(--maroon);
         }
 
+        .empty-center-cell {
+            height: calc(100vh - 295px);
+            vertical-align: middle !important;
+            text-align: center;
+            border-bottom: none !important;
+        }
+        .empty-icon-box {
+            width: 58px;
+            height: 58px;
+            background: #f1f5f9;
+            color: #94a3b8;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        /* ---------- Bilah Pintasan ---------- */
         .shortcut-bar {
-            padding: 0.2rem 0.5rem;
+            padding: 0.15rem 0.35rem;
             display: flex;
-            gap: 1.5rem;
-            font-size: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
         .key-badge {
-            background: rgba(0, 0, 0, 0.05);
-            padding: 1px 5px;
-            border-radius: 4px;
+            background: #e2e8f0;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 0.8rem;
             font-weight: 700;
             font-family: monospace;
             color: var(--text-dark);
+            margin-right: 4px;
         }
 
+        /* ---------- Panel Kanan ---------- */
         .panel-right {
-            width: 380px;
-            min-width: 380px;
+            width: 395px;
+            min-width: 395px;
             background: var(--surface);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
         }
 
         .panel-section {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-soft);
+        }
+        .panel-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-heading {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: #334155;
+            display: block;
+            margin-bottom: 0.45rem;
         }
 
         .segmented-selector {
@@ -289,23 +388,20 @@
             padding: 3px;
             gap: 3px;
         }
-
         .segmented-selector input[type="radio"] {
             display: none;
         }
-
         .segmented-selector label {
             flex: 1;
             text-align: center;
             padding: 6px 0;
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             font-weight: 600;
             color: var(--text-muted);
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s var(--ease-out);
         }
-
         .segmented-selector input[type="radio"]:checked + label {
             background: var(--maroon);
             color: #ffffff;
@@ -317,53 +413,70 @@
             opacity: 0;
             overflow: hidden;
             transform: translateY(-4px);
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            transition: max-height 0.35s var(--ease-out),
             opacity 0.25s ease,
             transform 0.25s ease,
             margin-top 0.3s ease;
             margin-top: 0;
         }
-
         .smooth-accordion.active {
-            max-height: 300px;
+            max-height: 450px;
             opacity: 1;
             transform: translateY(0);
-            margin-top: 0.6rem;
+            margin-top: 0.7rem;
         }
 
+        /* Form tambahan tanpa kotak abu-abu */
         .expandable-box {
+            padding-top: 0.7rem;
+            border-top: 1px solid #f1f5f9;
+        }
+        .expandable-box .form-label {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+        .expandable-box .form-control {
+            font-size: 0.94rem;
+            border-radius: 9px;
+            border: 1.5px solid var(--border-soft);
             background: #f8fafc;
-            border: 1px solid var(--border-soft);
-            border-radius: 10px;
-            padding: 0.85rem;
+            padding: 0.48rem 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .expandable-box .form-control:focus {
+            background: #ffffff;
+            border-color: var(--maroon);
+            box-shadow: 0 0 0 3px var(--maroon-soft);
         }
 
+        /* ---------- Ringkasan Total (Flat dengan garis halus) ---------- */
         .total-display-box {
-            background: #fff5f5;
-            border: 1.5px solid #fed7d7;
-            border-left: 5px solid var(--maroon);
-            border-radius: 14px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
+            padding-bottom: 0.9rem;
+            margin-bottom: 0.95rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
         .total-label {
-            color: #991b1b;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
             text-transform: uppercase;
             display: block;
-            margin-bottom: 0.25rem;
         }
 
         .total-amount {
-            font-size: 2.25rem;
+            font-size: 2.15rem;
             font-weight: 800;
-            color: var(--maroon);
-            line-height: 1;
-            letter-spacing: -0.5px;
+            color: var(--text-dark);
+            line-height: 1.15;
+            letter-spacing: -0.75px;
+            font-variant-numeric: tabular-nums;
         }
 
         .cash-input-group {
@@ -371,34 +484,47 @@
             align-items: center;
             border: 1.5px solid var(--border-soft);
             border-radius: 10px;
-            background: #ffffff;
+            background: #f8fafc;
             transition: all 0.2s ease;
+            overflow: hidden;
         }
-
         .cash-input-group:focus-within {
+            background: #ffffff;
             border-color: var(--maroon);
-            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.08);
+            box-shadow: 0 0 0 3px var(--maroon-soft);
         }
 
         .cash-prefix {
-            padding: 0.55rem 0.85rem;
-            background: #f8fafc;
+            padding: 0.65rem 0.9rem;
+            background: transparent;
             border-right: 1.5px solid var(--border-soft);
             color: var(--text-muted);
             font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 8px 0 0 8px;
+            font-size: 0.95rem;
         }
 
         .cash-input {
             border: none;
             outline: none;
             width: 100%;
-            padding: 0.55rem 0.85rem;
+            padding: 0.65rem 0.9rem;
             font-weight: 700;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--text-dark);
             background: transparent;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Kembalian (Flat dengan garis pemisah tipis) */
+        .change-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.7rem;
+            margin-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.94rem;
+            font-variant-numeric: tabular-nums;
         }
 
         .btn-pay {
@@ -406,43 +532,47 @@
             border: none;
             color: #ffffff;
             font-weight: 700;
-            padding: 0.95rem;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             width: 100%;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s var(--ease-out);
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.15);
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.16);
         }
-
         .btn-pay:hover {
             background: var(--maroon-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.25);
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(139, 0, 0, 0.24);
         }
-
-        .btn-pay:active {
-            transform: scale(0.99);
-        }
+        .btn-pay:active { transform: scale(0.99); }
+        .btn-pay:disabled { opacity: 0.75; cursor: wait; }
     </style>
 </head>
 <body>
 
 <header class="pos-header">
-    <div class="cashier-info">
-        <div class="cashier-avatar">
-            <i class="bi bi-person-fill"></i>
+    <div class="d-flex align-items-center gap-4">
+        <div class="user-identity">
+            <span class="user-name">{{ Auth::user()->nama_pengguna ?? 'Kasir' }}</span>
+            <span class="user-id">{{ Auth::user()->username ?? '-' }}</span>
         </div>
-        <div class="fw-bold text-dark fs-6">{{ Auth::user()->nama_pengguna ?? 'Kasir Pelayanan' }}</div>
+
+        <nav class="nav-segmented ms-2">
+            <a href="{{ Route::has('kasir.dashboard') ? route('kasir.dashboard') : url('/kasir/dashboard') }}">Dashboard Kasir</a>
+            <a href="{{ route('transaksi.index') }}" class="active">Terminal POS</a>
+        </nav>
     </div>
 
-    <div class="d-flex align-items-center gap-2">
-        <span class="text-muted small me-2" id="headerLiveClock">--:--:--</span>
+    <div class="d-flex align-items-center gap-3">
+        <span class="header-clock" id="headerLiveClock">--:-- WIB</span>
         <form action="{{ route('logout') }}" method="POST" class="m-0">
             @csrf
-            <button type="submit" class="btn btn-sm btn-outline-danger border-0 rounded-circle" title="Keluar">
+            <button type="submit" class="btn btn-outline-danger border-0 rounded-circle" title="Keluar" aria-label="Keluar">
                 <i class="bi bi-box-arrow-right fs-5"></i>
             </button>
         </form>
@@ -452,13 +582,13 @@
 <main class="pos-container">
     <section class="workspace-left">
         <div class="search-container">
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-3">
                 <i class="bi bi-search text-muted fs-5"></i>
                 <input
                     type="text"
                     class="search-input"
                     id="medicineSearchInput"
-                    placeholder="Cari nama obat atau kategori..."
+                    placeholder="Cari nama obat, SKU, atau kategori..."
                     autocomplete="off"
                     autofocus
                 >
@@ -471,21 +601,24 @@
                 <table class="table-custom">
                     <thead>
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 15%;">Kode/SKU</th>
-                        <th style="width: 35%;">Nama Item & Bentuk</th>
-                        <th style="width: 15%;">Harga Satuan</th>
-                        <th style="width: 15%; text-align: center;">Jumlah (Qty)</th>
-                        <th style="width: 15%; text-align: right;">Subtotal</th>
+                        <th style="width: 5%;">No.</th>
+                        <th style="width: 12%;">Kode SKU</th>
+                        <th style="width: 24%;">Nama Obat</th>
+                        <th style="width: 14%;">Kemasan</th>
+                        <th style="width: 14%;">Harga Satuan</th>
+                        <th style="width: 13%; text-align: center;">Jumlah</th>
+                        <th style="width: 13%; text-align: right;">Subtotal</th>
                         <th style="width: 5%; text-align: center;"></th>
                     </tr>
                     </thead>
                     <tbody id="transactionTableBody">
                     <tr id="emptyTableRow">
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <i class="bi bi-receipt fs-1 d-block opacity-25 mb-2"></i>
-                            <span class="fw-medium">Belum ada obat dalam nota transaksi saat ini.</span>
-                            <small class="d-block text-muted opacity-75">Ketik nama obat pada kolom pencarian di atas untuk memasukkan item.</small>
+                        <td colspan="8" class="empty-center-cell">
+                            <div class="empty-icon-box">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+                            <div class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">Belum Ada Item Transaksi</div>
+                            <p class="text-muted mb-0" style="font-size: 0.92rem;">Cari nama obat, SKU, atau kategori pada kolom di atas untuk menambahkan item.</p>
                         </td>
                     </tr>
                     </tbody>
@@ -494,17 +627,17 @@
         </div>
 
         <div class="shortcut-bar">
-            <span><span class="key-badge">/</span> Cari Obat</span>
-            <span><span class="key-badge">F8</span> Kosongkan Nota</span>
-            <span><span class="key-badge">F9</span> Selesaikan Transaksi</span>
-            <span class="ms-auto text-dark fw-semibold" id="tableItemCounter">0 Baris Item</span>
+            <span><span class="key-badge">/</span>Cari Obat</span>
+            <span><span class="key-badge">F8</span>Kosongkan Transaksi</span>
+            <span><span class="key-badge">F9</span>Selesaikan Transaksi</span>
+            <span class="ms-auto text-dark fw-bold" id="tableItemCounter">0 Item</span>
         </div>
     </section>
 
     <aside class="panel-right">
         <div class="panel-section">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">TIPE PASIEN</label>
-            <div class="segmented-selector mb-1">
+            <span class="section-heading">Jenis Pasien</span>
+            <div class="segmented-selector">
                 <input type="radio" name="patient_type" id="pasien-umum" value="Umum" checked onchange="updatePaymentVisibility()">
                 <label for="pasien-umum">Pasien Umum</label>
 
@@ -514,14 +647,13 @@
 
             <div class="smooth-accordion" id="bluExpandableArea">
                 <div class="expandable-box">
-                    <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.75rem;">NIM / NIP</label>
-                    <input type="text" class="form-control form-control-sm border-1" id="nimNipInput" placeholder="Masukkan NIM/NIP">
+                    <label class="form-label" for="nimNipInput">NIM / NIP</label>
+                    <input type="text" class="form-control" id="nimNipInput" placeholder="Masukkan NIM atau NIP" autocomplete="off">
                 </div>
             </div>
 
-            <label class="form-label text-muted fw-bold mb-1 mt-3" style="font-size: 0.7rem; letter-spacing: 0.5px;">STATUS RESEP</label>
-            <div class="segmented-selector mb-1">
-                <!-- Wrapper Tanpa Resep agar bisa disembunyikan utuh khusus BLU -->
+            <span class="section-heading mt-3">Status Resep</span>
+            <div class="segmented-selector">
                 <div id="tanpaResepWrapper" style="display: contents;">
                     <input type="radio" name="recipe_type" id="resep-non" value="Non-Resep" checked onchange="toggleRecipeType()">
                     <label for="resep-non">Tanpa Resep</label>
@@ -535,21 +667,21 @@
                 <div class="expandable-box">
                     <div class="row g-2 mb-2">
                         <div class="col-6">
-                            <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nomor Resep</label>
-                            <input type="text" class="form-control form-control-sm border-1" id="recipeNoInput" placeholder="No. Resep">
+                            <label class="form-label" for="recipeNoInput">No. Resep</label>
+                            <input type="text" class="form-control" id="recipeNoInput" placeholder="Nomor resep" autocomplete="off">
                         </div>
                         <div class="col-6">
-                            <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Tanggal Resep</label>
-                            <input type="date" class="form-control form-control-sm border-1" id="recipeDateInput" value="{{ date('Y-m-d') }}">
+                            <label class="form-label" for="recipeDateInput">Tanggal Resep</label>
+                            <input type="date" class="form-control" id="recipeDateInput" value="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Penulis</label>
-                        <input type="text" class="form-control form-control-sm border-1" id="doctorNameInput" placeholder="Contoh: dr. Budi Santoso">
+                        <label class="form-label" for="doctorNameInput">Dokter Penulis</label>
+                        <input type="text" class="form-control" id="doctorNameInput" placeholder="Contoh: dr. Budi Santoso" autocomplete="off">
                     </div>
                     <div>
-                        <label class="form-label small fw-semibold text-muted mb-1" style="font-size: 0.72rem;">Nama Faskes</label>
-                        <input type="text" class="form-control form-control-sm border-1" id="clinicNameInput" placeholder="Contoh: RS Panti Rapih">
+                        <label class="form-label" for="clinicNameInput">Fasilitas Kesehatan</label>
+                        <input type="text" class="form-control" id="clinicNameInput" placeholder="Contoh: RS Panti Rapih" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -563,7 +695,7 @@
                 </div>
 
                 <div class="smooth-accordion" id="paymentMethodSection">
-                    <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">METODE PEMBAYARAN</label>
+                    <span class="section-heading">Metode Pembayaran</span>
                     <div class="segmented-selector mb-3">
                         <input type="radio" name="payment_method" id="pay-cash" value="Cash" checked onchange="updatePaymentVisibility()">
                         <label for="pay-cash">Tunai</label>
@@ -577,8 +709,8 @@
                 </div>
 
                 <div class="smooth-accordion" id="cashCalcArea">
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-semibold mb-1">Total Uang Diterima dari Pembeli</label>
+                    <div>
+                        <label class="form-label fw-semibold text-muted mb-1" for="cashReceivedInput" style="font-size: 0.86rem;">Uang Diterima</label>
                         <div class="cash-input-group">
                             <span class="cash-prefix">Rp</span>
                             <input
@@ -586,21 +718,21 @@
                                 class="cash-input"
                                 id="cashReceivedInput"
                                 placeholder="0"
-                                inputmode="text"
+                                inputmode="numeric"
                                 autocomplete="off"
                             >
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center p-2 px-3 rounded-3 bg-light border">
-                        <span class="text-muted small fw-semibold">Kembalian:</span>
-                        <span class="fw-bold text-success fs-6" id="changeAmountDisplay">Rp 0</span>
+                    <div class="change-box">
+                        <span class="text-muted fw-semibold">Kembalian</span>
+                        <span class="fw-bold text-muted" style="font-size: 1.02rem;" id="changeAmountDisplay">Rp 0</span>
                     </div>
                 </div>
             </div>
 
             <div class="pt-3">
-                <button class="btn-pay" id="btnCompletePayment">
+                <button type="button" class="btn-pay" id="btnCompletePayment">
                     Selesaikan Transaksi
                 </button>
             </div>
@@ -614,20 +746,21 @@
     let activeTransaction = [];
     let grandTotal = 0;
 
-    const formatRupiah = (val) => {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
-    };
+    const rupiahFormatter = new Intl.NumberFormat('id-ID');
+    const formatRupiah = (val) => 'Rp ' + rupiahFormatter.format(Number(val) || 0);
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 
     function parseNominal(value) {
-        return Number(value.replace(/\D/g, '')) || 0;
+        return Number(String(value ?? '').replace(/\D/g, '')) || 0;
     }
-
-    function formatNominal(value) {
-        const angka = parseNominal(String(value));
-
-        return angka.toLocaleString('id-ID');
-    }
-
 
     const searchInput = document.getElementById('medicineSearchInput');
     const searchDropdown = document.getElementById('searchResults');
@@ -635,17 +768,20 @@
     const emptyRow = document.getElementById('emptyTableRow');
     const cashInput = document.getElementById('cashReceivedInput');
 
+    /* ---------- Jam Header (WIB) ---------- */
+    const clockEl = document.getElementById('headerLiveClock');
     function updateHeaderClock() {
-        const now = new Date();
-        document.getElementById('headerLiveClock').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+        clockEl.textContent = new Date().toLocaleTimeString('en-GB', {
+            timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false
+        }) + ' WIB';
     }
-    setInterval(updateHeaderClock, 1000);
     updateHeaderClock();
+    setInterval(updateHeaderClock, 1000);
 
+    /* ---------- Kontrol Tampilan Panel Kanan ---------- */
     function toggleRecipeType() {
         const isRecipe = document.getElementById('resep-ada').checked;
-        const recipeArea = document.getElementById('recipeExpandableArea');
-        recipeArea.classList.toggle('active', isRecipe);
+        document.getElementById('recipeExpandableArea').classList.toggle('active', isRecipe);
     }
 
     function updatePaymentVisibility() {
@@ -664,166 +800,129 @@
         if (isBlu) {
             paymentSection.classList.remove('active');
             cashArea.classList.remove('active');
-            document.getElementById('totalLabelText').innerText = 'Nilai Penjaminan BLU';
+            document.getElementById('totalLabelText').textContent = 'Nilai Penjaminan BLU';
 
-            // Sembunyikan tombol "Tanpa Resep" dan otomatis paksa pilih Resep Dokter
             tanpaResepWrapper.style.display = 'none';
             radioResepAda.checked = true;
             toggleRecipeType();
         } else {
             paymentSection.classList.add('active');
-            document.getElementById('totalLabelText').innerText = 'Total Tagihan';
+            document.getElementById('totalLabelText').textContent = 'Total Tagihan';
             cashArea.classList.toggle('active', selectedPayment === 'Cash');
 
-            // Tampilkan kembali tombol "Tanpa Resep"
             tanpaResepWrapper.style.display = 'contents';
             radioTanpaResep.checked = true;
             toggleRecipeType();
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         updatePaymentVisibility();
         toggleRecipeType();
     });
 
-    
-let filteredMedicines = [];
-let activeIndex = -1;
+    /* ---------- Pencarian Obat ---------- */
+    let filteredMedicines = [];
+    let activeIndex = -1;
 
-searchInput.addEventListener('input', function() {
-    const query = this.value.trim().toLowerCase();
+    searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
 
-    searchDropdown.innerHTML = '';
-    filteredMedicines = [];
-    activeIndex = -1;
+        searchDropdown.innerHTML = '';
+        filteredMedicines = [];
+        activeIndex = -1;
 
-    if (query.length === 0) {
-        searchDropdown.style.display = 'none';
-        return;
-    }
+        if (query.length === 0) {
+            searchDropdown.style.display = 'none';
+            return;
+        }
 
-    filteredMedicines = masterObatList.filter(o =>
-        o.nama_obat.toLowerCase().includes(query) ||
-        o.sku.toLowerCase().includes(query)
-    );
+        filteredMedicines = masterObatList.filter(o =>
+            (o.nama_obat && o.nama_obat.toLowerCase().includes(query)) ||
+            (o.sku && o.sku.toLowerCase().includes(query)) ||
+            (o.kategori && o.kategori.toLowerCase().includes(query))
+        );
 
-    if (filteredMedicines.length > 0) {
-        filteredMedicines.forEach((obat, index) => {
-            const itemDiv = document.createElement('div');
+        if (filteredMedicines.length > 0) {
+            filteredMedicines.forEach((obat, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'search-item';
 
-            itemDiv.className = 'search-item';
+                const isLowStock = Number(obat.stok) <= Number(obat.batas_minimum);
+                const stockTextClass = Number(obat.stok) <= 0
+                    ? 'stock-out'
+                    : (isLowStock ? 'stock-low' : 'stock-safe');
 
-            itemDiv.innerHTML = `
-                <div>
-                    <span class="fw-bold text-dark d-block">
-                        ${obat.nama_obat}
-                    </span>
-                    <small class="text-muted font-monospace">
-                        ${obat.sku} • ${obat.jenis_obat}
-                    </small>
-                </div>
+                itemDiv.innerHTML = `
+                    <div>
+                        <span class="search-item-title">${escapeHtml(obat.nama_obat)}</span>
+                        <span class="search-item-meta font-monospace">${escapeHtml(obat.sku)} &bull; ${escapeHtml(obat.jenis_obat)}</span>
+                    </div>
+                    <div class="text-end">
+                        <span class="search-item-price">${formatRupiah(obat.harga_obat)}</span>
+                        <span class="search-item-stock ${stockTextClass}">Stok: ${Number(obat.stok)}</span>
+                    </div>
+                `;
 
-                <div class="text-end">
-                    <span class="fw-bold text-dark d-block"
-                        style="color: #8B0000 !important;">
-                        ${formatRupiah(obat.harga_obat)}
-                    </span>
-
-                    <small class="badge ${
-                        obat.stok <= obat.batas_minimum
-                        ? 'bg-warning-subtle text-warning-emphasis'
-                        : 'bg-success-subtle text-success'
-                    } rounded-pill">
-                        Stok: ${obat.stok}
-                    </small>
+                itemDiv.onclick = () => selectMedicine(index);
+                searchDropdown.appendChild(itemDiv);
+            });
+            searchDropdown.style.display = 'block';
+        } else {
+            searchDropdown.innerHTML = `
+                <div class="p-3 text-center text-muted" style="font-size: 0.92rem;">
+                    Obat tidak ditemukan.
                 </div>
             `;
-
-            itemDiv.onclick = () => selectMedicine(index);
-
-            searchDropdown.appendChild(itemDiv);
-        });
-
-        searchDropdown.style.display = 'block';
-
-    } else {
-        searchDropdown.innerHTML = `
-            <div class="p-3 text-center text-muted small">
-                Obat tidak ditemukan.
-            </div>
-        `;
-
-        searchDropdown.style.display = 'block';
-    }
-});
-
-function updateActiveMedicine() {
-    const items = searchDropdown.querySelectorAll('.search-item');
-
-    items.forEach((item, index) => {
-        item.classList.toggle('active', index === activeIndex);
+            searchDropdown.style.display = 'block';
+        }
     });
 
-    if (activeIndex >= 0 && items[activeIndex]) {
-        items[activeIndex].scrollIntoView({
-            block: 'nearest'
+    function updateActiveMedicine() {
+        const items = searchDropdown.querySelectorAll('.search-item');
+        items.forEach((item, index) => {
+            item.classList.toggle('active', index === activeIndex);
         });
-    }
-}
 
-function selectMedicine(index) {
-    const obat = filteredMedicines[index];
-
-    if (!obat) return;
-
-    addItemToTransaction(obat);
-
-    searchInput.value = '';
-    searchDropdown.style.display = 'none';
-
-    filteredMedicines = [];
-    activeIndex = -1;
-
-    searchInput.focus();
-}
-
-searchInput.addEventListener('keydown', function(e) {
-
-    if (
-        ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.key) &&
-        filteredMedicines.length > 0
-    ) {
-        e.preventDefault();
-
-        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-            activeIndex = Math.min(
-                activeIndex + 1,
-                filteredMedicines.length - 1
-            );
+        if (activeIndex >= 0 && items[activeIndex]) {
+            items[activeIndex].scrollIntoView({ block: 'nearest' });
         }
-
-        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-            activeIndex = Math.max(
-                activeIndex - 1,
-                0
-            );
-        }
-
-        updateActiveMedicine();
     }
 
-    //pilih obat pakai enter
-    if (e.key === 'Enter' && activeIndex >= 0) {
-        e.preventDefault();
-        selectMedicine(activeIndex);
-    }
+    function selectMedicine(index) {
+        const obat = filteredMedicines[index];
+        if (!obat) return;
 
-    if (e.key === 'Escape') {
+        addItemToTransaction(obat);
+
+        searchInput.value = '';
         searchDropdown.style.display = 'none';
+        filteredMedicines = [];
         activeIndex = -1;
+        searchInput.focus();
     }
-});
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.key) && filteredMedicines.length > 0) {
+            e.preventDefault();
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                activeIndex = Math.min(activeIndex + 1, filteredMedicines.length - 1);
+            } else {
+                activeIndex = Math.max(activeIndex - 1, 0);
+            }
+            updateActiveMedicine();
+        }
+
+        if (e.key === 'Enter' && activeIndex >= 0) {
+            e.preventDefault();
+            selectMedicine(activeIndex);
+        }
+
+        if (e.key === 'Escape') {
+            searchDropdown.style.display = 'none';
+            activeIndex = -1;
+        }
+    });
 
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-container')) {
@@ -831,18 +930,20 @@ searchInput.addEventListener('keydown', function(e) {
         }
     });
 
+    /* ---------- Manajemen Keranjang Transaksi ---------- */
     function addItemToTransaction(obat) {
-        if (obat.stok <= 0) {
-            alert('Maaf, stok obat ini sudah habis!');
+        const maxStok = Number(obat.stok) || 0;
+        if (maxStok <= 0) {
+            alert('Stok obat tidak tersedia.');
             return;
         }
 
         const exist = activeTransaction.find(item => item.id_obat === obat.id_obat);
         if (exist) {
-            if (exist.qty < obat.stok) {
+            if (exist.qty < maxStok) {
                 exist.qty += 1;
             } else {
-                alert('Maksimal stok yang tersedia sudah tercapai!');
+                alert('Jumlah melebihi stok tersedia.');
             }
         } else {
             activeTransaction.push({
@@ -850,9 +951,9 @@ searchInput.addEventListener('keydown', function(e) {
                 sku: obat.sku,
                 nama: obat.nama_obat,
                 jenis: obat.jenis_obat,
-                harga: parseFloat(obat.harga_obat),
+                harga: parseFloat(obat.harga_obat) || 0,
                 qty: 1,
-                max_stok: obat.stok
+                max_stok: maxStok
             });
         }
         renderTable();
@@ -864,7 +965,7 @@ searchInput.addEventListener('keydown', function(e) {
 
         if (activeTransaction.length === 0) {
             tableBody.appendChild(emptyRow);
-            document.getElementById('tableItemCounter').innerText = '0 Baris Item';
+            document.getElementById('tableItemCounter').textContent = '0 Item';
             updateTotals();
             return;
         }
@@ -877,35 +978,35 @@ searchInput.addEventListener('keydown', function(e) {
             tr.className = 'animate-row';
             tr.innerHTML = `
                 <td class="text-muted fw-bold">${index + 1}</td>
-                <td><span class="font-monospace text-muted small">${item.sku}</span></td>
-                <td>
-                    <span class="fw-bold text-dark d-block">${item.nama}</span>
-                    <small class="text-muted" style="font-size: 0.75rem;">${item.jenis}</small>
-                </td>
-                <td class="fw-medium">${formatRupiah(item.harga)}</td>
+                <td><span class="font-monospace sku-code">${escapeHtml(item.sku)}</span></td>
+                <td><span class="fw-bold text-dark">${escapeHtml(item.nama)}</span></td>
+                <td><span class="packaging-text">${escapeHtml(item.jenis)}</span></td>
+                <td class="fw-medium" style="font-variant-numeric: tabular-nums;">${formatRupiah(item.harga)}</td>
                 <td class="text-center">
                     <div class="d-inline-flex align-items-center gap-2">
-                        <button class="table-qty-btn" onclick="updateItemQty(${index}, -1)"><i class="bi bi-dash"></i></button>
-                        <span class="fw-bold px-1" style="min-width: 22px;">${item.qty}</span>
-                        <button class="table-qty-btn" onclick="updateItemQty(${index}, 1)"><i class="bi bi-plus"></i></button>
+                        <button type="button" class="table-qty-btn" aria-label="Kurangi jumlah" onclick="updateItemQty(${index}, -1)"><i class="bi bi-dash"></i></button>
+                        <span class="fw-bold px-1" style="min-width: 26px; font-variant-numeric: tabular-nums;">${item.qty}</span>
+                        <button type="button" class="table-qty-btn" aria-label="Tambah jumlah" onclick="updateItemQty(${index}, 1)"><i class="bi bi-plus"></i></button>
                     </div>
                 </td>
-                <td class="text-end fw-bold text-dark">${formatRupiah(subtotal)}</td>
+                <td class="text-end fw-bold text-dark" style="font-variant-numeric: tabular-nums;">${formatRupiah(subtotal)}</td>
                 <td class="text-center">
-                    <button class="btn btn-sm text-danger border-0 p-1" onclick="removeItem(${index})" title="Hapus Baris">
-                        <i class="bi bi-x-circle fs-6"></i>
+                    <button type="button" class="btn btn-sm text-danger border-0 p-1" onclick="removeItem(${index})" title="Hapus Item" aria-label="Hapus Item">
+                        <i class="bi bi-x-circle fs-5"></i>
                     </button>
                 </td>
             `;
             tableBody.appendChild(tr);
         });
 
-        document.getElementById('tableItemCounter').innerText = `${activeTransaction.length} Baris Item`;
+        document.getElementById('tableItemCounter').textContent = `${activeTransaction.length} Item`;
         updateTotals();
     }
 
     function updateItemQty(index, delta) {
         const item = activeTransaction[index];
+        if (!item) return;
+
         const newQty = item.qty + delta;
         if (newQty > 0 && newQty <= item.max_stok) {
             item.qty = newQty;
@@ -913,7 +1014,7 @@ searchInput.addEventListener('keydown', function(e) {
             removeItem(index);
             return;
         } else if (newQty > item.max_stok) {
-            alert('Maksimal stok tercapai!');
+            alert('Jumlah melebihi stok tersedia.');
         }
         renderTable();
     }
@@ -924,49 +1025,53 @@ searchInput.addEventListener('keydown', function(e) {
     }
 
     function clearTransaction() {
-        if (activeTransaction.length > 0 && confirm('Kosongkan semua data transaksi saat ini?')) {
+        if (activeTransaction.length > 0 && confirm('Kosongkan seluruh item pada transaksi ini?')) {
             activeTransaction = [];
             renderTable();
         }
     }
 
+    /* ---------- Kalkulasi Pembayaran ---------- */
     function updateTotals() {
-        document.getElementById('grandTotalDisplay').innerText = formatRupiah(grandTotal);
+        document.getElementById('grandTotalDisplay').textContent = formatRupiah(grandTotal);
         calculateChange();
     }
 
     function calculateChange() {
-    const received = parseNominal(cashInput.value);
-    const change = received - grandTotal;
+        const received = parseNominal(cashInput.value);
+        const change = received - grandTotal;
+        const changeDisplay = document.getElementById('changeAmountDisplay');
 
-    const changeDisplay = document.getElementById('changeAmountDisplay');
-
-    if (received >= grandTotal && grandTotal > 0) {
-        changeDisplay.innerText = formatRupiah(change);
-        changeDisplay.className = 'fw-bold text-success fs-6';
-
-    } else if (received > 0 && received < grandTotal) {
-        changeDisplay.innerText = 'Kurang ' + formatRupiah(Math.abs(change));
-        changeDisplay.className = 'fw-bold text-danger fs-6';
-
-    } else {
-        changeDisplay.innerText = 'Rp 0';
-        changeDisplay.className = 'fw-bold text-muted fs-6';
+        if (received >= grandTotal && grandTotal > 0) {
+            changeDisplay.textContent = formatRupiah(change);
+            changeDisplay.className = 'fw-bold text-success';
+        } else if (received > 0 && received < grandTotal) {
+            changeDisplay.textContent = 'Kurang ' + formatRupiah(Math.abs(change));
+            changeDisplay.className = 'fw-bold text-danger';
+        } else {
+            changeDisplay.textContent = 'Rp 0';
+            changeDisplay.className = 'fw-bold text-muted';
+        }
     }
-}
 
-    
-    cashInput.addEventListener('input', function() {
-        const angka = parseNominal(this.value);
+    cashInput.addEventListener('input', function () {
+        const digitsBefore = this.value.slice(0, this.selectionStart).replace(/\D/g, '').length;
+        const digits = this.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
 
-        this.value = angka > 0
-            ? angka.toLocaleString('id-ID')
-            : '';
+        this.value = digits ? rupiahFormatter.format(digits) : '';
+
+        let seen = 0, pos = 0;
+        while (pos < this.value.length && seen < digitsBefore) {
+            if (/\d/.test(this.value[pos])) seen++;
+            pos++;
+        }
+        this.setSelectionRange(pos, pos);
 
         calculateChange();
     });
 
-    document.addEventListener('keydown', function(e) {
+    /* ---------- Pintasan Keyboard ---------- */
+    document.addEventListener('keydown', function (e) {
         if (e.key === '/' && document.activeElement !== searchInput && document.activeElement !== cashInput) {
             e.preventDefault();
             searchInput.focus();
@@ -981,9 +1086,10 @@ searchInput.addEventListener('keydown', function(e) {
         }
     });
 
-    document.getElementById('btnCompletePayment').addEventListener('click', async function() {
+    /* ---------- Simpan Transaksi ---------- */
+    document.getElementById('btnCompletePayment').addEventListener('click', async function () {
         if (activeTransaction.length === 0) {
-            alert('Belum ada obat yang dimasukkan ke dalam nota transaksi!');
+            alert('Belum ada item obat yang ditambahkan.');
             return;
         }
 
@@ -999,7 +1105,7 @@ searchInput.addEventListener('keydown', function(e) {
             changeAmount = cashReceived - grandTotal;
 
             if (cashReceived < grandTotal) {
-                alert('Nominal uang tunai yang diterima kurang dari total tagihan!');
+                alert('Nominal uang tunai kurang dari total tagihan.');
                 cashInput.focus();
                 return;
             }
@@ -1010,18 +1116,18 @@ searchInput.addEventListener('keydown', function(e) {
 
         const btn = this;
         const originalBtnHTML = btn.innerHTML;
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Memproses...`;
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Memproses...`;
         btn.disabled = true;
 
         const payload = {
             cart: activeTransaction,
             patient_type: patientType,
-            nim_nip: document.getElementById('nimNipInput').value,
+            nim_nip: document.getElementById('nimNipInput').value.trim(),
             recipe_type: recipeType,
-            recipe_no: document.getElementById('recipeNoInput').value,
+            recipe_no: document.getElementById('recipeNoInput').value.trim(),
             recipe_date: document.getElementById('recipeDateInput').value,
-            doctor_name: document.getElementById('doctorNameInput').value,
-            clinic_name: document.getElementById('clinicNameInput').value,
+            doctor_name: document.getElementById('doctorNameInput').value.trim(),
+            clinic_name: document.getElementById('clinicNameInput').value.trim(),
             payment_method: paymentMethod,
             grand_total: grandTotal,
             cash_received: cashReceived,
@@ -1030,19 +1136,20 @@ searchInput.addEventListener('keydown', function(e) {
 
         try {
             const response = await fetch('/transaksi/simpan', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify(payload)
-});
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(payload)
+            });
+
             const result = await response.json();
             if (response.ok && result.success) {
-                alert('Transaksi berhasil diselesaikan!');
+                alert('Transaksi berhasil disimpan.');
                 window.location.reload();
             } else {
-                alert('Gagal memproses transaksi: ' + (result.message || 'Terjadi kesalahan pada server.'));
+                alert('Transaksi gagal diproses: ' + (result.message || 'Terjadi kesalahan pada server.'));
                 btn.innerHTML = originalBtnHTML;
                 btn.disabled = false;
             }
