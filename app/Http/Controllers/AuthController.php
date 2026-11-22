@@ -45,11 +45,11 @@ class AuthController extends Controller
     private function redirectBasedOnRole($role)
     {
         if ($role === 'Kasir') {
-            return redirect('/transaksi');
+            return redirect('/kasir/dashboard');
         } elseif ($role === 'Apoteker') {
             return redirect('/apoteker');
         } elseif ($role === 'Manajemen') {
-            return redirect('/inventaris');
+            return redirect('/manajemen/dashboard');
         }
 
         return redirect('/');

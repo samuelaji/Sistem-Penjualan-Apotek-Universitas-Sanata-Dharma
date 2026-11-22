@@ -19,6 +19,9 @@ class Transaksi extends Model
         'tanggal_transaksi',
         'total_harga',
         'nominal_bayar',
+        'nominal_kembalian',
+        'metode_pembayaran',
+        'status_transaksi',
     ];
 
     public function shift(){

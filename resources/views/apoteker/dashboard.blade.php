@@ -524,7 +524,7 @@
                                 @endphp
                                 @if($diffInDays <= 0)
                                     <span class="badge bg-danger text-white rounded-pill px-2" style="font-size: 0.68rem;">Expired</span>
-                                @elseif($diffInMonths <= 6)Bln
+                                @elseif($diffInMonths <= 6)
                                     <span class="badge bg-danger-subtle text-danger rounded-pill fw-bold px-2" style="font-size: 0.68rem;">{{ $diffInMonths }} Bulan lagi</span>
                                 @else
                                     <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill fw-bold px-2" style="font-size: 0.68rem;">{{ $diffInMonths }} Bulan lagi</span>

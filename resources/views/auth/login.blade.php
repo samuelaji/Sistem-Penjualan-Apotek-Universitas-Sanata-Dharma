@@ -55,7 +55,7 @@
         }
 
         .login-wrapper {
-            background: linear-gradient(135deg, #f8fafc 0%, #fff0f2 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #ebebeb 100%);
             position: relative;
             overflow: hidden;
         }

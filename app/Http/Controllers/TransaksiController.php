@@ -53,7 +53,7 @@ class TransaksiController extends Controller
                 'tanggal_transaksi' => now(),
                 'total_harga' => $request->grand_total,
                 'nominal_bayar' => $request->cash_received,
-                'kembalian' => $request->change_amount,
+                'nominal_kembalian' => $request->change_amount,
                 'metode_pembayaran' => strtolower($request->payment_method),
                 'status_transaksi' => ($request->recipe_type === 'Resep') ? 'Pending' : 'Selesai',
             ]);
