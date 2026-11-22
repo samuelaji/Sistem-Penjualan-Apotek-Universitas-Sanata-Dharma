@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Kasir - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -461,17 +462,6 @@
 @if(!$shiftAktif)
     <main class="open-shift-wrapper">
         <div class="open-shift-card">
-            @if(session('success'))
-                <div class="alert alert-success border-0 rounded-3 py-2 px-3 mb-3 bg-success bg-opacity-10 text-success fw-semibold" style="font-size: 0.9rem;">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger border-0 rounded-3 py-2 px-3 mb-3 bg-danger bg-opacity-10 text-danger fw-semibold" style="font-size: 0.9rem;">
-                    {{ session('error') }}
-                </div>
-            @endif
-
             <h4 class="fw-bold text-dark mb-3" style="font-size: 1.35rem;">Buka Shift Kasir</h4>
 
             <div class="shift-meta-strip">
@@ -501,13 +491,6 @@
     <main class="pos-container">
 
         <section class="workspace-left">
-            @if(session('error'))
-                <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center gap-2 py-2 px-3 mb-0 rounded-3" style="background-color: #fef2f2;">
-                    <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-                    <div class="fw-semibold text-danger" style="font-size: 0.92rem;">{{ session('error') }}</div>
-                </div>
-            @endif
-
             <div class="table-card">
                 <div class="table-card-header">
                     <span class="card-title-main">Riwayat Transaksi Terakhir</span>
@@ -583,7 +566,10 @@
             <div class="panel-section-distinct flex-grow-1 d-flex flex-column justify-content-between">
                 <div>
                     <span class="section-heading">Tutup Shift</span>
-                    <form action="{{ route('kasir.shift.tutup') }}" method="POST" id="formTutupShift">
+                    <form action="{{ route('kasir.shift.tutup') }}" method="POST" id="formTutupShift"
+                          data-confirm="Pastikan uang fisik di laci sudah dihitung. Setelah shift ditutup, Anda akan keluar dari sistem kasir."
+                          data-confirm-title="Tutup shift?"
+                          data-confirm-accept="Tutup shift">
                         @csrf
                         <div class="mb-2">
                             <label class="form-label fw-semibold text-muted mb-1" for="uangFisikDisplay" style="font-size: 0.86rem;">Uang Fisik di Laci</label>
@@ -597,7 +583,7 @@
                 </div>
 
                 <div class="pt-3">
-                    <button type="submit" form="formTutupShift" class="btn-maroon-full" onclick="return confirm('Apakah Anda yakin ingin menutup shift dan keluar dari sistem? Pastikan uang fisik di laci sudah dihitung.')">
+                    <button type="submit" form="formTutupShift" class="btn-maroon-full">
                         Tutup Shift
                     </button>
                 </div>
@@ -608,6 +594,18 @@
     </main>
 @endif
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
+@if(session('success'))
+<script>
+    AppPopup.alert(@json(session('success')), { title: 'Berhasil', icon: 'bi-check-circle' });
+</script>
+@endif
+@if(session('error'))
+<script>
+    AppPopup.alert(@json(session('error')), { title: 'Terjadi kesalahan', icon: 'bi-exclamation-circle' });
+</script>
+@endif
 <script>
     (function () {
         'use strict';

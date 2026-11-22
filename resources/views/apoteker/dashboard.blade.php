@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusat Kontrol Apoteker - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -255,21 +256,18 @@
         .panel-right {
             width: 395px;
             min-width: 395px;
-            background: var(--surface);
-            border-radius: 14px;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
             display: flex;
             flex-direction: column;
+            gap: 0.75rem;
             overflow-y: auto;
         }
 
         .panel-section-distinct {
             padding: 1rem 1.2rem;
-            border-bottom: 1px solid var(--border-soft);
-        }
-        .panel-section-distinct:last-child {
-            border-bottom: none;
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
         }
 
         .section-heading {
@@ -278,52 +276,52 @@
             letter-spacing: 0.4px;
             text-transform: uppercase;
             color: #334155;
-            display: block;
-            margin-bottom: 0.65rem;
+            margin: 0;
+        }
+        .section-heading-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
         }
 
-        /* ---------- Ringkasan KPI (Flat tanpa kotak abu-abu) ---------- */
+        /* ---------- Ringkasan ---------- */
         .kpi-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.55rem;
         }
         .kpi-box {
-            padding: 0.65rem 0.75rem;
-        }
-        .kpi-box:nth-child(odd) {
-            padding-left: 0;
-            border-right: 1px solid #f1f5f9;
-        }
-        .kpi-box:nth-child(even) {
-            padding-right: 0;
-            padding-left: 1rem;
-        }
-        .kpi-box:nth-child(1),
-        .kpi-box:nth-child(2) {
-            padding-top: 0.1rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .kpi-box:nth-child(3),
-        .kpi-box:nth-child(4) {
-            padding-bottom: 0.1rem;
+            --kpi-accent: var(--maroon);
+            --kpi-soft: #fff5f5;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-areas: "label" "value";
+            align-items: center;
+            gap: 0.3rem;
+            min-height: 82px;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #f0dada;
+            border-left: 3px solid var(--kpi-accent);
+            border-radius: 11px;
+            background: var(--kpi-soft);
         }
         .kpi-label {
-            font-size: 0.76rem;
+            grid-area: label;
+            font-size: 0.68rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 0.3rem;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
+            color: #586579;
         }
         .kpi-value {
-            font-size: 1.55rem;
+            grid-area: value;
+            font-size: 1.65rem;
             font-weight: 800;
             line-height: 1.1;
-            color: var(--text-dark);
+            color: var(--kpi-accent);
             font-variant-numeric: tabular-nums;
         }
-
         /* ---------- Tombol Tindakan ---------- */
         .btn-maroon-sm {
             background: var(--maroon);
@@ -358,45 +356,62 @@
             border-color: #fecaca;
         }
 
-        /* ---------- Daftar Samping (Stok & Kedaluwarsa) ---------- */
-        .side-list-table {
-            font-size: 0.92rem;
+        /* ---------- Daftar Stok & Kedaluwarsa ---------- */
+        .side-list {
+            max-height: 205px;
+            overflow-y: auto;
+        }
+        .side-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .side-list-item:first-child { padding-top: 0.1rem; }
+        .side-list-item:last-child {
+            padding-bottom: 0.1rem;
+            border-bottom: 0;
+        }
+        .side-item-main {
+            min-width: 0;
         }
         .side-item-title {
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-dark);
-            max-width: 195px;
         }
         .side-item-sub {
-            font-size: 0.8rem;
+            font-size: 0.76rem;
             color: var(--text-muted);
         }
-        .stock-current {
-            font-size: 0.9rem;
+        .side-item-badge {
+            flex-shrink: 0;
+            padding: 0.2rem 0.45rem;
+            border-radius: 7px;
+            background: #fce8e8;
+            color: #8b0000;
+            font-size: 0.76rem;
             font-weight: 700;
-            color: #991b1b;
-            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
         }
-        .stock-min-limit {
-            font-size: 0.8rem;
+        .side-item-badge small {
+            font-size: 0.7rem;
             font-weight: 500;
-            color: var(--text-muted);
-            font-variant-numeric: tabular-nums;
+            color: #7f1d1d;
         }
-
-        .expiry-status-urgent {
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #991b1b;
-            white-space: nowrap;
+        .side-item-badge.expiry-urgent,
+        .side-item-badge.expiry-normal,
+        .side-item-badge.expiry-warm {
+            background: #fce8e8;
+            color: #8b0000;
         }
-        .expiry-status-normal {
-            font-size: 0.88rem;
-            font-weight: 600;
+        .empty-side-list {
+            padding: 0.65rem 0;
             color: var(--text-muted);
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
+            font-size: 0.82rem;
+            text-align: center;
         }
 
         .header-clock {
@@ -404,6 +419,125 @@
             color: var(--text-muted);
             font-weight: 600;
             font-variant-numeric: tabular-nums;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow: auto;
+            }
+            .pos-header {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+            .pos-header > .d-flex:first-child {
+                flex-wrap: wrap;
+                gap: 0.75rem !important;
+            }
+            .pos-header > .d-flex:last-child {
+                margin-left: auto;
+            }
+            .nav-segmented {
+                margin-left: 0 !important;
+            }
+            .pos-container {
+                flex: none;
+                flex-direction: column;
+                overflow: visible;
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+            .workspace-left {
+                flex: none;
+                min-width: 0;
+                overflow: visible;
+            }
+            .table-card {
+                flex: none;
+                min-height: 440px;
+            }
+            .table-wrapper {
+                min-height: 0;
+                overflow: auto;
+            }
+            .table-custom-scrollable {
+                min-width: 1050px;
+            }
+            .table-custom-empty {
+                width: 100%;
+                table-layout: fixed;
+            }
+            .table-custom-empty thead {
+                display: none;
+            }
+            .panel-right {
+                width: 100%;
+                min-width: 0;
+                overflow: visible;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                align-items: start;
+            }
+            .panel-section-distinct:first-child {
+                grid-column: 1 / -1;
+            }
+            .panel-section-distinct.flex-grow-1 {
+                flex-grow: 0 !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pos-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .pos-header > .d-flex:first-child {
+                width: 100%;
+            }
+            .pos-header > .d-flex:last-child {
+                width: 100%;
+                justify-content: flex-end;
+                margin-left: 0;
+            }
+            .nav-segmented {
+                width: 100%;
+            }
+            .nav-segmented a {
+                flex: 1;
+                padding: 0.5rem 0.35rem;
+                font-size: 0.78rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .pos-container {
+                padding: 0.65rem;
+            }
+            .table-card {
+                min-height: 390px;
+            }
+            .empty-center-cell {
+                height: 260px;
+            }
+            .table-card-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0.65rem;
+                padding: 0.85rem 1rem;
+            }
+            .card-title-main {
+                font-size: 0.98rem;
+            }
+            .card-title-sub {
+                font-size: 0.78rem;
+            }
+            .panel-right {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .panel-section-distinct:first-child {
+                grid-column: auto;
+            }
         }
     </style>
 </head>
@@ -455,7 +589,7 @@
             </div>
 
             <div class="table-wrapper">
-                <table class="table-custom">
+                <table class="table-custom {{ $totalPending > 0 ? 'table-custom-scrollable' : 'table-custom-empty' }}">
                     <thead>
                     <tr>
                         <th style="width: 5%;">No.</th>
@@ -502,9 +636,12 @@
                                         <button type="submit" class="btn-maroon-sm">Setujui</button>
                                     </form>
 
-                                    <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0">
+                                    <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0"
+                                          data-confirm="Apakah Anda yakin ingin menolak resep ini?"
+                                          data-confirm-title="Tolak resep?"
+                                          data-confirm-accept="Tolak resep">
                                         @csrf
-                                        <button type="submit" class="btn-outline-sm" onclick="return confirm('Apakah Anda yakin ingin menolak resep ini?')">Tolak</button>
+                                        <button type="submit" class="btn-outline-sm">Tolak</button>
                                     </form>
                                 </div>
                             </td>
@@ -528,9 +665,10 @@
 
     <aside class="panel-right">
 
-        <!-- Bagian 1: Ringkasan KPI -->
         <div class="panel-section-distinct">
-            <span class="section-heading">Ringkasan</span>
+            <div class="section-heading-row">
+                <h2 class="section-heading">Ringkasan</h2>
+            </div>
             <div class="kpi-grid">
                 <div class="kpi-box">
                     <span class="kpi-label">Antrean Resep</span>
@@ -554,69 +692,56 @@
             </div>
         </div>
 
-        <!-- Bagian 2: Stok Menipis -->
         <div class="panel-section-distinct">
-            <span class="section-heading">Stok Menipis</span>
-
-            <div class="table-responsive" style="max-height: 205px; overflow-y: auto;">
-                <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
-                    <tbody>
-                    @forelse($stokKritis as $obat)
-                        <tr class="border-bottom border-light">
-                            <td class="ps-0 py-2">
-                                <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
-                                <span class="side-item-sub font-monospace d-block">{{ $obat->sku }}</span>
-                            </td>
-                            <td class="text-end pe-0 py-2" style="white-space: nowrap;">
-                                <span class="stock-current">{{ $obat->stok }}</span>
-                                <span class="stock-min-limit">/ {{ $obat->batas_minimum }} unit</span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center py-3 text-muted" style="font-size: 0.9rem;">Semua stok obat aman.</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
+            <div class="section-heading-row">
+                <h2 class="section-heading">Stok Menipis</h2>
+            </div>
+            <div class="side-list">
+                @forelse($stokKritis as $obat)
+                    <div class="side-list-item">
+                        <div class="side-item-main">
+                            <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                            <span class="side-item-sub font-monospace">{{ $obat->sku }}</span>
+                        </div>
+                        <span class="side-item-badge">
+                            {{ $obat->stok }} <small>/ {{ $obat->batas_minimum }} unit</small>
+                        </span>
+                    </div>
+                @empty
+                    <div class="empty-side-list">Semua stok obat aman.</div>
+                @endforelse
             </div>
         </div>
 
-        <!-- Bagian 3: Peringatan Kedaluwarsa -->
         <div class="panel-section-distinct flex-grow-1">
-            <span class="section-heading">Peringatan Kedaluwarsa</span>
-
-            <div class="table-responsive" style="max-height: 230px; overflow-y: auto;">
-                <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
-                    <tbody>
-                    @forelse($mendekatiExpired as $obat)
-                        @php
-                            $tglExp       = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
-                            $diffInDays   = (int) now()->startOfDay()->diffInDays($tglExp, false);
-                            $diffInMonths = (int) round($diffInDays / 30);
-                        @endphp
-                        <tr class="border-bottom border-light">
-                            <td class="ps-0 py-2">
-                                <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
-                                <span class="side-item-sub d-block">{{ $tglExp->format('d M Y') }}</span>
-                            </td>
-                            <td class="text-end pe-0 py-2">
-                                @if($diffInDays <= 0)
-                                    <span class="expiry-status-urgent">Kedaluwarsa</span>
-                                @elseif($diffInMonths <= 3)
-                                    <span class="expiry-status-urgent">{{ max(1, $diffInMonths) }} Bulan</span>
-                                @else
-                                    <span class="expiry-status-normal">{{ $diffInMonths }} Bulan</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center py-3 text-muted" style="font-size: 0.9rem;">Tidak ada obat mendekati kedaluwarsa.</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
+            <div class="section-heading-row">
+                <h2 class="section-heading">Hampir Kedaluwarsa</h2>
+            </div>
+            <div class="side-list">
+                @forelse($mendekatiExpired as $obat)
+                    @php
+                        $tglExp       = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
+                        $diffInDays   = (int) now()->startOfDay()->diffInDays($tglExp, false);
+                        $diffInMonths = (int) round($diffInDays / 30);
+                    @endphp
+                    <div class="side-list-item">
+                        <div class="side-item-main">
+                            <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                            <span class="side-item-sub">{{ $tglExp->format('d M Y') }}</span>
+                        </div>
+                        @if($diffInDays <= 0)
+                            <span class="side-item-badge expiry-urgent">Kedaluwarsa</span>
+                        @elseif($diffInMonths <= 3)
+                            <span class="side-item-badge expiry-urgent">{{ max(1, $diffInMonths) }} Bulan</span>
+                        @elseif($diffInMonths <= 6)
+                            <span class="side-item-badge expiry-warm">{{ $diffInMonths }} Bulan</span>
+                        @else
+                            <span class="side-item-badge expiry-normal">{{ $diffInMonths }} Bulan</span>
+                        @endif
+                    </div>
+                @empty
+                    <div class="empty-side-list">Tidak ada obat mendekati kedaluwarsa.</div>
+                @endforelse
             </div>
         </div>
 
@@ -624,6 +749,8 @@
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
 <script>
     (function () {
         'use strict';

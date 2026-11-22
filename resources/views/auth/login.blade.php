@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - Sistem Penjualan Apotek Sanata Dharma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -423,13 +424,6 @@
                 <p class="text-muted small mb-0">Masukkan kredensial Anda untuk melanjutkan.</p>
             </div>
 
-            @error('username')
-            <div class="alert alert-danger d-flex align-items-center mb-3 rounded-3 py-2 px-3 small border-0 bg-danger bg-opacity-10 text-danger" role="alert">
-                <i class="bi bi-exclamation-circle-fill me-2 fs-6"></i>
-                <div>{{ $message }}</div>
-            </div>
-            @enderror
-
             <form action="{{ route('login.process') }}" method="POST">
                 @csrf
                 <div class="mb-3">
@@ -567,5 +561,11 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
+@error('username')
+<script>
+    AppPopup.alert(@json($message), { title: 'Login gagal', icon: 'bi-exclamation-circle' });
+</script>
+@enderror
 </body>
 </html>

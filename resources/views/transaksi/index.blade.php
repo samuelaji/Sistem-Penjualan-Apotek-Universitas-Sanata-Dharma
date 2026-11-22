@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Terminal POS - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -551,6 +552,7 @@
         }
         .btn-pay:active { transform: scale(0.99); }
         .btn-pay:disabled { opacity: 0.75; cursor: wait; }
+
     </style>
 </head>
 <body>
@@ -740,11 +742,22 @@
     </aside>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
 <script>
     const masterObatList = @json($obatList);
 
     let activeTransaction = [];
     let grandTotal = 0;
+
+    function showTransactionResult(title, message, success) {
+        AppPopup.alert(message, {
+            title: title,
+            icon: success ? 'bi-check-circle' : 'bi-exclamation-circle'
+        }).then(function () {
+            if (success) window.location.reload();
+        });
+    }
 
     const rupiahFormatter = new Intl.NumberFormat('id-ID');
     const formatRupiah = (val) => 'Rp ' + rupiahFormatter.format(Number(val) || 0);
@@ -934,7 +947,7 @@
     function addItemToTransaction(obat) {
         const maxStok = Number(obat.stok) || 0;
         if (maxStok <= 0) {
-            alert('Stok obat tidak tersedia.');
+            AppPopup.alert('Stok obat tidak tersedia.', { title: 'Stok tidak tersedia' });
             return;
         }
 
@@ -943,7 +956,7 @@
             if (exist.qty < maxStok) {
                 exist.qty += 1;
             } else {
-                alert('Jumlah melebihi stok tersedia.');
+                AppPopup.alert('Jumlah melebihi stok tersedia.', { title: 'Stok tidak mencukupi' });
             }
         } else {
             activeTransaction.push({
@@ -1014,7 +1027,7 @@
             removeItem(index);
             return;
         } else if (newQty > item.max_stok) {
-            alert('Jumlah melebihi stok tersedia.');
+            AppPopup.alert('Jumlah melebihi stok tersedia.', { title: 'Stok tidak mencukupi' });
         }
         renderTable();
     }
@@ -1024,8 +1037,11 @@
         renderTable();
     }
 
-    function clearTransaction() {
-        if (activeTransaction.length > 0 && confirm('Kosongkan seluruh item pada transaksi ini?')) {
+    async function clearTransaction() {
+        if (activeTransaction.length > 0 && await AppPopup.confirm('Kosongkan seluruh item pada transaksi ini?', {
+            title: 'Kosongkan transaksi?',
+            acceptText: 'Kosongkan'
+        })) {
             activeTransaction = [];
             renderTable();
         }
@@ -1089,7 +1105,7 @@
     /* ---------- Simpan Transaksi ---------- */
     document.getElementById('btnCompletePayment').addEventListener('click', async function () {
         if (activeTransaction.length === 0) {
-            alert('Belum ada item obat yang ditambahkan.');
+            AppPopup.alert('Belum ada item obat yang ditambahkan.', { title: 'Transaksi masih kosong' });
             return;
         }
 
@@ -1105,8 +1121,11 @@
             changeAmount = cashReceived - grandTotal;
 
             if (cashReceived < grandTotal) {
-                alert('Nominal uang tunai kurang dari total tagihan.');
-                cashInput.focus();
+                AppPopup.alert('Nominal uang tunai kurang dari total tagihan.', {
+                    title: 'Pembayaran belum cukup'
+                }).then(function () {
+                    cashInput.focus();
+                });
                 return;
             }
         } else {
@@ -1146,22 +1165,32 @@
 
             const result = await response.json();
             if (response.ok && result.success) {
-                alert('Transaksi berhasil disimpan.');
-                window.location.reload();
+                showTransactionResult(
+                    'Pembayaran berhasil!',
+                    'Transaksi berhasil disimpan dan tercatat pada sistem apotek.',
+                    true
+                );
             } else {
-                alert('Transaksi gagal diproses: ' + (result.message || 'Terjadi kesalahan pada server.'));
+                showTransactionResult(
+                    'Transaksi belum berhasil',
+                    result.message || 'Transaksi gagal diproses. Silakan coba kembali.',
+                    false
+                );
                 btn.innerHTML = originalBtnHTML;
                 btn.disabled = false;
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Terjadi kesalahan jaringan atau server.');
+            showTransactionResult(
+                'Koneksi bermasalah',
+                'Terjadi kesalahan jaringan atau server. Periksa koneksi, lalu coba kembali.',
+                false
+            );
             btn.innerHTML = originalBtnHTML;
             btn.disabled = false;
         }
     });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
