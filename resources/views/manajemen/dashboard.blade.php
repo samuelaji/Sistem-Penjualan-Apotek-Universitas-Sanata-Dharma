@@ -366,7 +366,7 @@
         <div class="chart-card">
             <div class="chart-card-header">
                 <div>
-                    <span class="card-title-main" id="chartTitleMain">Tren Penjualan (7 Hari Terakhir)</span>
+                    <span class="card-title-main" id="chartTitleMain">Tren Penjualan</span>
                     <span class="card-title-sub" id="chartTitleSub">Perkembangan omset transaksi harian yang sudah terverifikasi</span>
                 </div>
 
@@ -483,7 +483,7 @@
 
         const seriesMap = {
             day: {
-                title: 'Tren Penjualan (Per Jam Hari Ini)',
+                title: 'Tren Penjualan',
                 subtitle: 'Distribusi omset transaksi terverifikasi sepanjang hari ini',
                 labels: Array.isArray(serverDailyLabels) ? serverDailyLabels : ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', 'Sekarang'],
                 values: Array.isArray(serverDailyValues)
@@ -491,13 +491,13 @@
                     : [0, 0, 0, 0, 0, 0, 0, omsetToday]
             },
             '7d': {
-                title: 'Tren Penjualan (7 Hari Terakhir)',
+                title: 'Tren Penjualan',
                 subtitle: 'Perkembangan omset transaksi harian yang sudah terverifikasi',
                 labels: sevenDayLabels,
                 values: sevenDayValues
             },
             '1m': {
-                title: 'Tren Penjualan (1 Bulan Terakhir)',
+                title: 'Tren Penjualan',
                 subtitle: 'Rekapitulasi mingguan omset apotek selama 30 hari terakhir',
                 labels: Array.isArray(serverMonthlyLabels) ? serverMonthlyLabels : ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
                 values: Array.isArray(serverMonthlyValues)
@@ -505,7 +505,7 @@
                     : [0, 0, 0, weekSum]
             },
             '1y': {
-                title: 'Tren Penjualan (1 Tahun Terakhir)',
+                title: 'Tren Penjualan',
                 subtitle: 'Perkembangan omset bulanan apotek sepanjang 12 bulan terakhir',
                 labels: Array.isArray(serverYearlyLabels)
                     ? serverYearlyLabels
