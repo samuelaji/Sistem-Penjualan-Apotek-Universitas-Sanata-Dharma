@@ -21,7 +21,7 @@
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -116,7 +116,6 @@
             color: var(--text-muted);
             font-weight: 600;
             line-height: 1.25;
-            text-transform: capitalize;
         }
 
         .nav-segmented {
@@ -362,26 +361,85 @@
             width: 34px;
             height: 34px;
             border-radius: 8px;
-            border: 1px solid var(--border-soft);
-            background: #ffffff;
+            border: none;
+            background: var(--maroon);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #ffffff;
             font-size: 0.95rem;
             transition: all 0.15s ease;
         }
-        .btn-action-icon:hover { background: #f1f5f9; border-color: #cbd5e1; color: var(--text-dark); }
-        .btn-action-icon.delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+        .btn-action-icon:hover {
+            background: var(--maroon-dark);
+            color: #ffffff;
+        }
+        .btn-action-icon.delete {
+            background: var(--maroon);
+            color: #ffffff;
+        }
+        .btn-action-icon.delete:hover {
+            background: #520000;
+            color: #ffffff;
+        }
 
+        /* ---------- Footer & Pagination Kompak ---------- */
         .table-footer {
-            padding: 0.8rem 1.2rem;
+            padding: 0.65rem 1.25rem;
             border-top: 1px solid var(--border-soft);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 0.75rem;
             background: #ffffff;
-            font-size: 0.88rem;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        .pagination-wrap nav > div.d-flex.justify-content-between.flex-fill.d-sm-none {
+            display: none !important;
+        }
+        .pagination-wrap nav > div.d-none.flex-sm-fill.d-sm-flex.align-items-sm-center.justify-content-sm-between > div:first-child {
+            display: none !important;
+        }
+        .pagination-wrap nav > div.d-none.flex-sm-fill.d-sm-flex.align-items-sm-center.justify-content-sm-between {
+            justify-content: flex-end !important;
+        }
+        .pagination-wrap .pagination {
+            margin: 0;
+            gap: 3px;
+            flex-wrap: nowrap;
+        }
+        .pagination-wrap .page-item .page-link {
+            padding: 0.32rem 0.62rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            border: 1px solid var(--border-soft);
+            border-radius: 7px;
+            font-variant-numeric: tabular-nums;
+            transition: all 0.15s ease;
+        }
+        .pagination-wrap .page-item:first-child .page-link,
+        .pagination-wrap .page-item:last-child .page-link {
+            border-radius: 7px;
+        }
+        .pagination-wrap .page-item .page-link:hover {
+            background-color: #f8fafc;
+            border-color: var(--maroon);
+            color: var(--maroon);
+        }
+        .pagination-wrap .page-item.active .page-link {
+            background-color: var(--maroon);
+            border-color: var(--maroon);
+            color: #ffffff;
+        }
+        .pagination-wrap .page-item.disabled .page-link {
+            color: #94a3b8;
+            background-color: #f8fafc;
+            border-color: var(--border-soft);
         }
 
         /* ---------- Modal ---------- */
@@ -525,7 +583,7 @@
     <div class="d-flex align-items-center gap-4">
         <div class="user-identity">
             <span class="user-name">{{ Auth::user()->nama_pengguna ?? 'Apoteker' }}</span>
-            <span class="user-id">{{ Auth::user()->role_akses ?? 'Apoteker Pelayanan' }}</span>
+            <span class="user-id">{{ Auth::user()->username ?? 'apoteker' }}</span>
         </div>
 
         <nav class="nav-segmented ms-2">
@@ -640,11 +698,11 @@
                         </td>
                         <td>
                             @if($sudahExpired)
-                                <span class="status-text status-expired">Kedaluwarsa</span>
+                                <span class="status-text status-expired">Kadaluwarsa</span>
                             @elseif($segera)
-                                <span class="status-text status-warning">Hampir Kedaluwarsa</span>
+                                <span class="status-text status-warning">Hampir Kadaluwarsa</span>
                             @else
-                                <span class="status-text status-active">Aktif</span>
+                                <span class="status-text status-active">Belum Kadaluwarsa</span>
                             @endif
                         </td>
                         <td class="text-center">
@@ -677,8 +735,8 @@
         </div>
 
         <div class="table-footer" id="obatTableFooter">
-            <span class="text-muted">Menampilkan {{ $obatList->firstItem() ?? 0 }}–{{ $obatList->lastItem() ?? 0 }} dari {{ $obatList->total() }} data</span>
-            <div>{{ $obatList->withQueryString()->links('pagination::bootstrap-5') }}</div>
+            <span class="text-muted" style="font-variant-numeric: tabular-nums;">Menampilkan {{ $obatList->firstItem() ?? 0 }}–{{ $obatList->lastItem() ?? 0 }} dari {{ $obatList->total() }} data</span>
+            <div class="pagination-wrap">{{ $obatList->withQueryString()->links('pagination::bootstrap-5') }}</div>
         </div>
     </div>
 

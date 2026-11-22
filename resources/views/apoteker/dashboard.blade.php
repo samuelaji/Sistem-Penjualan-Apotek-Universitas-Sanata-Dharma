@@ -21,7 +21,7 @@
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -251,6 +251,27 @@
             margin-bottom: 0.8rem;
         }
 
+        .side-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1.15rem 0.5rem;
+            gap: 0.45rem;
+        }
+        .side-empty-icon {
+            color: #cbd5e1;
+            font-size: 1.55rem;
+            line-height: 1;
+        }
+        .side-empty-text {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
         /* ---------- Panel Kanan ---------- */
         .panel-right {
             width: 395px;
@@ -390,12 +411,6 @@
             font-weight: 700;
             color: #991b1b;
             white-space: nowrap;
-        }
-        .expiry-status-normal {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            white-space: nowrap;
             font-variant-numeric: tabular-nums;
         }
 
@@ -432,6 +447,15 @@
         </form>
     </div>
 </header>
+
+@php
+    $todayStart = now()->startOfDay();
+    $peringatanSatuBulan = collect($mendekatiExpired ?? [])->filter(function ($obat) use ($todayStart) {
+        $tglExp = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
+        $sisaHari = (int) $todayStart->diffInDays($tglExp, false);
+        return $sisaHari <= 30;
+    });
+@endphp
 
 <main class="pos-container">
 
@@ -549,7 +573,7 @@
 
                 <div class="kpi-box">
                     <span class="kpi-label">Hampir Kedaluwarsa</span>
-                    <div class="kpi-value">{{ $totalExpiredAlert }}</div>
+                    <div class="kpi-value">{{ $peringatanSatuBulan->count() }}</div>
                 </div>
             </div>
         </div>
@@ -558,66 +582,71 @@
         <div class="panel-section-distinct">
             <span class="section-heading">Stok Menipis</span>
 
-            <div class="table-responsive" style="max-height: 205px; overflow-y: auto;">
-                <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
-                    <tbody>
-                    @forelse($stokKritis as $obat)
-                        <tr class="border-bottom border-light">
-                            <td class="ps-0 py-2">
-                                <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
-                                <span class="side-item-sub font-monospace d-block">{{ $obat->sku }}</span>
-                            </td>
-                            <td class="text-end pe-0 py-2" style="white-space: nowrap;">
-                                <span class="stock-current">{{ $obat->stok }}</span>
-                                <span class="stock-min-limit">/ {{ $obat->batas_minimum }} unit</span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center py-3 text-muted" style="font-size: 0.9rem;">Semua stok obat aman.</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
-            </div>
+            @if(collect($stokKritis ?? [])->isNotEmpty())
+                <div class="table-responsive" style="max-height: 205px; overflow-y: auto;">
+                    <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
+                        <tbody>
+                        @foreach($stokKritis as $obat)
+                            <tr class="border-bottom border-light">
+                                <td class="ps-0 py-2">
+                                    <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                                    <span class="side-item-sub font-monospace d-block">{{ $obat->sku }}</span>
+                                </td>
+                                <td class="text-end pe-0 py-2" style="white-space: nowrap;">
+                                    <span class="stock-current">{{ $obat->stok }}</span>
+                                    <span class="stock-min-limit">/ {{ $obat->batas_minimum }} unit</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="side-empty-state">
+                    <i class="bi bi-inbox side-empty-icon"></i>
+                    <span class="side-empty-text">Belum ada stok obat yang menipis.</span>
+                </div>
+            @endif
         </div>
 
-        <!-- Bagian 3: Peringatan Kedaluwarsa -->
+        <!-- Bagian 3: Peringatan Kedaluwarsa (<= 1 Bulan) -->
         <div class="panel-section-distinct flex-grow-1">
             <span class="section-heading">Peringatan Kedaluwarsa</span>
 
-            <div class="table-responsive" style="max-height: 230px; overflow-y: auto;">
-                <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
-                    <tbody>
-                    @forelse($mendekatiExpired as $obat)
-                        @php
-                            $tglExp       = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
-                            $diffInDays   = (int) now()->startOfDay()->diffInDays($tglExp, false);
-                            $diffInMonths = (int) round($diffInDays / 30);
-                        @endphp
-                        <tr class="border-bottom border-light">
-                            <td class="ps-0 py-2">
-                                <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
-                                <span class="side-item-sub d-block">{{ $tglExp->format('d M Y') }}</span>
-                            </td>
-                            <td class="text-end pe-0 py-2">
-                                @if($diffInDays <= 0)
-                                    <span class="expiry-status-urgent">Kedaluwarsa</span>
-                                @elseif($diffInMonths <= 3)
-                                    <span class="expiry-status-urgent">{{ max(1, $diffInMonths) }} Bulan</span>
-                                @else
-                                    <span class="expiry-status-normal">{{ $diffInMonths }} Bulan</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center py-3 text-muted" style="font-size: 0.9rem;">Tidak ada obat mendekati kedaluwarsa.</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
-            </div>
+            @if($peringatanSatuBulan->isNotEmpty())
+                <div class="table-responsive" style="max-height: 230px; overflow-y: auto;">
+                    <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
+                        <tbody>
+                        @foreach($peringatanSatuBulan as $obat)
+                            @php
+                                $tglExp   = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
+                                $sisaHari = (int) $todayStart->diffInDays($tglExp, false);
+                            @endphp
+                            <tr class="border-bottom border-light">
+                                <td class="ps-0 py-2">
+                                    <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                                    <span class="side-item-sub d-block">{{ $tglExp->format('d M Y') }}</span>
+                                </td>
+                                <td class="text-end pe-0 py-2">
+                                    @if($sisaHari < 0)
+                                        <span class="expiry-status-urgent">Kedaluwarsa</span>
+                                    @elseif($sisaHari === 0)
+                                        <span class="expiry-status-urgent">Hari ini</span>
+                                    @else
+                                        <span class="expiry-status-urgent">{{ $sisaHari }} Hari</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="side-empty-state">
+                    <i class="bi bi-inbox side-empty-icon"></i>
+                    <span class="side-empty-text">Belum ada obat yang mendekati kadaluarsa.</span>
+                </div>
+            @endif
         </div>
 
     </aside>
