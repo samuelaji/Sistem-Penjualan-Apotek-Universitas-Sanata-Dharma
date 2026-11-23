@@ -18,11 +18,12 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -139,8 +140,9 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 0.65rem;
+            gap: 0.75rem;
             overflow: hidden;
+            min-width: 0;
         }
 
         /* ---------- Pencarian Obat ---------- */
@@ -202,17 +204,19 @@
 
         .search-item-title {
             font-size: 0.96rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-dark);
             display: block;
         }
         .search-item-meta {
             font-size: 0.84rem;
+            font-weight: 400;
             color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
         }
         .search-item-price {
             font-size: 0.96rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-dark);
             display: block;
             font-variant-numeric: tabular-nums;
@@ -242,11 +246,14 @@
 
         .table-wrapper {
             flex: 1;
-            overflow-y: auto;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .table-custom {
             width: 100%;
+            min-width: 820px;
             margin-bottom: 0;
             border-collapse: separate;
             border-spacing: 0;
@@ -255,21 +262,27 @@
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.86rem;
-            font-weight: 700;
-            padding: 0.85rem 1.1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15px;
+            padding: 0.85rem 0.65rem;
             border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
             white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
         }
 
         .table-custom tbody td {
-            padding: 0.9rem 1.1rem;
+            padding: 0.85rem 0.65rem;
             vertical-align: middle;
+            text-align: center;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.96rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text-body);
             transition: background-color 0.15s ease;
         }
 
@@ -277,40 +290,103 @@
             background-color: #fafbfc;
         }
 
-        .sku-code {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
+        /* Hirarki Tipografi Kolom */
+        .col-no {
+            font-weight: 500;
+            color: var(--text-muted) !important;
+            font-variant-numeric: tabular-nums;
         }
-        .packaging-text {
-            font-size: 0.92rem;
-            color: var(--text-muted);
+        .col-sku {
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-med-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .col-packaging {
+            font-weight: 400;
+            color: #475569;
             text-transform: capitalize;
         }
+        .col-price {
+            font-weight: 500;
+            color: var(--text-body);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .qty-val {
+            font-weight: 600;
+            color: var(--text-dark);
+            min-width: 28px;
+            display: inline-block;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-subtotal {
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
 
+        /* Tombol Pengatur Jumlah & Hapus Item (Merah Marun + Ikon SVG Tebal) */
         .table-qty-btn {
             width: 32px;
             height: 32px;
-            border: 1px solid var(--border-soft);
-            background: #ffffff;
+            border: none;
+            background: var(--maroon);
             border-radius: 8px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-dark);
-            font-size: 0.95rem;
+            color: #ffffff;
+            padding: 0;
             cursor: pointer;
             transition: all 0.15s ease;
         }
         .table-qty-btn:hover {
-            background: var(--maroon-soft);
-            border-color: var(--maroon);
-            color: var(--maroon);
+            background: var(--maroon-dark);
+            color: #ffffff;
+        }
+        .table-qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-remove-item {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: var(--maroon);
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .btn-remove-item:hover {
+            background: #520000;
+            color: #ffffff;
+        }
+        .btn-remove-item:active {
+            transform: scale(0.95);
+        }
+
+        .table-qty-btn svg,
+        .btn-remove-item svg {
+            display: block;
+            flex-shrink: 0;
         }
 
         .empty-center-cell {
-            height: calc(100vh - 295px);
+            height: calc(100vh - 245px);
             vertical-align: middle !important;
             text-align: center;
             border-bottom: none !important;
@@ -328,26 +404,30 @@
             margin-bottom: 0.8rem;
         }
 
-        /* ---------- Bilah Pintasan ---------- */
+        /* ---------- Footer Tabel & Bilah Pintasan ---------- */
         .shortcut-bar {
-            padding: 0.15rem 0.35rem;
+            padding: 0.72rem 1.25rem;
+            border-top: 1px solid var(--border-soft);
+            background: #ffffff;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 1.25rem;
             font-size: 0.85rem;
             color: var(--text-muted);
+            flex-shrink: 0;
         }
 
         .key-badge {
-            background: #e2e8f0;
+            background: #f1f5f9;
+            border: 1px solid var(--border-soft);
             padding: 2px 7px;
             border-radius: 5px;
             font-size: 0.8rem;
-            font-weight: 700;
-            font-family: monospace;
+            font-weight: 600;
             color: var(--text-dark);
-            margin-right: 4px;
+            margin-right: 5px;
+            font-variant-numeric: tabular-nums;
         }
 
         /* ---------- Panel Kanan ---------- */
@@ -451,7 +531,7 @@
             box-shadow: 0 0 0 3px var(--maroon-soft);
         }
 
-        /* ---------- Ringkasan Total (Flat dengan garis halus) ---------- */
+        /* ---------- Ringkasan Total ---------- */
         .total-display-box {
             padding-bottom: 0.9rem;
             margin-bottom: 0.95rem;
@@ -515,7 +595,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* Kembalian (Flat dengan garis pemisah tipis) */
+        /* Kembalian */
         .change-box {
             display: flex;
             justify-content: space-between;
@@ -563,8 +643,8 @@
         </div>
 
         <nav class="nav-segmented ms-2">
-            <a href="{{ Route::has('kasir.dashboard') ? route('kasir.dashboard') : url('/kasir/dashboard') }}">Dashboard Kasir</a>
-            <a href="{{ route('transaksi.index') }}" class="active">Terminal POS</a>
+            <a href="{{ Route::has('kasir.dashboard') ? route('kasir.dashboard') : url('/kasir/dashboard') }}">Dashboard</a>
+            <a href="{{ route('transaksi.index') }}" class="active">Transaksi</a>
         </nav>
     </div>
 
@@ -602,13 +682,13 @@
                     <thead>
                     <tr>
                         <th style="width: 5%;">No.</th>
-                        <th style="width: 12%;">Kode SKU</th>
-                        <th style="width: 24%;">Nama Obat</th>
+                        <th style="width: 11%;">Kode SKU</th>
+                        <th style="width: 25%;">Nama Obat</th>
                         <th style="width: 14%;">Kemasan</th>
                         <th style="width: 14%;">Harga Satuan</th>
-                        <th style="width: 13%; text-align: center;">Jumlah</th>
-                        <th style="width: 13%; text-align: right;">Subtotal</th>
-                        <th style="width: 5%; text-align: center;"></th>
+                        <th style="width: 13%;">Jumlah</th>
+                        <th style="width: 12%;">Subtotal</th>
+                        <th style="width: 6%;">Aksi</th>
                     </tr>
                     </thead>
                     <tbody id="transactionTableBody">
@@ -624,13 +704,13 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <div class="shortcut-bar">
-            <span><span class="key-badge">/</span>Cari Obat</span>
-            <span><span class="key-badge">F8</span>Kosongkan Transaksi</span>
-            <span><span class="key-badge">F9</span>Selesaikan Transaksi</span>
-            <span class="ms-auto text-dark fw-bold" id="tableItemCounter">0 Item</span>
+            <div class="shortcut-bar">
+                <span><span class="key-badge">/</span>Cari Obat</span>
+                <span><span class="key-badge">F8</span>Kosongkan Transaksi</span>
+                <span><span class="key-badge">F9</span>Selesaikan Transaksi</span>
+                <span class="ms-auto text-dark fw-semibold" id="tableItemCounter" style="font-variant-numeric: tabular-nums;">0 Item</span>
+            </div>
         </div>
     </section>
 
@@ -856,7 +936,7 @@
                 itemDiv.innerHTML = `
                     <div>
                         <span class="search-item-title">${escapeHtml(obat.nama_obat)}</span>
-                        <span class="search-item-meta font-monospace">${escapeHtml(obat.sku)} &bull; ${escapeHtml(obat.jenis_obat)}</span>
+                        <span class="search-item-meta">${escapeHtml(obat.sku)} &bull; ${escapeHtml(obat.jenis_obat)}</span>
                     </div>
                     <div class="text-end">
                         <span class="search-item-price">${formatRupiah(obat.harga_obat)}</span>
@@ -977,22 +1057,34 @@
             const tr = document.createElement('tr');
             tr.className = 'animate-row';
             tr.innerHTML = `
-                <td class="text-muted fw-bold">${index + 1}</td>
-                <td><span class="font-monospace sku-code">${escapeHtml(item.sku)}</span></td>
-                <td><span class="fw-bold text-dark">${escapeHtml(item.nama)}</span></td>
-                <td><span class="packaging-text">${escapeHtml(item.jenis)}</span></td>
-                <td class="fw-medium" style="font-variant-numeric: tabular-nums;">${formatRupiah(item.harga)}</td>
-                <td class="text-center">
-                    <div class="d-inline-flex align-items-center gap-2">
-                        <button type="button" class="table-qty-btn" aria-label="Kurangi jumlah" onclick="updateItemQty(${index}, -1)"><i class="bi bi-dash"></i></button>
-                        <span class="fw-bold px-1" style="min-width: 26px; font-variant-numeric: tabular-nums;">${item.qty}</span>
-                        <button type="button" class="table-qty-btn" aria-label="Tambah jumlah" onclick="updateItemQty(${index}, 1)"><i class="bi bi-plus"></i></button>
+                <td class="col-no">${index + 1}</td>
+                <td class="col-sku">${escapeHtml(item.sku)}</td>
+                <td class="col-med-name">${escapeHtml(item.nama)}</td>
+                <td class="col-packaging">${escapeHtml(item.jenis)}</td>
+                <td class="col-price">${formatRupiah(item.harga)}</td>
+                <td>
+                    <div class="d-inline-flex align-items-center justify-content-center gap-2">
+                        <button type="button" class="table-qty-btn" title="Kurangi jumlah" aria-label="Kurangi jumlah" onclick="updateItemQty(${index}, -1)">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                                <line x1="3" y1="8" x2="13" y2="8"/>
+                            </svg>
+                        </button>
+                        <span class="qty-val">${item.qty}</span>
+                        <button type="button" class="table-qty-btn" title="Tambah jumlah" aria-label="Tambah jumlah" onclick="updateItemQty(${index}, 1)">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                                <line x1="8" y1="3" x2="8" y2="13"/>
+                                <line x1="3" y1="8" x2="13" y2="8"/>
+                            </svg>
+                        </button>
                     </div>
                 </td>
-                <td class="text-end fw-bold text-dark" style="font-variant-numeric: tabular-nums;">${formatRupiah(subtotal)}</td>
-                <td class="text-center">
-                    <button type="button" class="btn btn-sm text-danger border-0 p-1" onclick="removeItem(${index})" title="Hapus Item" aria-label="Hapus Item">
-                        <i class="bi bi-x-circle fs-5"></i>
+                <td class="col-subtotal">${formatRupiah(subtotal)}</td>
+                <td>
+                    <button type="button" class="btn-remove-item" onclick="removeItem(${index})" title="Hapus Item" aria-label="Hapus Item">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                            <line x1="3.5" y1="3.5" x2="12.5" y2="12.5"/>
+                            <line x1="12.5" y1="3.5" x2="3.5" y2="12.5"/>
+                        </svg>
                     </button>
                 </td>
             `;

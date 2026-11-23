@@ -17,6 +17,7 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -102,6 +103,7 @@
             font-size: 0.95rem;
             color: var(--text-muted);
             font-weight: 600;
+            font-variant-numeric: tabular-nums;
         }
 
         /* ---------- Tata Letak Utama ---------- */
@@ -120,6 +122,7 @@
             flex-direction: column;
             gap: 0.75rem;
             overflow: hidden;
+            min-width: 0;
         }
 
         .table-card {
@@ -147,42 +150,16 @@
             color: var(--text-dark);
             display: block;
         }
-        .card-title-sub {
-            font-size: 0.84rem;
-            color: var(--text-muted);
-            display: block;
-            margin-top: 2px;
-        }
-
-        .badge-queue-pending {
-            background: #f8fafc;
-            color: var(--maroon);
-            border: 1px solid var(--border-soft);
-            font-size: 0.82rem;
-            font-weight: 700;
-            padding: 4px 11px;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
-        .badge-queue-clear {
-            background: #f8fafc;
-            color: var(--text-muted);
-            border: 1px solid var(--border-soft);
-            font-size: 0.82rem;
-            font-weight: 600;
-            padding: 4px 11px;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
 
         .table-wrapper {
             flex: 1;
-            overflow-y: auto;
+            overflow: auto;
             display: flex;
             flex-direction: column;
         }
         .table-custom {
             width: 100%;
+            min-width: 960px;
             margin-bottom: 0;
             border-collapse: separate;
             border-spacing: 0;
@@ -190,46 +167,142 @@
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.86rem;
-            font-weight: 700;
-            padding: 0.85rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15px;
+            padding: 0.85rem 0.65rem;
             border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
             white-space: nowrap;
-        }
-        .table-custom tbody td {
-            padding: 0.9rem 1.2rem;
+            text-align: center;
             vertical-align: middle;
-            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-custom tbody.trx-group td {
+            padding: 0.85rem 0.65rem;
+            vertical-align: middle;
+            text-align: center;
             font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text-body);
+            border-bottom: 1px solid #f1f5f9;
             transition: background-color 0.15s ease;
         }
-        .table-custom tbody tr:hover td {
+        .table-custom tbody.trx-group tr:last-child td,
+        .table-custom tbody.trx-group td[rowspan] {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table-custom tbody.trx-group:hover td {
             background-color: #fafbfc;
         }
 
-        .sub-note {
+        /* Tipografi Kolom Selaras dengan Katalog Obat */
+        .col-no {
+            font-weight: 500;
+            color: var(--text-muted) !important;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-resep {
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-date-main {
             display: block;
-            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-sub-note {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
             color: var(--text-muted);
             margin-top: 2px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
         }
-        .med-item-name {
-            font-size: 0.94rem;
+        .col-dokter {
             font-weight: 600;
             color: var(--text-dark);
         }
-        .med-qty-badge {
-            background: #f8fafc;
-            color: #475569;
-            border: 1px solid var(--border-soft);
-            font-size: 0.82rem;
+        .col-faskes {
+            font-weight: 400;
+            color: #475569 !important;
+        }
+        .col-obat {
             font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 6px;
+            color: var(--text-dark);
+        }
+        .col-jumlah {
             white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .qty-val {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .qty-unit {
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .col-total {
+            font-weight: 600;
+            color: var(--maroon) !important;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---------- Tombol Tindakan Simetris ---------- */
+        .action-btn-group {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+        }
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            height: 33px;
+            padding: 0 0.7rem;
+            font-size: 0.84rem;
+            font-weight: 600;
+            line-height: 1;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .btn-action-approve {
+            background: var(--maroon);
+            color: #ffffff;
+            border: 1px solid var(--maroon);
+        }
+        .btn-action-approve:hover {
+            background: var(--maroon-dark);
+            border-color: var(--maroon-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .btn-action-reject {
+            background: #ffffff;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .btn-action-reject:hover {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #b91c1c;
+            transform: translateY(-1px);
         }
 
         .empty-center-cell {
@@ -252,12 +325,14 @@
         }
 
         .side-empty-state {
+            flex: 1;
+            min-height: 168px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 1.15rem 0.5rem;
+            padding: 1rem 0.5rem;
             gap: 0.45rem;
         }
         .side-empty-icon {
@@ -286,8 +361,10 @@
         }
 
         .panel-section-distinct {
-            padding: 1rem 1.2rem;
+            padding: 0.85rem 1.2rem;
             border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            flex-direction: column;
         }
         .panel-section-distinct:last-child {
             border-bottom: none;
@@ -300,29 +377,26 @@
             text-transform: uppercase;
             color: #334155;
             display: block;
-            margin-bottom: 0.65rem;
+            margin-bottom: 0.5rem;
         }
 
-        /* ---------- Ringkasan KPI (Flat tanpa kotak abu-abu) ---------- */
         .kpi-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
         .kpi-box {
-            padding: 0.65rem 0.75rem;
+            padding: 0.85rem 0.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .kpi-box:nth-child(odd) {
-            padding-left: 0;
-            border-right: 1px solid #f1f5f9;
-        }
-        .kpi-box:nth-child(even) {
-            padding-right: 0;
-            padding-left: 1rem;
+            border-right: 1px solid #cbd5e1;
         }
         .kpi-box:nth-child(1),
         .kpi-box:nth-child(2) {
-            padding-top: 0.1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #cbd5e1;
         }
         .kpi-box:nth-child(3),
         .kpi-box:nth-child(4) {
@@ -345,79 +419,47 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* ---------- Tombol Tindakan ---------- */
-        .btn-maroon-sm {
-            background: var(--maroon);
-            color: #ffffff;
-            border: none;
-            padding: 0.42rem 0.9rem;
-            font-size: 0.86rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        .btn-maroon-sm:hover {
-            background: var(--maroon-dark);
-            color: #ffffff;
-            transform: translateY(-1px);
-        }
-
-        .btn-outline-sm {
-            background: #ffffff;
-            color: #dc2626;
-            border: 1px solid var(--border-soft);
-            padding: 0.42rem 0.9rem;
-            font-size: 0.86rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        .btn-outline-sm:hover {
-            background: #fef2f2;
-            border-color: #fecaca;
-        }
-
-        /* ---------- Daftar Samping (Stok & Kedaluwarsa) ---------- */
         .side-list-table {
             font-size: 0.92rem;
         }
         .side-item-title {
             font-size: 0.92rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-dark);
             max-width: 195px;
         }
         .side-item-sub {
             font-size: 0.8rem;
+            font-weight: 400;
             color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+        .side-item-sku {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            font-variant-numeric: tabular-nums;
         }
         .stock-current {
             font-size: 0.9rem;
-            font-weight: 700;
-            color: #991b1b;
+            font-weight: 600;
+            color: #b91c1c;
             font-variant-numeric: tabular-nums;
         }
         .stock-min-limit {
             font-size: 0.8rem;
-            font-weight: 500;
+            font-weight: 400;
             color: var(--text-muted);
             font-variant-numeric: tabular-nums;
         }
 
         .expiry-status-urgent {
             font-size: 0.88rem;
-            font-weight: 700;
-            color: #991b1b;
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .header-clock {
-            font-size: 0.95rem;
-            color: var(--text-muted);
             font-weight: 600;
+            color: #b91c1c;
+            white-space: nowrap;
             font-variant-numeric: tabular-nums;
         }
     </style>
@@ -432,7 +474,7 @@
         </div>
 
         <nav class="nav-segmented ms-2">
-            <a href="{{ route('apoteker.dashboard') }}" class="active">Dashboard Validasi</a>
+            <a href="{{ route('apoteker.dashboard') }}" class="active">Dashboard</a>
             <a href="{{ route('apoteker.obat.index') }}">Katalog Obat</a>
         </nav>
     </div>
@@ -465,77 +507,107 @@
             <div class="table-card-header">
                 <div>
                     <span class="card-title-main">Antrean Validasi Resep Dokter</span>
-                    <span class="card-title-sub">Daftar resep dari kasir yang memerlukan verifikasi apoteker</span>
                 </div>
-                @if($totalPending > 0)
-                    <span class="badge-queue-pending">
-                        {{ $totalPending }} Resep Menunggu
-                    </span>
-                @else
-                    <span class="badge-queue-clear">
-                        Semua Terverifikasi
-                    </span>
-                @endif
             </div>
 
             <div class="table-wrapper">
                 <table class="table-custom">
                     <thead>
                     <tr>
-                        <th style="width: 5%;">No.</th>
-                        <th style="width: 15%;">No. Resep / Tgl</th>
-                        <th style="width: 24%;">Dokter &amp; Faskes</th>
-                        <th style="width: 29%;">Item Obat Diresepkan</th>
-                        <th style="width: 13%;">Total Tagihan</th>
-                        <th style="width: 14%; text-align: center;">Tindakan</th>
+                        <th style="width: 4%;">No.</th>
+                        <th style="width: 11%;">No. Resep</th>
+                        <th style="width: 11%;">Waktu</th>
+                        <th style="width: 13%;">Dokter</th>
+                        <th style="width: 11%;">Faskes</th>
+                        <th style="width: 19%;">Obat</th>
+                        <th style="width: 10%;">Jumlah</th>
+                        <th style="width: 10%;">Total</th>
+                        <th style="width: 11%;">Tindakan</th>
                     </tr>
                     </thead>
-                    <tbody>
+
                     @forelse($pendingResep as $index => $trx)
                         @php
                             $namaDokter = $trx->resep?->nama_dokter;
                             $kodeResep  = ($namaDokter && $namaDokter !== 'Tidak Diketahui')
                                 ? 'RSP-00' . $trx->id_resep
                                 : 'RSP-AUTO-' . $trx->id_transaksi;
+                            $waktuTrx   = \Carbon\Carbon::parse($trx->tanggal_transaksi);
+                            $details    = $trx->detail_transaksi;
+                            $rowCount   = max($details->count(), 1);
                         @endphp
-                        <tr>
-                            <td class="text-muted fw-bold">{{ $index + 1 }}</td>
-                            <td>
-                                <span class="fw-bold text-dark font-monospace d-block">{{ $kodeResep }}</span>
-                                <span class="sub-note">{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d M Y, H:i') }}</span>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">{{ $namaDokter ?? 'Dokter' }}</div>
-                                <span class="sub-note">{{ $trx->resep?->nama_klinik ?? 'Fasilitas Kesehatan' }}</span>
-                            </td>
-                            <td>
-                                @foreach($trx->detail_transaksi as $detail)
-                                    <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
-                                        <span class="med-item-name">• {{ $detail->obat->nama_obat ?? 'Obat' }}</span>
-                                        <span class="med-qty-badge">{{ $detail->jumlah_beli }} {{ $detail->obat->jenis_obat ?? 'Unit' }}</span>
-                                    </div>
-                                @endforeach
-                            </td>
-                            <td class="fw-bold text-maroon" style="font-variant-numeric: tabular-nums;">
-                                Rp {{ number_format($trx->total_harga, 0, ',', '.') }}
-                            </td>
-                            <td class="text-center">
-                                <div class="d-inline-flex gap-2">
-                                    <form action="{{ route('apoteker.resep.approve', $trx->id_transaksi) }}" method="POST" class="m-0">
-                                        @csrf
-                                        <button type="submit" class="btn-maroon-sm">Setujui</button>
-                                    </form>
+                        <tbody class="trx-group">
+                        @forelse($details as $dIndex => $detail)
+                            <tr>
+                                @if($dIndex === 0)
+                                    <td rowspan="{{ $rowCount }}" class="col-no">{{ $index + 1 }}</td>
+                                    <td rowspan="{{ $rowCount }}" class="col-resep">{{ $kodeResep }}</td>
+                                    <td rowspan="{{ $rowCount }}">
+                                        <span class="col-date-main">{{ $waktuTrx->format('d M Y') }}</span>
+                                        <span class="col-sub-note">{{ $waktuTrx->format('H:i') }} WIB</span>
+                                    </td>
+                                    <td rowspan="{{ $rowCount }}" class="col-dokter">{{ $namaDokter ?? '-' }}</td>
+                                    <td rowspan="{{ $rowCount }}" class="col-faskes">{{ $trx->resep?->nama_klinik ?? '-' }}</td>
+                                @endif
 
-                                    <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0">
-                                        @csrf
-                                        <button type="submit" class="btn-outline-sm" onclick="return confirm('Apakah Anda yakin ingin menolak resep ini?')">Tolak</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                                <td class="col-obat">{{ $detail->obat->nama_obat ?? 'Obat' }}</td>
+                                <td class="col-jumlah">
+                                    <span class="qty-val">{{ $detail->jumlah_beli }}</span>
+                                    <span class="qty-unit">{{ $detail->obat->jenis_obat ?? 'Unit' }}</span>
+                                </td>
+
+                                @if($dIndex === 0)
+                                    <td rowspan="{{ $rowCount }}" class="col-total">
+                                        Rp {{ number_format($trx->total_harga, 0, ',', '.') }}
+                                    </td>
+                                    <td rowspan="{{ $rowCount }}">
+                                        <div class="action-btn-group">
+                                            <form action="{{ route('apoteker.resep.approve', $trx->id_transaksi) }}" method="POST" class="m-0">
+                                                @csrf
+                                                <button type="submit" class="btn-action btn-action-approve">Setujui</button>
+                                            </form>
+
+                                            <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0">
+                                                @csrf
+                                                <button type="submit" class="btn-action btn-action-reject" onclick="return confirm('Apakah Anda yakin ingin menolak resep ini?')">Tolak</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                @endif
+                            </tr>
+                        @empty
+                            <tr>
+                                <td class="col-no">{{ $index + 1 }}</td>
+                                <td class="col-resep">{{ $kodeResep }}</td>
+                                <td>
+                                    <span class="col-date-main">{{ $waktuTrx->format('d M Y') }}</span>
+                                    <span class="col-sub-note">{{ $waktuTrx->format('H:i') }} WIB</span>
+                                </td>
+                                <td class="col-dokter">{{ $namaDokter ?? '-' }}</td>
+                                <td class="col-faskes">{{ $trx->resep?->nama_klinik ?? '-' }}</td>
+                                <td class="col-obat text-muted">-</td>
+                                <td class="col-jumlah text-muted">-</td>
+                                <td class="col-total">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <form action="{{ route('apoteker.resep.approve', $trx->id_transaksi) }}" method="POST" class="m-0">
+                                            @csrf
+                                            <button type="submit" class="btn-action btn-action-approve">Setujui</button>
+                                        </form>
+
+                                        <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0">
+                                            @csrf
+                                            <button type="submit" class="btn-action btn-action-reject" onclick="return confirm('Apakah Anda yakin ingin menolak resep ini?')">Tolak</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
                     @empty
+                        <tbody>
                         <tr>
-                            <td colspan="6" class="empty-center-cell">
+                            <td colspan="9" class="empty-center-cell">
                                 <div class="empty-icon-box">
                                     <i class="bi bi-inbox"></i>
                                 </div>
@@ -543,8 +615,8 @@
                                 <p class="text-muted mb-0" style="font-size: 0.92rem;">Resep baru dari kasir akan tampil secara otomatis pada tabel ini.</p>
                             </td>
                         </tr>
+                        </tbody>
                     @endforelse
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -572,25 +644,25 @@
                 </div>
 
                 <div class="kpi-box">
-                    <span class="kpi-label">Hampir Kedaluwarsa</span>
+                    <span class="kpi-label">Mendekati ED</span>
                     <div class="kpi-value">{{ $peringatanSatuBulan->count() }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Bagian 2: Stok Menipis -->
+        <!-- Bagian 2: Stok Menipis (Default tampil 3 item penuh) -->
         <div class="panel-section-distinct">
             <span class="section-heading">Stok Menipis</span>
 
             @if(collect($stokKritis ?? [])->isNotEmpty())
-                <div class="table-responsive" style="max-height: 205px; overflow-y: auto;">
+                <div class="table-responsive pe-1" style="max-height: 168px; overflow-y: auto;">
                     <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
                         <tbody>
                         @foreach($stokKritis as $obat)
                             <tr class="border-bottom border-light">
                                 <td class="ps-0 py-2">
                                     <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
-                                    <span class="side-item-sub font-monospace d-block">{{ $obat->sku }}</span>
+                                    <span class="side-item-sku d-block">{{ $obat->sku }}</span>
                                 </td>
                                 <td class="text-end pe-0 py-2" style="white-space: nowrap;">
                                     <span class="stock-current">{{ $obat->stok }}</span>
@@ -611,10 +683,10 @@
 
         <!-- Bagian 3: Peringatan Kedaluwarsa (<= 1 Bulan) -->
         <div class="panel-section-distinct flex-grow-1">
-            <span class="section-heading">Peringatan Kedaluwarsa</span>
+            <span class="section-heading">Peringatan Kadaluwarsa</span>
 
             @if($peringatanSatuBulan->isNotEmpty())
-                <div class="table-responsive" style="max-height: 230px; overflow-y: auto;">
+                <div class="table-responsive pe-1" style="max-height: 230px; overflow-y: auto;">
                     <table class="table table-sm table-borderless align-middle mb-0 side-list-table">
                         <tbody>
                         @foreach($peringatanSatuBulan as $obat)

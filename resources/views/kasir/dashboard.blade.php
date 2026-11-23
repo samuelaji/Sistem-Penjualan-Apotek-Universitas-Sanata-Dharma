@@ -17,11 +17,12 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -120,6 +121,7 @@
             flex-direction: column;
             gap: 0.75rem;
             overflow: hidden;
+            min-width: 0;
         }
 
         .btn-maroon-hero {
@@ -175,13 +177,14 @@
 
         .table-wrapper {
             flex: 1;
-            overflow-y: auto;
+            overflow: auto;
             display: flex;
             flex-direction: column;
         }
 
         .table-custom {
             width: 100%;
+            min-width: 720px;
             margin-bottom: 0;
             border-collapse: separate;
             border-spacing: 0;
@@ -189,44 +192,107 @@
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.86rem;
-            font-weight: 700;
-            padding: 0.85rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15px;
+            padding: 0.85rem 0.75rem;
             border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
             white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
         }
         .table-custom tbody td {
-            padding: 0.9rem 1.2rem;
+            padding: 0.85rem 0.75rem;
             vertical-align: middle;
+            text-align: center;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.96rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text-body);
             transition: background-color 0.15s ease;
         }
         .table-custom tbody tr:hover td {
             background-color: #fafbfc;
         }
 
-        .badge-method-cash {
-            background: #ecfdf5;
-            color: #047857;
-            border: 1px solid #a7f3d0;
-            font-size: 0.82rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 999px;
+        /* Hirarki Tipografi Kolom */
+        .col-waktu {
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
         }
-        .badge-method-other {
-            background: #f8fafc;
-            color: #475569;
-            border: 1px solid var(--border-soft);
-            font-size: 0.82rem;
+        .col-nota {
             font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 999px;
+            color: var(--text-dark);
             text-transform: uppercase;
+            letter-spacing: 0.25px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-item {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .item-val {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .item-unit {
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .col-total {
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Metode Pembayaran Tanpa Lencana Kotak */
+        .method-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .method-cash {
+            color: #047857;
+        }
+        .method-other {
+            color: var(--text-body);
+            text-transform: uppercase;
+        }
+
+        /* Tombol Struk Merah Marun */
+        .btn-struk {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            height: 33px;
+            padding: 0 0.85rem;
+            background: var(--maroon);
+            border: 1px solid var(--maroon);
+            color: #ffffff;
+            font-size: 0.84rem;
+            font-weight: 600;
+            line-height: 1;
+            border-radius: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .btn-struk:hover {
+            background: var(--maroon-dark);
+            border-color: var(--maroon-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .btn-struk:active {
+            transform: scale(0.98);
         }
 
         .empty-center-cell {
@@ -279,7 +345,7 @@
             margin-bottom: 0.65rem;
         }
 
-        /* ---------- Informasi Shift (Flat dengan garis pemisah tipis) ---------- */
+        /* ---------- Informasi Shift ---------- */
         .kpi-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -372,24 +438,6 @@
         }
         .btn-maroon-full:active { transform: scale(0.99); }
 
-        .btn-struk {
-            background: #f8fafc;
-            border: 1px solid var(--border-soft);
-            color: var(--text-dark);
-            padding: 5px 14px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.15s ease;
-        }
-        .btn-struk:hover {
-            background: #ffffff;
-            border-color: var(--maroon);
-            color: var(--maroon);
-        }
-
         /* ---------- Halaman Buka Shift ---------- */
         .open-shift-wrapper {
             flex: 1;
@@ -441,8 +489,8 @@
 
         @if($shiftAktif)
             <nav class="nav-segmented ms-2">
-                <a href="{{ Route::has('kasir.dashboard') ? route('kasir.dashboard') : url('/kasir/dashboard') }}" class="active">Dashboard Kasir</a>
-                <a href="{{ route('transaksi.index') }}">Terminal POS</a>
+                <a href="{{ Route::has('kasir.dashboard') ? route('kasir.dashboard') : url('/kasir/dashboard') }}" class="active">Dashboard</a>
+                <a href="{{ route('transaksi.index') }}">Transaksi</a>
             </nav>
         @endif
     </div>
@@ -517,31 +565,32 @@
                     <table class="table-custom">
                         <thead>
                         <tr>
-                            <th style="width: 12%;">Waktu</th>
+                            <th style="width: 13%;">Waktu</th>
                             <th style="width: 21%;">No. Nota</th>
-                            <th style="width: 23%;">Ringkasan Item</th>
+                            <th style="width: 22%;">Ringkasan Item</th>
                             <th style="width: 18%;">Total Belanja</th>
-                            <th style="width: 14%; text-align: center;">Metode</th>
-                            <th style="width: 12%; text-align: center;">Nota</th>
+                            <th style="width: 13%;">Metode</th>
+                            <th style="width: 13%;">Nota</th>
                         </tr>
                         </thead>
                         <tbody>
                         @forelse($transaksiTerakhir as $trx)
                             <tr>
-                                <td class="text-muted" style="font-variant-numeric: tabular-nums;">{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('H:i') }}</td>
-                                <td class="fw-bold text-dark font-monospace">TRX-{{ str_pad($trx->id_transaksi, 5, '0', STR_PAD_LEFT) }}</td>
-                                <td>
-                                    <span class="fw-medium text-dark">{{ $trx->detail_transaksi->count() }} jenis obat</span>
+                                <td class="col-waktu">{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('H:i') }}</td>
+                                <td class="col-nota">TRX-{{ str_pad($trx->id_transaksi, 5, '0', STR_PAD_LEFT) }}</td>
+                                <td class="col-item">
+                                    <span class="item-val">{{ $trx->detail_transaksi->count() }}</span>
+                                    <span class="item-unit">jenis obat</span>
                                 </td>
-                                <td class="fw-bold text-dark" style="font-variant-numeric: tabular-nums;">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</td>
-                                <td class="text-center">
+                                <td class="col-total">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</td>
+                                <td>
                                     @if($trx->metode_pembayaran == 'cash')
-                                        <span class="badge-method-cash">Tunai</span>
+                                        <span class="method-text method-cash">Tunai</span>
                                     @else
-                                        <span class="badge-method-other">{{ $trx->metode_pembayaran }}</span>
+                                        <span class="method-text method-other">{{ $trx->metode_pembayaran }}</span>
                                     @endif
                                 </td>
-                                <td class="text-center">
+                                <td>
                                     <a href="{{ route('transaksi.struk', $trx->id_transaksi) }}" target="_blank" class="btn-struk">
                                         Struk
                                     </a>
@@ -554,7 +603,7 @@
                                         <i class="bi bi-receipt"></i>
                                     </div>
                                     <div class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">Belum Ada Transaksi</div>
-                                    <p class="text-muted mb-0" style="font-size: 0.92rem;">Buka Terminal POS untuk mulai mencatat transaksi.</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.92rem;">Buka menu Transaksi untuk mencatat transaksi.</p>
                                 </td>
                             </tr>
                         @endforelse

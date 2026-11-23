@@ -17,6 +17,7 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -271,47 +272,110 @@
         .table-wrapper {
             flex: 1;
             overflow: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .table-custom {
             width: 100%;
+            min-width: 920px;
             margin-bottom: 0;
             border-collapse: separate;
             border-spacing: 0;
-            min-width: 920px;
         }
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.84rem;
-            font-weight: 700;
-            padding: 0.85rem 1.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15px;
+            padding: 0.85rem 0.65rem;
             border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
             white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
         }
         .table-custom tbody td {
-            padding: 0.9rem 1.25rem;
+            padding: 0.85rem 0.65rem;
             vertical-align: middle;
+            text-align: center;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.94rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text-body);
             transition: background-color 0.15s ease;
         }
         .table-custom tbody tr:last-child td { border-bottom: none; }
         .table-custom tbody tr:hover td { background-color: #fafbfc; }
 
-        .sku-code {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            font-weight: 700;
+        /* Hirarki Tipografi Kolom */
+        .col-no {
+            font-weight: 500;
+            color: var(--text-muted) !important;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-sku {
+            font-weight: 600;
+            color: var(--text-dark);
             text-transform: uppercase;
+            letter-spacing: 0.25px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-med-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .col-category {
+            font-weight: 400;
+            color: #475569;
+            text-transform: capitalize;
+        }
+        .col-stat {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-val {
+            font-weight: 600;
+            color: var(--text-dark);
         }
         .unit-label {
-            font-size: 0.84rem;
+            font-weight: 400;
             color: var(--text-muted);
+        }
+        .col-price {
             font-weight: 500;
+            color: var(--text-body);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-asset {
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .empty-center-cell {
+            height: calc(100vh - 255px);
+            vertical-align: middle !important;
+            text-align: center;
+            border-bottom: none !important;
+        }
+        .empty-icon-box {
+            width: 58px;
+            height: 58px;
+            background: #f1f5f9;
+            color: #94a3b8;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
         }
 
         /* ---------- Footer & Pagination Kompak ---------- */
@@ -385,7 +449,7 @@
 
         <nav class="nav-segmented ms-2 d-none d-md-flex">
             <a href="{{ route('manajemen.dashboard') }}">Analitik Bisnis</a>
-            <a href="{{ route('manajemen.inventaris') }}" class="active">Laporan Inventaris</a>
+            <a href="{{ route('manajemen.inventaris') }}" class="active">Inventaris</a>
         </nav>
     </div>
 
@@ -437,10 +501,10 @@
                     <th style="width: 12%;">Kode SKU</th>
                     <th style="width: 24%;">Nama Obat</th>
                     <th style="width: 13%;">Kategori</th>
-                    <th style="width: 11%; text-align: center;">Total Terjual</th>
-                    <th style="width: 10%; text-align: center;">Sisa Stok</th>
-                    <th style="width: 12%; text-align: right;">Harga Satuan</th>
-                    <th style="width: 12%; text-align: right;">Nilai Aset</th>
+                    <th style="width: 11%;">Total Terjual</th>
+                    <th style="width: 10%;">Sisa Stok</th>
+                    <th style="width: 12%;">Harga Satuan</th>
+                    <th style="width: 12%;">Nilai Aset</th>
                 </tr>
                 </thead>
                 <tbody id="inventarisTableBody">
@@ -451,28 +515,31 @@
                             : $index + 1;
                     @endphp
                     <tr>
-                        <td class="text-muted fw-semibold" style="font-variant-numeric: tabular-nums;">{{ $nomorUrut }}</td>
-                        <td><span class="font-monospace sku-code">{{ $obat->sku }}</span></td>
-                        <td class="fw-bold text-dark">{{ $obat->nama_obat }}</td>
-                        <td><span class="text-dark fw-medium text-capitalize">{{ $obat->kategori }}</span></td>
-                        <td class="text-center" style="font-variant-numeric: tabular-nums;">
-                            <span class="fw-bold text-dark">{{ $obat->total_terjual ?? 0 }}</span>
+                        <td class="col-no">{{ $nomorUrut }}</td>
+                        <td class="col-sku">{{ $obat->sku }}</td>
+                        <td class="col-med-name">{{ $obat->nama_obat }}</td>
+                        <td class="col-category">{{ $obat->kategori }}</td>
+                        <td class="col-stat">
+                            <span class="stat-val">{{ $obat->total_terjual ?? 0 }}</span>
                             <span class="unit-label">unit</span>
                         </td>
-                        <td class="text-center" style="font-variant-numeric: tabular-nums;">
-                            <span class="fw-bold text-dark">{{ $obat->stok }}</span>
+                        <td class="col-stat">
+                            <span class="stat-val">{{ $obat->stok }}</span>
                             <span class="unit-label">unit</span>
                         </td>
-                        <td class="text-end fw-medium text-dark" style="font-variant-numeric: tabular-nums;">Rp {{ number_format($obat->harga_obat, 0, ',', '.') }}</td>
-                        <td class="text-end fw-bold text-dark" style="font-variant-numeric: tabular-nums;">
+                        <td class="col-price">Rp {{ number_format($obat->harga_obat, 0, ',', '.') }}</td>
+                        <td class="col-asset">
                             Rp {{ number_format($obat->stok * $obat->harga_obat, 0, ',', '.') }}
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-5 text-muted">
-                            <i class="bi bi-inbox fs-2 d-block opacity-25 mb-2"></i>
-                            <span class="fw-medium" style="font-size: 0.92rem;">Tidak ada data obat ditemukan.</span>
+                        <td colspan="8" class="empty-center-cell">
+                            <div class="empty-icon-box">
+                                <i class="bi bi-inbox"></i>
+                            </div>
+                            <div class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">Tidak Ada Data Obat</div>
+                            <p class="text-muted mb-0" style="font-size: 0.92rem;">Data obat tidak ditemukan untuk kata kunci atau filter yang dipilih.</p>
                         </td>
                     </tr>
                 @endforelse

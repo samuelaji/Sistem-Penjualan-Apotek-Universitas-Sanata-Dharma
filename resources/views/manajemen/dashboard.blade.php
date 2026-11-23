@@ -18,11 +18,12 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -104,7 +105,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* ---------- Tata Letak Utama (Kiri Besar & Kanan Informasi) ---------- */
+        /* ---------- Tata Letak Utama ---------- */
         .pos-container {
             flex: 1;
             display: flex;
@@ -119,6 +120,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            min-width: 0;
         }
 
         .chart-card {
@@ -146,12 +148,7 @@
             font-weight: 700;
             color: var(--text-dark);
             display: block;
-        }
-        .card-title-sub {
-            font-size: 0.84rem;
-            color: var(--text-muted);
-            display: block;
-            margin-top: 2px;
+            line-height: 1.3;
         }
         .chart-controls {
             display: flex;
@@ -171,9 +168,9 @@
             border: none;
             background: transparent;
             color: var(--text-muted);
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             font-weight: 600;
-            padding: 5px 11px;
+            padding: 5px 12px;
             border-radius: 7px;
             cursor: pointer;
             transition: all 0.18s ease;
@@ -193,27 +190,7 @@
             min-height: 0;
         }
 
-        .btn-soft-sm {
-            background: #f8fafc;
-            color: var(--text-dark);
-            border: 1px solid var(--border-soft);
-            padding: 0.42rem 0.85rem;
-            font-size: 0.84rem;
-            font-weight: 600;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.15s ease;
-            white-space: nowrap;
-        }
-        .btn-soft-sm:hover {
-            background: #ffffff;
-            border-color: var(--maroon);
-            color: var(--maroon);
-        }
-
-        /* ---------- Panel Kanan (Terpisah Vertikal dengan Jarak) ---------- */
+        /* ---------- Panel Kanan ---------- */
         .panel-right {
             width: 395px;
             min-width: 395px;
@@ -241,71 +218,64 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.65rem;
+            padding-bottom: 0.72rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1.5px solid var(--border-soft);
         }
         .section-heading {
             font-size: 0.82rem;
             font-weight: 700;
             letter-spacing: 0.4px;
             text-transform: uppercase;
-            color: #334155;
+            color: var(--text-body);
             display: block;
         }
         .section-date {
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
         }
 
-        /* ---------- Ringkasan Metrik ---------- */
+        /* ---------- Ringkasan Metrik (Rata Tengah & Garis Tegas) ---------- */
         .kpi-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
         .kpi-box {
-            padding: 0.6rem 0.75rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 0.65rem 0.85rem;
         }
-        .kpi-box:nth-child(odd) {
-            padding-left: 0;
-            border-right: 1px solid #f1f5f9;
+        .kpi-box:nth-child(1) {
+            border-right: 1.5px solid var(--border-soft);
+            border-bottom: 1.5px solid var(--border-soft);
         }
-        .kpi-box:nth-child(even) {
-            padding-right: 0;
-            padding-left: 1rem;
-        }
-        .kpi-box:nth-child(1),
         .kpi-box:nth-child(2) {
-            padding-top: 0.1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1.5px solid var(--border-soft);
         }
         .kpi-box:nth-child(3) {
             grid-column: span 2;
-            padding-left: 0;
-            padding-right: 0;
-            padding-bottom: 0.1rem;
-            border-right: none;
+            padding: 0.85rem 0.65rem 0.25rem;
         }
         .kpi-label {
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.76rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.35px;
             color: var(--text-muted);
             display: block;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
         }
         .kpi-value {
-            font-size: 1.4rem;
-            font-weight: 800;
-            line-height: 1.15;
+            font-size: 1.38rem;
+            font-weight: 700;
+            line-height: 1.2;
             color: var(--text-dark);
             font-variant-numeric: tabular-nums;
-        }
-        .kpi-currency {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-right: 2px;
         }
 
         /* ---------- Daftar Top Produk ---------- */
@@ -317,19 +287,52 @@
         .top-product-item {
             display: flex;
             align-items: center;
-            padding: 0.7rem 0;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-soft);
         }
-        .top-product-item:last-child { border-bottom: none; }
+        .top-product-item:first-child { padding-top: 0.25rem; }
+        .top-product-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0.25rem;
+        }
 
         .rank-number {
-            width: 20px;
+            width: 22px;
             color: var(--text-muted);
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 600;
+            font-size: 0.92rem;
             margin-right: 0.75rem;
             flex-shrink: 0;
             text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.35;
+        }
+        .product-category {
+            font-size: 0.82rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            text-transform: capitalize;
+        }
+        .product-qty {
+            font-size: 0.94rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-variant-numeric: tabular-nums;
+        }
+        .product-qty-unit {
+            font-size: 0.82rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .product-revenue {
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--text-muted);
             font-variant-numeric: tabular-nums;
         }
     </style>
@@ -345,7 +348,7 @@
 
         <nav class="nav-segmented ms-2 d-none d-md-flex">
             <a href="{{ route('manajemen.dashboard') }}" class="active">Analitik Bisnis</a>
-            <a href="{{ route('manajemen.inventaris') }}">Laporan Inventaris</a>
+            <a href="{{ route('manajemen.inventaris') }}">Inventaris</a>
         </nav>
     </div>
 
@@ -367,21 +370,15 @@
             <div class="chart-card-header">
                 <div>
                     <span class="card-title-main" id="chartTitleMain">Tren Penjualan</span>
-                    <span class="card-title-sub" id="chartTitleSub">Perkembangan omset transaksi harian yang sudah terverifikasi</span>
                 </div>
 
                 <div class="chart-controls">
                     <div class="period-segmented" role="group" aria-label="Rentang waktu tren penjualan">
-                        <button type="button" class="period-btn" data-period="day">Per Hari</button>
+                        <button type="button" class="period-btn" data-period="day">Hari Ini</button>
                         <button type="button" class="period-btn active" data-period="7d">7 Hari</button>
                         <button type="button" class="period-btn" data-period="1m">1 Bulan</button>
                         <button type="button" class="period-btn" data-period="1y">1 Tahun</button>
                     </div>
-
-                    <button type="button" class="btn-soft-sm" onclick="window.print()">
-                        <i class="bi bi-printer"></i>
-                        <span>Cetak</span>
-                    </button>
                 </div>
             </div>
 
@@ -402,47 +399,43 @@
             <div class="kpi-grid">
                 <div class="kpi-box">
                     <span class="kpi-label">Omset Hari Ini</span>
-                    <div class="kpi-value">
-                        <span class="kpi-currency">Rp</span>{{ number_format($omsetHariIni, 0, ',', '.') }}
-                    </div>
+                    <div class="kpi-value">Rp {{ number_format($omsetHariIni, 0, ',', '.') }}</div>
                 </div>
 
                 <div class="kpi-box">
                     <span class="kpi-label">Transaksi Selesai</span>
-                    <div class="kpi-value">
-                        {{ number_format($transaksiHariIni, 0, ',', '.') }}
-                    </div>
+                    <div class="kpi-value">{{ number_format($transaksiHariIni, 0, ',', '.') }}</div>
                 </div>
 
                 <div class="kpi-box">
                     <span class="kpi-label">Estimasi Nilai Aset Obat</span>
-                    <div class="kpi-value">
-                        <span class="kpi-currency">Rp</span>{{ number_format($nilaiAset ?? 0, 0, ',', '.') }}
-                    </div>
+                    <div class="kpi-value">Rp {{ number_format($nilaiAset ?? 0, 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
 
         <div class="panel-section-card is-grow">
-            <span class="section-heading mb-2">Top 5 Produk Terlaris</span>
+            <div class="section-heading-row">
+                <span class="section-heading">Top 5 Produk Terlaris</span>
+            </div>
 
             <ul class="top-product-list">
                 @forelse($produkTerlaris as $index => $item)
                     <li class="top-product-item">
                         <span class="rank-number">{{ $index + 1 }}</span>
                         <div class="flex-grow-1 overflow-hidden">
-                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.92rem;">{{ $item->nama_obat }}</div>
-                            <span class="text-muted text-capitalize" style="font-size: 0.78rem;">{{ $item->kategori }}</span>
+                            <div class="product-title text-truncate">{{ $item->nama_obat }}</div>
+                            <span class="product-category">{{ $item->kategori }}</span>
                         </div>
-                        <div class="text-end ms-2" style="font-variant-numeric: tabular-nums;">
-                            <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ $item->total_terjual }} <span class="fw-normal text-muted" style="font-size: 0.78rem;">unit</span></div>
-                            <div class="text-muted fw-semibold" style="font-size: 0.8rem;">Rp {{ number_format($item->total_rupiah, 0, ',', '.') }}</div>
+                        <div class="text-end ms-2">
+                            <div class="product-qty">{{ $item->total_terjual }} <span class="product-qty-unit">unit</span></div>
+                            <div class="product-revenue">Rp {{ number_format($item->total_rupiah, 0, ',', '.') }}</div>
                         </div>
                     </li>
                 @empty
                     <div class="py-5 text-center text-muted">
                         <i class="bi bi-inbox fs-2 d-block opacity-25 mb-2"></i>
-                        <span class="fw-medium" style="font-size: 0.9rem;">Belum ada data penjualan.</span>
+                        <span class="fw-medium" style="font-size: 0.92rem;">Belum ada data penjualan.</span>
                     </div>
                 @endforelse
             </ul>
@@ -484,7 +477,6 @@
         const seriesMap = {
             day: {
                 title: 'Tren Penjualan',
-                subtitle: 'Distribusi omset transaksi terverifikasi sepanjang hari ini',
                 labels: Array.isArray(serverDailyLabels) ? serverDailyLabels : ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', 'Sekarang'],
                 values: Array.isArray(serverDailyValues)
                     ? serverDailyValues.map(Number)
@@ -492,13 +484,11 @@
             },
             '7d': {
                 title: 'Tren Penjualan',
-                subtitle: 'Perkembangan omset transaksi harian yang sudah terverifikasi',
                 labels: sevenDayLabels,
                 values: sevenDayValues
             },
             '1m': {
                 title: 'Tren Penjualan',
-                subtitle: 'Rekapitulasi mingguan omset apotek selama 30 hari terakhir',
                 labels: Array.isArray(serverMonthlyLabels) ? serverMonthlyLabels : ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
                 values: Array.isArray(serverMonthlyValues)
                     ? serverMonthlyValues.map(Number)
@@ -506,7 +496,6 @@
             },
             '1y': {
                 title: 'Tren Penjualan',
-                subtitle: 'Perkembangan omset bulanan apotek sepanjang 12 bulan terakhir',
                 labels: Array.isArray(serverYearlyLabels)
                     ? serverYearlyLabels
                     : ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
@@ -548,8 +537,8 @@
                     tooltip: {
                         backgroundColor: '#0f172a',
                         padding: 12,
-                        titleFont: { family: 'Plus Jakarta Sans', size: 13 },
-                        bodyFont: { family: 'Plus Jakarta Sans', size: 14, weight: 'bold' },
+                        titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: '600' },
+                        bodyFont: { family: 'Plus Jakarta Sans', size: 14, weight: '700' },
                         callbacks: {
                             label: function (context) {
                                 return 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
@@ -560,13 +549,16 @@
                 scales: {
                     x: {
                         grid: { display: false },
-                        ticks: { font: { family: 'Plus Jakarta Sans' }, color: '#64748b' }
+                        ticks: {
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: '500' },
+                            color: '#64748b'
+                        }
                     },
                     y: {
-                        grid: { color: '#f1f5f9' },
+                        grid: { color: '#e2e8f0' },
                         beginAtZero: true,
                         ticks: {
-                            font: { family: 'Plus Jakarta Sans' },
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: '500' },
                             color: '#64748b',
                             callback: function (value) {
                                 if (value >= 1000000) return 'Rp ' + (value / 1000000) + 'M';
@@ -580,7 +572,6 @@
         });
 
         const titleMainEl = document.getElementById('chartTitleMain');
-        const titleSubEl = document.getElementById('chartTitleSub');
         const periodButtons = document.querySelectorAll('.period-btn');
 
         periodButtons.forEach(btn => {
@@ -592,7 +583,6 @@
                 this.classList.add('active');
 
                 titleMainEl.textContent = target.title;
-                titleSubEl.textContent = target.subtitle;
 
                 chart.data.labels = target.labels;
                 chart.data.datasets[0].data = target.values;
