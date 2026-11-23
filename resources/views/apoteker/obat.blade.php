@@ -18,11 +18,12 @@
             --maroon-dark: #6e0000;
             --maroon-soft: rgba(139, 0, 0, 0.08);
             --text-dark: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -90,7 +91,6 @@
             color: var(--text-muted);
             font-weight: 600;
             line-height: 1.25;
-            text-transform: capitalize;
         }
 
         .nav-segmented {
@@ -162,7 +162,7 @@
             border-radius: 10px;
             border: 1.5px solid var(--border-soft);
             outline: none;
-            font-size: 0.94rem;
+            font-size: 0.9rem;
             transition: all 0.2s;
             background: #f8fafc;
         }
@@ -203,7 +203,14 @@
             gap: 0.65rem;
             padding: 0.45rem 0.7rem;
             border: 1.5px solid var(--border-soft);
+<<<<<<< HEAD
             border-radius: 10px;
+=======
+            background-color: #f8fafc;
+            padding: 0.6rem 1.1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
             color: var(--text-dark);
             background: #ffffff;
             font-size: 0.92rem;
@@ -262,7 +269,7 @@
             color: #ffffff;
             border: none;
             padding: 0.6rem 1.25rem;
-            font-size: 0.94rem;
+            font-size: 0.9rem;
             font-weight: 600;
             border-radius: 10px;
             display: inline-flex;
@@ -286,7 +293,7 @@
             color: var(--text-dark);
             border: 1.5px solid var(--border-soft);
             padding: 0.6rem 1.15rem;
-            font-size: 0.94rem;
+            font-size: 0.9rem;
             font-weight: 600;
             border-radius: 10px;
             display: inline-flex;
@@ -302,7 +309,7 @@
         }
         .btn-soft:active { transform: scale(0.98); }
 
-        /* ---------- Tabel ---------- */
+        /* ---------- Tabel (Header Selaras, Isi Lebih Besar) ---------- */
         .table-card {
             flex: 1;
             background: var(--surface);
@@ -319,87 +326,205 @@
             pointer-events: none;
         }
         .table-wrapper { flex: 1; overflow: auto; }
-        .table-custom { width: 100%; margin-bottom: 0; border-collapse: separate; border-spacing: 0; min-width: 1120px; }
+        .table-custom {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1140px;
+        }
 
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.86rem;
-            font-weight: 700;
-            padding: 0.85rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15px;
+            padding: 0.85rem 0.65rem;
             border-bottom: 1.5px solid var(--border-soft);
             position: sticky;
             top: 0;
             z-index: 5;
             white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
         }
         .table-custom tbody td {
-            padding: 0.9rem 1.2rem;
+            padding: 0.85rem 0.65rem;
             vertical-align: middle;
+            text-align: center;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.96rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text-body);
             transition: background-color 0.15s ease;
         }
         .table-custom tbody tr:hover td { background-color: #fafbfc; }
 
-        .sku-code {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
+        /* Hirarki Kolom Isi Tabel */
+        .col-no {
+            font-weight: 500;
+            color: var(--text-muted) !important;
+            font-variant-numeric: tabular-nums;
         }
-        .sub-note {
+        .col-sku {
+            font-weight: 600;
+            color: var(--text-dark) !important;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-med-name {
             display: block;
-            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .col-sub-note {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
             color: var(--text-muted);
             margin-top: 2px;
         }
-        .unit-label {
-            font-size: 0.84rem;
+        .col-sub-note.is-expired {
+            color: #b91c1c;
             font-weight: 500;
         }
-        .packaging-text {
-            font-size: 0.92rem;
-            color: var(--text-muted);
+        .col-category {
+            font-weight: 500;
+            color: var(--text-body);
             text-transform: capitalize;
         }
+        .col-packaging {
+            font-weight: 400;
+            color: #475569;
+        }
+        .col-stock {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .stock-val {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .stock-val.is-low {
+            color: #b91c1c;
+        }
+        .stock-unit {
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .stock-unit.is-low {
+            color: #b91c1c;
+        }
+        .col-price {
+            font-weight: 600;
+            color: var(--text-dark) !important;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .col-expiry-date {
+            display: block;
+            font-weight: 500;
+            color: var(--text-dark);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
 
-        /* Status (Teks datar tanpa kotak & ikon) */
+        /* Status (Bobot seragam 600, beda warna semantik) */
         .status-text {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             white-space: nowrap;
         }
-        .status-active  { color: #047857; font-weight: 600; }
-        .status-warning { color: #b45309; font-weight: 700; }
-        .status-expired { color: #991b1b; font-weight: 700; }
-
-        .expiry-note { display: block; font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
-        .expiry-note.is-expired { color: #991b1b; font-weight: 600; }
+        .status-active  { color: #047857; }
+        .status-warning { color: #b45309; }
+        .status-expired { color: #b91c1c; }
 
         .btn-action-icon {
             width: 34px;
             height: 34px;
             border-radius: 8px;
-            border: 1px solid var(--border-soft);
-            background: #ffffff;
+            border: none;
+            background: var(--maroon);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #ffffff;
             font-size: 0.95rem;
             transition: all 0.15s ease;
         }
-        .btn-action-icon:hover { background: #f1f5f9; border-color: #cbd5e1; color: var(--text-dark); }
-        .btn-action-icon.delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+        .btn-action-icon:hover {
+            background: var(--maroon-dark);
+            color: #ffffff;
+        }
+        .btn-action-icon.delete {
+            background: var(--maroon);
+            color: #ffffff;
+        }
+        .btn-action-icon.delete:hover {
+            background: #520000;
+            color: #ffffff;
+        }
 
+        /* ---------- Footer & Pagination Kompak ---------- */
         .table-footer {
-            padding: 0.8rem 1.2rem;
+            padding: 0.65rem 1.25rem;
             border-top: 1px solid var(--border-soft);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 0.75rem;
             background: #ffffff;
-            font-size: 0.88rem;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        .pagination-wrap nav > div.d-flex.justify-content-between.flex-fill.d-sm-none {
+            display: none !important;
+        }
+        .pagination-wrap nav > div.d-none.flex-sm-fill.d-sm-flex.align-items-sm-center.justify-content-sm-between > div:first-child {
+            display: none !important;
+        }
+        .pagination-wrap nav > div.d-none.flex-sm-fill.d-sm-flex.align-items-sm-center.justify-content-sm-between {
+            justify-content: flex-end !important;
+        }
+        .pagination-wrap .pagination {
+            margin: 0;
+            gap: 3px;
+            flex-wrap: nowrap;
+        }
+        .pagination-wrap .page-item .page-link {
+            padding: 0.32rem 0.62rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            border: 1px solid var(--border-soft);
+            border-radius: 7px;
+            font-variant-numeric: tabular-nums;
+            transition: all 0.15s ease;
+        }
+        .pagination-wrap .page-item:first-child .page-link,
+        .pagination-wrap .page-item:last-child .page-link {
+            border-radius: 7px;
+        }
+        .pagination-wrap .page-item .page-link:hover {
+            background-color: #f8fafc;
+            border-color: var(--maroon);
+            color: var(--maroon);
+        }
+        .pagination-wrap .page-item.active .page-link {
+            background-color: var(--maroon);
+            border-color: var(--maroon);
+            color: #ffffff;
+        }
+        .pagination-wrap .page-item.disabled .page-link {
+            color: #94a3b8;
+            background-color: #f8fafc;
+            border-color: var(--border-soft);
         }
 
         .form-label { font-size: 0.88rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
@@ -488,11 +613,11 @@
     <div class="d-flex align-items-center gap-4">
         <div class="user-identity">
             <span class="user-name">{{ Auth::user()->nama_pengguna ?? 'Apoteker' }}</span>
-            <span class="user-id">{{ Auth::user()->role_akses ?? 'Apoteker Pelayanan' }}</span>
+            <span class="user-id">{{ Auth::user()->username ?? 'apoteker' }}</span>
         </div>
 
         <nav class="nav-segmented ms-2">
-            <a href="{{ route('apoteker.dashboard') }}">Dashboard Validasi</a>
+            <a href="{{ route('apoteker.dashboard') }}">Dashboard</a>
             <a href="{{ route('apoteker.obat.index') }}" class="active">Katalog Obat</a>
         </nav>
     </div>
@@ -551,15 +676,15 @@
                 <thead>
                 <tr>
                     <th style="width: 4%;">No.</th>
-                    <th style="width: 10%;">Kode SKU</th>
+                    <th style="width: 9%;">Kode SKU</th>
                     <th style="width: 20%;">Nama Obat</th>
                     <th style="width: 10%;">Kategori</th>
                     <th style="width: 11%;">Kemasan</th>
-                    <th style="width: 7%; text-align: center;">Stok</th>
-                    <th style="width: 11%;">Harga Satuan</th>
+                    <th style="width: 7.5%;">Stok</th>
+                    <th style="width: 10.5%;">Harga Satuan</th>
                     <th style="width: 10%;">Kedaluwarsa</th>
-                    <th style="width: 11%;">Status</th>
-                    <th style="width: 6%; text-align: center;">Aksi</th>
+                    <th style="width: 11.5%;">Status</th>
+                    <th style="width: 6.5%;">Aksi</th>
                 </tr>
                 </thead>
                 <tbody id="obatTableBody">
@@ -569,6 +694,7 @@
                         $hariTersisa  = (int) now()->startOfDay()->diffInDays($kedaluwarsa, false);
                         $sudahExpired = $hariTersisa < 0;
                         $segera       = !$sudahExpired && $hariTersisa <= 90;
+                        $stokMenipis  = $obat->stok <= $obat->batas_minimum;
 
                         $payloadEdit = [
                             'sku'                 => $obat->sku,
@@ -582,42 +708,37 @@
                         ];
                     @endphp
                     <tr>
-                        <td class="text-muted fw-bold">{{ $obatList->firstItem() + $index }}</td>
-                        <td><span class="font-monospace sku-code">{{ $obat->sku }}</span></td>
+                        <td class="col-no">{{ $obatList->firstItem() + $index }}</td>
+                        <td class="col-sku">{{ $obat->sku }}</td>
                         <td>
-                            <span class="fw-bold text-dark d-block">{{ $obat->nama_obat }}</span>
-                            <span class="sub-note">Stok min. {{ $obat->batas_minimum }} unit</span>
+                            <span class="col-med-name">{{ $obat->nama_obat }}</span>
+                            <span class="col-sub-note">Stok min. {{ $obat->batas_minimum }} unit</span>
                         </td>
-                        <td><span class="text-dark fw-medium text-capitalize">{{ $obat->kategori }}</span></td>
-                        <td><span class="packaging-text">{{ $obat->jenis_obat }}</span></td>
-                        <td class="text-center" style="font-variant-numeric: tabular-nums;">
-                            @if($obat->stok <= $obat->batas_minimum)
-                                <span class="fw-bold text-danger">{{ $obat->stok }}</span>
-                                <span class="text-danger unit-label">unit</span>
-                            @else
-                                <span class="fw-bold text-dark">{{ $obat->stok }}</span>
-                                <span class="text-muted unit-label">unit</span>
-                            @endif
+                        <td class="col-category">{{ $obat->kategori }}</td>
+                        <td class="col-packaging">{{ $obat->jenis_obat }}</td>
+                        <td class="col-stock">
+                            <span class="stock-val {{ $stokMenipis ? 'is-low' : '' }}">{{ $obat->stok }}</span>
+                            <span class="stock-unit {{ $stokMenipis ? 'is-low' : '' }}">unit</span>
                         </td>
-                        <td class="fw-bold text-dark" style="font-variant-numeric: tabular-nums;">Rp {{ number_format($obat->harga_obat, 0, ',', '.') }}</td>
+                        <td class="col-price">Rp {{ number_format($obat->harga_obat, 0, ',', '.') }}</td>
                         <td>
-                            <span class="text-dark d-block">{{ $kedaluwarsa->format('d M Y') }}</span>
+                            <span class="col-expiry-date">{{ $kedaluwarsa->format('d M Y') }}</span>
                             @if($sudahExpired)
-                                <span class="expiry-note is-expired">Lewat {{ abs($hariTersisa) }} hari</span>
+                                <span class="col-sub-note is-expired">Lewat {{ abs($hariTersisa) }} hari</span>
                             @else
-                                <span class="expiry-note">{{ $hariTersisa === 0 ? 'Kedaluwarsa hari ini' : $hariTersisa . ' hari lagi' }}</span>
+                                <span class="col-sub-note">{{ $hariTersisa === 0 ? 'Kedaluwarsa hari ini' : $hariTersisa . ' hari lagi' }}</span>
                             @endif
                         </td>
                         <td>
                             @if($sudahExpired)
-                                <span class="status-text status-expired">Kedaluwarsa</span>
+                                <span class="status-text status-expired">Kadaluwarsa</span>
                             @elseif($segera)
-                                <span class="status-text status-warning">Hampir Kedaluwarsa</span>
+                                <span class="status-text status-warning">Hampir Kadaluwarsa</span>
                             @else
-                                <span class="status-text status-active">Aktif</span>
+                                <span class="status-text status-active">Belum Kadaluwarsa</span>
                             @endif
                         </td>
-                        <td class="text-center">
+                        <td>
                             <div class="d-inline-flex gap-2">
                                 <button type="button" class="btn-action-icon" title="Ubah Data" aria-label="Ubah Data"
                                         data-bs-toggle="modal" data-bs-target="#modalEditObat"
@@ -647,8 +768,8 @@
         </div>
 
         <div class="table-footer" id="obatTableFooter">
-            <span class="text-muted">Menampilkan {{ $obatList->firstItem() ?? 0 }}–{{ $obatList->lastItem() ?? 0 }} dari {{ $obatList->total() }} data</span>
-            <div>{{ $obatList->withQueryString()->links('pagination::bootstrap-5') }}</div>
+            <span class="text-muted" style="font-variant-numeric: tabular-nums;">Menampilkan {{ $obatList->firstItem() ?? 0 }}–{{ $obatList->lastItem() ?? 0 }} dari {{ $obatList->total() }} data</span>
+            <div class="pagination-wrap">{{ $obatList->withQueryString()->links('pagination::bootstrap-5') }}</div>
         </div>
     </div>
 
@@ -696,8 +817,14 @@
                                     </select>
                                     <div class="cp-new">
                                         <div class="input-group">
+<<<<<<< HEAD
                                             <input type="text" class="form-control cp-new-input text-capitalize" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
                                             <button type="button" class="btn btn-outline-secondary cp-cancel">Daftar</button>
+=======
+                                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                            <input type="text" class="form-control cp-new-input" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
+                                            <button type="button" class="btn btn-outline-secondary cp-cancel" title="Pilih dari daftar" aria-label="Pilih dari daftar"><i class="bi bi-x-lg"></i></button>
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
                                         </div>
                                     </div>
                                     <input type="hidden" name="kategori" class="cp-value">
@@ -705,12 +832,12 @@
                             </div>
                             <div class="col-12 field">
                                 <label class="form-label" for="add_nama">Nama Obat</label>
-                                <input type="text" class="form-control text-capitalize" id="add_nama" name="nama_obat"
+                                <input type="text" class="form-control" id="add_nama" name="nama_obat"
                                        value="{{ old('nama_obat') }}" placeholder="Contoh: Amoxicillin 500 mg" autocomplete="off" required>
                             </div>
                             <div class="col-12 field">
                                 <label class="form-label" for="add_jenis">Kemasan / Sediaan</label>
-                                <input type="text" class="form-control text-capitalize" id="add_jenis" name="jenis_obat"
+                                <input type="text" class="form-control" id="add_jenis" name="jenis_obat"
                                        value="{{ old('jenis_obat') }}" placeholder="Contoh: Strip (10 Tablet)" autocomplete="off" required>
                             </div>
                         </div>
@@ -803,8 +930,14 @@
                                 </select>
                                 <div class="cp-new">
                                     <div class="input-group">
+<<<<<<< HEAD
                                         <input type="text" class="form-control cp-new-input text-capitalize" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
                                         <button type="button" class="btn btn-outline-secondary cp-cancel">Daftar</button>
+=======
+                                        <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                        <input type="text" class="form-control cp-new-input" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
+                                        <button type="button" class="btn btn-outline-secondary cp-cancel" title="Pilih dari daftar" aria-label="Pilih dari daftar"><i class="bi bi-x-lg"></i></button>
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
                                     </div>
                                 </div>
                                 <input type="hidden" name="kategori" class="cp-value">
@@ -812,11 +945,11 @@
                         </div>
                         <div class="col-12 field">
                             <label class="form-label" for="edit_nama">Nama Obat</label>
-                            <input type="text" class="form-control text-capitalize" id="edit_nama" name="nama_obat" autocomplete="off" required>
+                            <input type="text" class="form-control" id="edit_nama" name="nama_obat" autocomplete="off" required>
                         </div>
                         <div class="col-12 field">
                             <label class="form-label" for="edit_jenis">Kemasan / Sediaan</label>
-                            <input type="text" class="form-control text-capitalize" id="edit_jenis" name="jenis_obat" autocomplete="off" required>
+                            <input type="text" class="form-control" id="edit_jenis" name="jenis_obat" autocomplete="off" required>
                         </div>
                         <div class="col-6 field">
                             <label class="form-label" for="edit_stok">Stok Tersedia</label>

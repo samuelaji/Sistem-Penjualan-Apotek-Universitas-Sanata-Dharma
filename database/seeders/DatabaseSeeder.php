@@ -6,91 +6,126 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Staff;
 use App\Models\Obat;
+use App\Models\Shift;
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $passwordHash = Hash::make('12345678');
 
+        // 1. Akun Staff (username pakai NIM, password: 12345678)
         $manajemen = Staff::create([
-            'nama_pengguna' => 'satria',
-            'username' => 'manajemen',
-            'password' => Hash::make('12345678'),
-            'role_akses' => 'Manajemen',
+            'nama_pengguna' => 'samuel',
+            'username'      => '245314008',
+            'password'      => $passwordHash,
+            'role_akses'    => 'Manajemen',
         ]);
 
         $apoteker = Staff::create([
-            'nama_pengguna' => 'samuel',
-            'username' => 'apoteker',
-            'password' => Hash::make('12345678'),
-            'role_akses' => 'Apoteker',
+            'nama_pengguna' => 'nadia',
+            'username'      => '245314015',
+            'password'      => $passwordHash,
+            'role_akses'    => 'Apoteker',
+        ]);
+
+        $apoteker2 = Staff::create([
+            'nama_pengguna' => 'bagas',
+            'username'      => '245314022',
+            'password'      => $passwordHash,
+            'role_akses'    => 'Apoteker',
         ]);
 
         $kasir = Staff::create([
             'nama_pengguna' => 'aji',
-            'username' => 'kasir',
-            'password' => Hash::make('12345678'),
-            'role_akses' => 'Kasir',
+            'username'      => '245314031',
+            'password'      => $passwordHash,
+            'role_akses'    => 'Kasir',
         ]);
 
+        $kasir2 = Staff::create([
+            'nama_pengguna' => 'rara',
+            'username'      => '245314044',
+            'password'      => $passwordHash,
+            'role_akses'    => 'Kasir',
+        ]);
 
-        $obatData = [
-            [
-                'id_pengguna' => $apoteker->id_pengguna,
-                'sku' => 'AMO-500',
-                'nama_obat' => 'Amoxicillin 500mg',
-                'kategori' => 'Antibiotik',
-                'jenis_obat' => 'Strip (12 Kapsul)',
-                'stok' => 45,
-                'batas_minimum' => 10,
-                'harga_obat' => 18000,
-                'tanggal_kadaluwarsa' => Carbon::now()->addMonths(12),
-            ],
-            [
-                'id_pengguna' => $apoteker->id_pengguna,
-                'sku' => 'PARA-SYR',
-                'nama_obat' => 'Paracetamol Sirup 60ml',
-                'kategori' => 'Analgesik',
-                'jenis_obat' => 'Botol (60 ml)',
-                'stok' => 24,
-                'batas_minimum' => 5,
-                'harga_obat' => 27000,
-                'tanggal_kadaluwarsa' => Carbon::now()->addMonths(24),
-            ],
-            [
-                'id_pengguna' => $apoteker->id_pengguna,
-                'sku' => 'CET-10',
-                'nama_obat' => 'Cetirizine 10mg',
-                'kategori' => 'Antihistamin',
-                'jenis_obat' => 'Strip (10 Tablet)',
-                'stok' => 5,
-                'batas_minimum' => 10,
-                'harga_obat' => 12500,
-                'tanggal_kadaluwarsa' => Carbon::now()->addMonths(8),
-            ],
-            [
-                'id_pengguna' => $apoteker->id_pengguna,
-                'sku' => 'VIT-C500',
-                'nama_obat' => 'Vitamin C 500mg',
-                'kategori' => 'Suplemen',
-                'jenis_obat' => 'Botol (30 Tablet)',
-                'stok' => 80,
-                'batas_minimum' => 20,
-                'harga_obat' => 35000,
-                'tanggal_kadaluwarsa' => Carbon::now()->addMonths(36),
-            ]
+        $daftarApoteker = [$apoteker->id_pengguna, $apoteker2->id_pengguna];
+        $kategoris = ['Analgesik', 'Antibiotik', 'Antihistamin', 'Suplemen', 'Antasida', 'Antipiretik', 'Topikal'];
+        $kemasans = ['Strip (10 Tablet)', 'Strip (10 Kapsul)', 'Botol (60 ml)', 'Botol (30 Tablet)', 'Tube (5 gr)'];
+        $seederNow = Carbon::now();
+
+        // 2. 500 Nama Obat Unik (50 nama dasar x 10 varian sediaan/dosis)
+        $namaObatDasar = [
+            'Paracetamol', 'Amoxicillin', 'Cetirizine', 'Vitamin C', 'Antasida',
+            'Ibuprofen', 'Cefadroxil', 'Loratadine', 'Vitamin B1', 'Omeprazole',
+            'Asam Mefenamat', 'Ciprofloxacin', 'Dexamethasone', 'Minyak Kayu Putih', 'Hidrokortison',
+            'Amlodipine', 'Metformin', 'Simvastatin', 'Captopril', 'Salbutamol',
+            'Loperamide', 'Domperidone', 'Ranitidine', 'Meloxicam', 'Ketoprofen',
+            'Azithromycin', 'Cefixime', 'Clindamycin', 'Metronidazole', 'Doxycycline',
+            'Chlorpheniramine', 'Fexofenadine', 'Vitamin D3', 'Zinc Sulfate', 'Ferrous Sulfate',
+            'Sucralfate', 'Lansoprazole', 'Pantoprazole', 'Piroxicam', 'Diclofenac',
+            'Guaifenesin', 'Dextromethorphan', ' Ambroxol', 'Acetylcysteine', 'Povidone Iodine',
+            'Gentamicin', 'Neomycin', 'Bacitracin', 'Betamethasone', 'Caladine',
         ];
 
-        foreach ($obatData as $obat) {
-            Obat::create($obat);
+        $varianObat = [
+            'Tablet 250mg',
+            'Tablet 500mg',
+            'Kaplet Salut Selaput 500mg',
+            'Kapsul 250mg',
+            'Kapsul 500mg',
+            'Sirup 60ml',
+            'Sirup Forte 100ml',
+            'Drop 15ml',
+            'Krim 5gr',
+            'Salep 10gr',
+        ];
+
+        $namaObat500 = [];
+        foreach ($namaObatDasar as $dasar) {
+            foreach ($varianObat as $varian) {
+                $namaObat500[] = trim($dasar) . ' ' . $varian;
+            }
         }
 
-        \App\Models\Shift::create([
+        // 3. Isi 500 data obat ke database
+        for ($i = 0; $i < 500; $i++) {
+            $nomor     = $i + 1;
+            $namaObat  = $namaObat500[$i];
+            $kategori  = $kategoris[$i % count($kategoris)];
+            $kemasan   = $kemasans[$i % count($kemasans)];
+            $kodeKat   = strtoupper(substr($kategori, 0, 3));
+
+            Obat::create([
+                'id_pengguna'         => $daftarApoteker[$i % count($daftarApoteker)],
+                'sku'                 => $kodeKat . '-' . str_pad((string) $nomor, 3, '0', STR_PAD_LEFT),
+                'nama_obat'           => $namaObat,
+                'kategori'            => $kategori,
+                'jenis_obat'          => $kemasan,
+                'stok'                => 10 + (($nomor * 13) % 90),
+                'batas_minimum'       => 10,
+                'harga_obat'          => 5000 + (($nomor % 20) * 1500),
+                'tanggal_kadaluwarsa' => $seederNow->copy()->addMonths(6 + ($nomor % 24)),
+            ]);
+        }
+
+        // 4. Isi data shift
+        Shift::create([
             'id_pengguna' => $kasir->id_pengguna,
-            'waktu_mulai' => Carbon::now(),
-            'saldo_awal' => 500000,
-            'status' => 'Buka'
+            'waktu_mulai' => $seederNow->copy()->setTime(8, 0, 0),
+            'saldo_awal'  => 500000,
+            'status'      => 'Buka',
+        ]);
+
+        Shift::create([
+            'id_pengguna'   => $kasir2->id_pengguna,
+            'waktu_mulai'   => $seederNow->copy()->subDay()->setTime(8, 0, 0),
+            'waktu_selesai' => $seederNow->copy()->subDay()->setTime(16, 0, 0),
+            'saldo_awal'    => 500000,
+            'saldo_akhir'   => 1250000,
+            'status'        => 'Tutup',
         ]);
     }
 }
