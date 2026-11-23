@@ -108,8 +108,8 @@
 
         <!--tabel opsi mutasi stok-->
         <div class="card shadow-sm border box-sharp p-4">
-            <h4 class="text-center fw-bold mb-1">Opsi Tabel Mutasi Stok</h4>
-            <p class="text-center text-muted small mb-4">Pilih data yang akan ditampilkan pada tabel mendetail di bawah ini.</p>
+            <h4 class="text-center fw-bold mb-1">Pengaturan Tampilan Mutasi Stok</h4>
+            <p class="text-center text-muted small mb-4">Pilih kriteria untuk menampilkan data mutasi stok</p>
             
             <form method="GET" action="">
                 <div class="row g-3 mb-4">
@@ -120,25 +120,25 @@
                         <select name="kategori" class="form-select form-select-sm box-sharp">
                             <option value="">Semua Kategori</option>
                         </select>
-                        <div class="form-text text-muted" style="font-size: 10px;">Filter tabel berdasarkan kategori</div>
+                        <div class="form-text text-muted" style="font-size: 10px;">Menampilkan data berdasarkan kategori obat</div>
                     </div>
 
                     <!-- Pilihan Filter: Jenis Mutasi Stok -->
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Jenis Mutasi Stok</label>
+                        <label class="form-label small fw-bold">Jenis Mutasi</label>
                         <select name="jenis_mutasi" class="form-select form-select-sm box-sharp">
                             <option value="">Semua</option>
                         </select>
-                        <div class="form-text text-muted" style="font-size: 10px;">Penerimaan, Pengeluaran, Transfer, Penyesuaian</div>
+                        <div class="form-text text-muted" style="font-size: 10px;">Jenis transaksi yang ditampilkan pada tabel</div>
                     </div>
 
                     <!-- Pilihan Filter: Mode Tampilan -->
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Mode Tampilan</label>
+                        <label class="form-label small fw-bold">Mode Penilaian</label>
                         <select name="mode_tampilan" class="form-select form-select-sm box-sharp">
                             <option value="">Penilaian Saat Ini</option>
                         </select>
-                        <div class="form-text text-muted" style="font-size: 10px;">Beralih antara Saat Ini / Rerata Bulanan</div>
+                        <div class="form-text text-muted" style="font-size: 10px;">Pilih penilaian berdasarkan kondisi saat ini atau rata-rata bulanan</div>
                     </div>
 
                     <!-- Pilihan Filter: Urutkan Berdasarkan -->
@@ -147,7 +147,7 @@
                         <select name="urutkan" class="form-select form-select-sm box-sharp">
                             <option value="">Nilai Tertinggi</option>
                         </select>
-                        <div class="form-text text-muted" style="font-size: 10px;">Penilaian, Nama, atau Tanggal Mutasi Terakhir</div>
+                        <div class="form-text text-muted" style="font-size: 10px;">Mengurutkan data berdasarkan nilai, nama obat, atau tanggal mutasi terakhir</div>
                     </div>
 
                 </div>
