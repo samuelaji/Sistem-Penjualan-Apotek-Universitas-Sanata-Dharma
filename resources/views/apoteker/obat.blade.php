@@ -196,73 +196,22 @@
         }
 
         .category-filter { flex-shrink: 0; }
-        .category-trigger {
+        .category-select {
             min-width: 205px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.45rem 0.7rem;
+            border-radius: 9px;
             border: 1.5px solid var(--border-soft);
-<<<<<<< HEAD
-            border-radius: 10px;
-=======
-            background-color: #f8fafc;
-            padding: 0.6rem 1.1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
->>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
-            color: var(--text-dark);
-            background: #ffffff;
+            background-color: #ffffff;
+            padding: 0.54rem 1rem;
             font-size: 0.92rem;
-            font-weight: 600;
-            text-align: left;
-            transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-        }
-        .category-trigger:hover,
-        .category-trigger:focus,
-        .category-filter.show .category-trigger {
-            border-color: var(--maroon);
             color: var(--text-dark);
-            background: #fffafa;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .category-select:focus {
+            border-color: var(--maroon);
+            outline: none;
             box-shadow: 0 0 0 3px var(--maroon-soft);
         }
-        .category-trigger.dropdown-toggle::after { margin-left: auto; }
-        .category-trigger-icon,
-        .category-option-icon {
-            width: 32px;
-            height: 32px;
-            flex: 0 0 32px;
-            display: grid;
-            place-items: center;
-            border-radius: 8px;
-            color: var(--maroon);
-            background: var(--maroon-soft);
-            font-size: 0.95rem;
-        }
-        .category-filter .dropdown-menu {
-            min-width: 100%;
-            padding: 0.35rem;
-            border: 1px solid var(--border-soft);
-            border-radius: 12px;
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
-        }
-        .category-option {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.4rem 0.5rem;
-            border-radius: 8px;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        .category-option:hover,
-        .category-option:focus,
-        .category-option.active {
-            color: var(--maroon);
-            background: #fff1f1;
-        }
-        .category-option.active { font-weight: 700; }
 
         .btn-maroon {
             background: var(--maroon);
@@ -648,18 +597,13 @@
 
             <button type="submit" class="btn-maroon" id="btnSearch">Cari</button>
 
-            <div class="category-filter dropdown">
-                <select name="kategori" id="kategoriSelect" class="category-select visually-hidden" aria-label="Filter Kategori" aria-hidden="true" tabindex="-1">
+            <div class="category-filter">
+                <select name="kategori" id="kategoriSelect" class="category-select" aria-label="Filter Kategori">
                     <option value="Semua">Semua Kategori</option>
                     @foreach($kategoriList as $kat)
                         <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ ucfirst($kat) }}</option>
                     @endforeach
                 </select>
-                <button type="button" class="category-trigger dropdown-toggle" id="kategoriDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="listbox">
-                    <span class="category-trigger-icon"><i id="kategoriTriggerIcon" class="bi bi-grid" aria-hidden="true"></i></span>
-                    <span id="kategoriTriggerLabel">Semua Kategori</span>
-                </button>
-                <div class="dropdown-menu category-menu" id="kategoriOptions" role="listbox" aria-label="Kategori obat" aria-labelledby="kategoriDropdown"></div>
             </div>
         </form>
 
@@ -1045,65 +989,12 @@
         const searchInput = document.getElementById('searchInput');
         const btnClearSearch = document.getElementById('btnClearSearch');
         const kategoriSelect = document.getElementById('kategoriSelect');
-        const kategoriTriggerLabel = document.getElementById('kategoriTriggerLabel');
-        const kategoriTriggerIcon = document.getElementById('kategoriTriggerIcon');
-        const kategoriOptions = document.getElementById('kategoriOptions');
         const tableCard = document.getElementById('obatTableCard');
         const tableBody = document.getElementById('obatTableBody');
         const tableFooter = document.getElementById('obatTableFooter');
 
         let searchTimer = null;
         let activeController = null;
-
-        function getCategoryIcon(category) {
-            const name = category.toLowerCase();
-            if (name === 'semua') return 'bi-grid';
-            if (name.includes('antibiotik')) return 'bi-capsule';
-            if (name.includes('analgesik')) return 'bi-bandaid';
-            if (name.includes('antihistamin')) return 'bi-droplet';
-            if (name.includes('suplemen')) return 'bi-heart-pulse';
-            return 'bi-tags';
-        }
-
-        function updateCategoryDropdown() {
-            const selectedOption = kategoriSelect.options[kategoriSelect.selectedIndex];
-            if (!selectedOption) return;
-
-            kategoriTriggerLabel.textContent = selectedOption.textContent.trim();
-            kategoriTriggerIcon.className = 'bi ' + getCategoryIcon(selectedOption.value);
-            kategoriOptions.querySelectorAll('.category-option').forEach(option => {
-                const isSelected = option.dataset.value === kategoriSelect.value;
-                option.classList.toggle('active', isSelected);
-                option.setAttribute('aria-selected', String(isSelected));
-            });
-        }
-
-        Array.from(kategoriSelect.options).forEach(option => {
-            const iconName = getCategoryIcon(option.value);
-            const item = document.createElement('button');
-            item.type = 'button';
-            item.className = 'dropdown-item category-option';
-            item.dataset.value = option.value;
-            item.setAttribute('role', 'option');
-            item.setAttribute('aria-selected', 'false');
-
-            const iconContainer = document.createElement('span');
-            iconContainer.className = 'category-option-icon';
-            const icon = document.createElement('i');
-            icon.className = 'bi ' + iconName;
-            icon.setAttribute('aria-hidden', 'true');
-            iconContainer.appendChild(icon);
-
-            const label = document.createElement('span');
-            label.textContent = option.textContent.trim();
-            item.append(iconContainer, label);
-            item.addEventListener('click', () => {
-                kategoriSelect.value = option.value;
-                kategoriSelect.dispatchEvent(new Event('change', { bubbles: true }));
-            });
-            kategoriOptions.appendChild(item);
-        });
-        updateCategoryDropdown();
 
         function toggleClearButton() {
             btnClearSearch.classList.toggle('d-none', searchInput.value.trim() === '');
@@ -1165,7 +1056,6 @@
         });
 
         kategoriSelect.addEventListener('change', () => {
-            updateCategoryDropdown();
             clearTimeout(searchTimer);
             fetchFilteredObat();
         });

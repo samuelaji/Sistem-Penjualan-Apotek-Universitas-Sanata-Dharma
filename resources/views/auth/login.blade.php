@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - Sistem Penjualan Apotek Sanata Dharma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -424,25 +423,31 @@
                 <p class="text-muted small mb-0">Masukkan kredensial Anda untuk melanjutkan.</p>
             </div>
 
-            <form action="{{ route('login.process') }}" method="POST">
+            <form action="{{ route('login.process') }}" method="POST" novalidate>
                 @csrf
                 <div class="mb-3">
                     <label for="username" class="form-label fw-semibold text-secondary small mb-1">Username</label>
                     <div class="custom-input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username" required autofocus>
+                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username" autofocus>
                     </div>
+                    @error('username')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="form-label fw-semibold text-secondary small mb-1">Kata Sandi</label>
                     <div class="custom-input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi" required>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan kata sandi">
                         <button class="btn border-0 text-secondary pe-3" type="button" id="togglePassword">
                             <i class="bi bi-eye" id="eyeIcon"></i>
                         </button>
                     </div>
+                    @error('password')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-maroon w-100 shadow-sm mt-2">
@@ -561,11 +566,5 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ asset('js/system-popups.js') }}"></script>
-@error('username')
-<script>
-    AppPopup.alert(@json($message), { title: 'Login gagal', icon: 'bi-exclamation-circle' });
-</script>
-@enderror
 </body>
 </html>
