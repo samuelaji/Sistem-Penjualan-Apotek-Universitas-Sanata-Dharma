@@ -423,32 +423,31 @@
                 <p class="text-muted small mb-0">Masukkan kredensial Anda untuk melanjutkan.</p>
             </div>
 
-            @error('username')
-            <div class="alert alert-danger d-flex align-items-center mb-3 rounded-3 py-2 px-3 small border-0 bg-danger bg-opacity-10 text-danger" role="alert">
-                <i class="bi bi-exclamation-circle-fill me-2 fs-6"></i>
-                <div>{{ $message }}</div>
-            </div>
-            @enderror
-
-            <form action="{{ route('login.process') }}" method="POST">
+            <form action="{{ route('login.process') }}" method="POST" novalidate>
                 @csrf
                 <div class="mb-3">
                     <label for="username" class="form-label fw-semibold text-secondary small mb-1">Username</label>
                     <div class="custom-input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username" required autofocus>
+                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username" autofocus>
                     </div>
+                    @error('username')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="form-label fw-semibold text-secondary small mb-1">Kata Sandi</label>
                     <div class="custom-input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi" required>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan kata sandi">
                         <button class="btn border-0 text-secondary pe-3" type="button" id="togglePassword">
                             <i class="bi bi-eye" id="eyeIcon"></i>
                         </button>
                     </div>
+                    @error('password')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-maroon w-100 shadow-sm mt-2">

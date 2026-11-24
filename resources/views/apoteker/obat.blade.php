@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Obat - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -45,10 +46,6 @@
             from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes toastSlideIn {
-            from { opacity: 0; transform: translateY(-16px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
         @keyframes slideForward {
             from { opacity: 0; transform: translateX(28px); }
             to   { opacity: 1; transform: translateX(0); }
@@ -71,29 +68,6 @@
             from { opacity: 0; transform: translateY(-4px); }
             to   { opacity: 1; transform: none; }
         }
-
-        /* ---------- Notifikasi Toast ---------- */
-        .toast-floating {
-            position: fixed;
-            top: 20px;
-            right: 24px;
-            z-index: 1080;
-            background: #ffffff;
-            border: 1px solid var(--border-soft);
-            border-left: 4px solid #10b981;
-            border-radius: 12px;
-            padding: 14px 18px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 340px;
-            max-width: 440px;
-            animation: toastSlideIn 0.35s var(--ease-out) forwards;
-        }
-        .toast-floating.toast-error { border-left-color: #ef4444; }
-        .toast-title { font-size: 0.92rem; font-weight: 700; color: var(--text-dark); }
-        .toast-desc  { font-size: 0.85rem; color: var(--text-muted); }
 
         /* ---------- Header ---------- */
         .pos-header {
@@ -221,19 +195,19 @@
             color: var(--text-dark);
         }
 
+        .category-filter { flex-shrink: 0; }
         .category-select {
-            border-radius: 10px;
+            min-width: 205px;
+            border-radius: 9px;
             border: 1.5px solid var(--border-soft);
-            background-color: #f8fafc;
-            padding: 0.6rem 1.1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
+            background-color: #ffffff;
+            padding: 0.54rem 1rem;
+            font-size: 0.92rem;
             color: var(--text-dark);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
         .category-select:focus {
-            background-color: #ffffff;
             border-color: var(--maroon);
             outline: none;
             box-shadow: 0 0 0 3px var(--maroon-soft);
@@ -502,39 +476,6 @@
             border-color: var(--border-soft);
         }
 
-        /* ---------- Modal ---------- */
-        .modal-content {
-            border-radius: 16px;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
-            overflow: hidden;
-        }
-        .modal-header { padding: 1.15rem 1.4rem; border-bottom: 1px solid var(--border-soft); }
-        .modal-title  { font-size: 1.08rem; }
-        .modal-body   { padding: 1.4rem; }
-        .modal-footer { padding: 0.95rem 1.4rem; border-top: 1px solid var(--border-soft); background: #fafbfc; }
-
-        .modal.fade .modal-dialog {
-            opacity: 0;
-            transform: translateY(24px) scale(0.96);
-            transition: transform 0.4s var(--ease-out), opacity 0.25s ease;
-        }
-        .modal.show .modal-dialog { opacity: 1; transform: none; }
-        .modal-backdrop.show { opacity: 0.45; backdrop-filter: blur(2px); }
-
-        .modal-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 11px;
-            background: var(--maroon-soft);
-            color: var(--maroon);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        .modal-icon.danger { background: #fef2f2; color: #dc2626; }
-
         .form-label { font-size: 0.88rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
         .form-control, .form-select {
             border-radius: 9px;
@@ -617,28 +558,6 @@
 </head>
 <body>
 
-@if(session('success'))
-    <div class="toast-floating" id="floatingToast">
-        <i class="bi bi-check-circle-fill text-success fs-5"></i>
-        <div>
-            <div class="toast-title">Berhasil</div>
-            <div class="toast-desc">{{ session('success') }}</div>
-        </div>
-        <button type="button" class="btn-close ms-auto" aria-label="Tutup" onclick="this.parentElement.remove()"></button>
-    </div>
-@endif
-
-@if($errors->any())
-    <div class="toast-floating toast-error" id="floatingToast">
-        <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
-        <div>
-            <div class="toast-title">Terjadi Kesalahan</div>
-            <div class="toast-desc">{{ $errors->first() }}</div>
-        </div>
-        <button type="button" class="btn-close ms-auto" aria-label="Tutup" onclick="this.parentElement.remove()"></button>
-    </div>
-@endif
-
 <header class="pos-header">
     <div class="d-flex align-items-center gap-4">
         <div class="user-identity">
@@ -678,12 +597,14 @@
 
             <button type="submit" class="btn-maroon" id="btnSearch">Cari</button>
 
-            <select name="kategori" id="kategoriSelect" class="category-select" aria-label="Filter Kategori">
-                <option value="Semua">Semua Kategori</option>
-                @foreach($kategoriList as $kat)
-                    <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ ucfirst($kat) }}</option>
-                @endforeach
-            </select>
+            <div class="category-filter">
+                <select name="kategori" id="kategoriSelect" class="category-select" aria-label="Filter Kategori">
+                    <option value="Semua">Semua Kategori</option>
+                    @foreach($kategoriList as $kat)
+                        <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ ucfirst($kat) }}</option>
+                    @endforeach
+                </select>
+            </div>
         </form>
 
         <button type="button" class="btn-maroon" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
@@ -799,12 +720,13 @@
 </main>
 
 {{-- ============ MODAL TAMBAH DATA OBAT (3 LANGKAH) ============ --}}
-<div class="modal fade" id="modalTambahObat" tabindex="-1" aria-hidden="true">
+<div class="modal fade app-popup-modal" id="modalTambahObat" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header app-popup-form-header">
+                <span class="app-popup-form-icon" aria-hidden="true"><i class="bi bi-capsule"></i></span>
                 <h5 class="modal-title fw-bold text-dark mb-0">Tambah Data Obat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
 
             <form action="{{ route('apoteker.obat.store') }}" method="POST" id="formTambahObat" novalidate>
@@ -839,9 +761,14 @@
                                     </select>
                                     <div class="cp-new">
                                         <div class="input-group">
+<<<<<<< HEAD
+                                            <input type="text" class="form-control cp-new-input text-capitalize" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
+                                            <button type="button" class="btn btn-outline-secondary cp-cancel">Daftar</button>
+=======
                                             <span class="input-group-text"><i class="bi bi-tag"></i></span>
                                             <input type="text" class="form-control cp-new-input" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
                                             <button type="button" class="btn btn-outline-secondary cp-cancel" title="Pilih dari daftar" aria-label="Pilih dari daftar"><i class="bi bi-x-lg"></i></button>
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
                                         </div>
                                     </div>
                                     <input type="hidden" name="kategori" class="cp-value">
@@ -866,17 +793,17 @@
                             <div class="col-6 field">
                                 <label class="form-label" for="add_stok">Stok Awal</label>
                                 <div class="input-group stepper">
-                                    <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah"><i class="bi bi-dash-lg"></i></button>
+                                    <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah">-</button>
                                     <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control text-center js-integer" id="add_stok" name="stok" value="{{ old('stok', 0) }}" data-default="0" autocomplete="off" required>
-                                    <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah"><i class="bi bi-plus-lg"></i></button>
+                                    <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah">+</button>
                                 </div>
                             </div>
                             <div class="col-6 field">
                                 <label class="form-label" for="add_min">Stok Minimum</label>
                                 <div class="input-group stepper">
-                                    <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah"><i class="bi bi-dash-lg"></i></button>
+                                    <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah">-</button>
                                     <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control text-center js-integer" id="add_min" name="batas_minimum" value="{{ old('batas_minimum', 10) }}" data-default="10" autocomplete="off" required>
-                                    <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah"><i class="bi bi-plus-lg"></i></button>
+                                    <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah">+</button>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 field">
@@ -905,11 +832,11 @@
                 <div class="modal-footer justify-content-between">
                     <div>
                         <button type="button" class="btn-soft" id="btnCancel" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn-soft d-none" id="btnBack"><i class="bi bi-arrow-left"></i>Sebelumnya</button>
+                        <button type="button" class="btn-soft d-none" id="btnBack">Sebelumnya</button>
                     </div>
                     <div>
-                        <button type="button" class="btn-maroon" id="btnNext">Berikutnya<i class="bi bi-arrow-right"></i></button>
-                        <button type="submit" class="btn-maroon d-none" id="btnSubmit" data-loading-text="Menyimpan..."><i class="bi bi-check2"></i>Simpan Data</button>
+                        <button type="button" class="btn-maroon" id="btnNext">Berikutnya</button>
+                        <button type="submit" class="btn-maroon d-none" id="btnSubmit" data-loading-text="Menyimpan...">Simpan Data</button>
                     </div>
                 </div>
             </form>
@@ -918,12 +845,13 @@
 </div>
 
 {{-- ============ MODAL UBAH DATA OBAT ============ --}}
-<div class="modal fade" id="modalEditObat" tabindex="-1" aria-hidden="true">
+<div class="modal fade app-popup-modal" id="modalEditObat" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header app-popup-form-header">
+                <span class="app-popup-form-icon" aria-hidden="true"><i class="bi bi-pencil"></i></span>
                 <h5 class="modal-title fw-bold text-dark mb-0">Ubah Data Obat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
             <form id="formEditObat" method="POST" novalidate>
                 @csrf
@@ -946,9 +874,14 @@
                                 </select>
                                 <div class="cp-new">
                                     <div class="input-group">
+<<<<<<< HEAD
+                                        <input type="text" class="form-control cp-new-input text-capitalize" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
+                                        <button type="button" class="btn btn-outline-secondary cp-cancel">Daftar</button>
+=======
                                         <span class="input-group-text"><i class="bi bi-tag"></i></span>
                                         <input type="text" class="form-control cp-new-input" placeholder="Masukkan nama kategori" maxlength="50" autocomplete="off">
                                         <button type="button" class="btn btn-outline-secondary cp-cancel" title="Pilih dari daftar" aria-label="Pilih dari daftar"><i class="bi bi-x-lg"></i></button>
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
                                     </div>
                                 </div>
                                 <input type="hidden" name="kategori" class="cp-value">
@@ -965,17 +898,17 @@
                         <div class="col-6 field">
                             <label class="form-label" for="edit_stok">Stok Tersedia</label>
                             <div class="input-group stepper">
-                                <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah"><i class="bi bi-dash-lg"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah">-</button>
                                 <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control text-center js-integer" id="edit_stok" name="stok" autocomplete="off" required>
-                                <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah"><i class="bi bi-plus-lg"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah">+</button>
                             </div>
                         </div>
                         <div class="col-6 field">
                             <label class="form-label" for="edit_min">Stok Minimum</label>
                             <div class="input-group stepper">
-                                <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah"><i class="bi bi-dash-lg"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" data-stepper="-1" aria-label="Kurangi jumlah">-</button>
                                 <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control text-center js-integer" id="edit_min" name="batas_minimum" autocomplete="off" required>
-                                <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah"><i class="bi bi-plus-lg"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" data-stepper="1" aria-label="Tambah jumlah">+</button>
                             </div>
                         </div>
                         <div class="col-6 field">
@@ -1002,18 +935,21 @@
 </div>
 
 {{-- ============ MODAL KONFIRMASI HAPUS ============ --}}
-<div class="modal fade" id="modalHapusObat" tabindex="-1" aria-hidden="true">
+<div class="modal fade app-popup-modal" id="modalHapusObat" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="max-width: 380px; margin: auto;">
             <form id="formHapusObat" method="POST">
                 @csrf
                 @method('DELETE')
-                <div class="modal-body text-center pt-4">
-                    <span class="modal-icon danger mx-auto mb-3" style="width: 52px; height: 52px; font-size: 1.4rem;"><i class="bi bi-trash"></i></span>
-                    <h5 class="fw-bold mb-2">Hapus Data Obat?</h5>
-                    <p class="text-muted mb-0" style="font-size: 0.94rem;">Data obat <strong id="hapusNamaObat" class="text-dark"></strong> akan dihapus secara permanen.</p>
+                <div class="modal-header app-popup-form-header">
+                    <span class="app-popup-form-icon" aria-hidden="true"><i class="bi bi-trash"></i></span>
+                    <h5 class="modal-title mb-0">Hapus data obat?</h5>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
-                <div class="modal-footer justify-content-center border-top-0 bg-white pt-0 pb-4">
+                <div class="modal-body text-center">
+                    <p class="mb-0">Data obat <strong id="hapusNamaObat"></strong> akan dihapus secara permanen.</p>
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn-soft" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn-maroon js-loading-submit" data-loading-text="Menghapus...">Hapus</button>
                 </div>
@@ -1023,6 +959,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
+@if(session('success'))
+<script>
+    AppPopup.alert(@json(session('success')), { title: 'Berhasil', icon: 'bi-check-circle' });
+</script>
+@endif
+@if($errors->any())
+<script>
+    AppPopup.alert(@json($errors->first()), { title: 'Terjadi kesalahan', icon: 'bi-exclamation-circle' });
+</script>
+@endif
 <script>
     (function () {
         'use strict';
@@ -1036,17 +983,6 @@
         }
         updateClock();
         setInterval(updateClock, 1000);
-
-        /* ---------- Penutupan Otomatis Toast ---------- */
-        const toast = document.getElementById('floatingToast');
-        if (toast) {
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-12px)';
-                setTimeout(() => toast.remove(), 400);
-            }, 3500);
-        }
 
         /* ---------- Pencarian & Filter Realtime ---------- */
         const filterForm = document.getElementById('filterForm');
@@ -1314,7 +1250,7 @@
                 const idx = parseInt(s.dataset.step, 10);
                 s.classList.toggle('active', idx === n);
                 s.classList.toggle('done', idx < n);
-                s.querySelector('.wizard-dot').innerHTML = idx < n ? '<i class="bi bi-check-lg"></i>' : idx;
+                s.querySelector('.wizard-dot').textContent = idx;
             });
             progressFill.style.width = ((n - 1) / (TOTAL_STEPS - 1) * 100) + '%';
             btnCancel.classList.toggle('d-none', n !== 1);

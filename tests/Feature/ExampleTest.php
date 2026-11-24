@@ -16,4 +16,13 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_login_page_does_not_include_popup_scripts(): void
+    {
+        $response = $this->get('/login');
+
+        $response->assertOk();
+        $response->assertDontSee('AppPopup');
+        $response->assertDontSee('system-popups.js');
+    }
 }

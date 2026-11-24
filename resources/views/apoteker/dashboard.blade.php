@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusat Kontrol Apoteker - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -351,16 +352,20 @@
         .panel-right {
             width: 395px;
             min-width: 395px;
-            background: var(--surface);
-            border-radius: 14px;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
             display: flex;
             flex-direction: column;
+            gap: 0.75rem;
             overflow-y: auto;
         }
 
         .panel-section-distinct {
+<<<<<<< HEAD
+            padding: 1rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+=======
             padding: 0.85rem 1.2rem;
             border-bottom: 1px solid var(--border-soft);
             display: flex;
@@ -368,6 +373,7 @@
         }
         .panel-section-distinct:last-child {
             border-bottom: none;
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
         }
 
         .section-heading {
@@ -376,15 +382,43 @@
             letter-spacing: 0.4px;
             text-transform: uppercase;
             color: #334155;
+<<<<<<< HEAD
+            margin: 0;
+        }
+        .section-heading-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ---------- Ringkasan ---------- */
+=======
             display: block;
             margin-bottom: 0.5rem;
         }
 
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
         .kpi-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.55rem;
         }
         .kpi-box {
+<<<<<<< HEAD
+            --kpi-accent: var(--maroon);
+            --kpi-soft: #fff5f5;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-areas: "label" "value";
+            align-items: center;
+            gap: 0.3rem;
+            min-height: 82px;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #f0dada;
+            border-left: 3px solid var(--kpi-accent);
+            border-radius: 11px;
+            background: var(--kpi-soft);
+=======
             padding: 0.85rem 0.5rem;
             text-align: center;
             display: flex;
@@ -401,23 +435,85 @@
         .kpi-box:nth-child(3),
         .kpi-box:nth-child(4) {
             padding-bottom: 0.1rem;
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
         }
         .kpi-label {
-            font-size: 0.76rem;
+            grid-area: label;
+            font-size: 0.68rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 0.3rem;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
+            color: #586579;
         }
         .kpi-value {
-            font-size: 1.55rem;
+            grid-area: value;
+            font-size: 1.65rem;
             font-weight: 800;
             line-height: 1.1;
-            color: var(--text-dark);
+            color: var(--kpi-accent);
             font-variant-numeric: tabular-nums;
         }
+<<<<<<< HEAD
+        /* ---------- Tombol Tindakan ---------- */
+        .btn-maroon-sm {
+            background: var(--maroon);
+            color: #ffffff;
+            border: none;
+            padding: 0.42rem 0.9rem;
+            font-size: 0.86rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-maroon-sm:hover {
+            background: var(--maroon-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-sm {
+            background: #ffffff;
+            color: #dc2626;
+            border: 1px solid var(--border-soft);
+            padding: 0.42rem 0.9rem;
+            font-size: 0.86rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-outline-sm:hover {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        /* ---------- Daftar Stok & Kedaluwarsa ---------- */
+        .side-list {
+            max-height: 205px;
+            overflow-y: auto;
+        }
+        .side-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .side-list-item:first-child { padding-top: 0.1rem; }
+        .side-list-item:last-child {
+            padding-bottom: 0.1rem;
+            border-bottom: 0;
+        }
+        .side-item-main {
+            min-width: 0;
+        }
+        .side-item-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+=======
 
         .side-list-table {
             font-size: 0.92rem;
@@ -425,12 +521,16 @@
         .side-item-title {
             font-size: 0.92rem;
             font-weight: 600;
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
             color: var(--text-dark);
-            max-width: 195px;
         }
         .side-item-sub {
+<<<<<<< HEAD
+            font-size: 0.76rem;
+=======
             font-size: 0.8rem;
             font-weight: 400;
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
             color: var(--text-muted);
             font-variant-numeric: tabular-nums;
         }
@@ -442,6 +542,161 @@
             letter-spacing: 0.25px;
             font-variant-numeric: tabular-nums;
         }
+<<<<<<< HEAD
+        .side-item-badge {
+            flex-shrink: 0;
+            padding: 0.2rem 0.45rem;
+            border-radius: 7px;
+            background: #fce8e8;
+            color: #8b0000;
+            font-size: 0.76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .side-item-badge small {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #7f1d1d;
+        }
+        .side-item-badge.expiry-urgent,
+        .side-item-badge.expiry-normal,
+        .side-item-badge.expiry-warm {
+            background: #fce8e8;
+            color: #8b0000;
+        }
+        .empty-side-list {
+            padding: 0.65rem 0;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        .header-clock {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow: auto;
+            }
+            .pos-header {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+            .pos-header > .d-flex:first-child {
+                flex-wrap: wrap;
+                gap: 0.75rem !important;
+            }
+            .pos-header > .d-flex:last-child {
+                margin-left: auto;
+            }
+            .nav-segmented {
+                margin-left: 0 !important;
+            }
+            .pos-container {
+                flex: none;
+                flex-direction: column;
+                overflow: visible;
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+            .workspace-left {
+                flex: none;
+                min-width: 0;
+                overflow: visible;
+            }
+            .table-card {
+                flex: none;
+                min-height: 440px;
+            }
+            .table-wrapper {
+                min-height: 0;
+                overflow: auto;
+            }
+            .table-custom-scrollable {
+                min-width: 1050px;
+            }
+            .table-custom-empty {
+                width: 100%;
+                table-layout: fixed;
+            }
+            .table-custom-empty thead {
+                display: none;
+            }
+            .panel-right {
+                width: 100%;
+                min-width: 0;
+                overflow: visible;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                align-items: start;
+            }
+            .panel-section-distinct:first-child {
+                grid-column: 1 / -1;
+            }
+            .panel-section-distinct.flex-grow-1 {
+                flex-grow: 0 !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pos-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .pos-header > .d-flex:first-child {
+                width: 100%;
+            }
+            .pos-header > .d-flex:last-child {
+                width: 100%;
+                justify-content: flex-end;
+                margin-left: 0;
+            }
+            .nav-segmented {
+                width: 100%;
+            }
+            .nav-segmented a {
+                flex: 1;
+                padding: 0.5rem 0.35rem;
+                font-size: 0.78rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .pos-container {
+                padding: 0.65rem;
+            }
+            .table-card {
+                min-height: 390px;
+            }
+            .empty-center-cell {
+                height: 260px;
+            }
+            .table-card-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0.65rem;
+                padding: 0.85rem 1rem;
+            }
+            .card-title-main {
+                font-size: 0.98rem;
+            }
+            .card-title-sub {
+                font-size: 0.78rem;
+            }
+            .panel-right {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .panel-section-distinct:first-child {
+                grid-column: auto;
+            }
+        }
+=======
         .stock-current {
             font-size: 0.9rem;
             font-weight: 600;
@@ -462,6 +717,7 @@
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
         }
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
     </style>
 </head>
 <body>
@@ -511,7 +767,7 @@
             </div>
 
             <div class="table-wrapper">
-                <table class="table-custom">
+                <table class="table-custom {{ $totalPending > 0 ? 'table-custom-scrollable' : 'table-custom-empty' }}">
                     <thead>
                     <tr>
                         <th style="width: 4%;">No.</th>
@@ -550,6 +806,18 @@
                                     <td rowspan="{{ $rowCount }}" class="col-faskes">{{ $trx->resep?->nama_klinik ?? '-' }}</td>
                                 @endif
 
+<<<<<<< HEAD
+                                    <form action="{{ route('apoteker.resep.reject', $trx->id_transaksi) }}" method="POST" class="m-0"
+                                          data-confirm="Apakah Anda yakin ingin menolak resep ini?"
+                                          data-confirm-title="Tolak resep?"
+                                          data-confirm-accept="Tolak resep">
+                                        @csrf
+                                        <button type="submit" class="btn-outline-sm">Tolak</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+=======
                                 <td class="col-obat">{{ $detail->obat->nama_obat ?? 'Obat' }}</td>
                                 <td class="col-jumlah">
                                     <span class="qty-val">{{ $detail->jumlah_beli }}</span>
@@ -604,6 +872,7 @@
                             </tr>
                         @endforelse
                         </tbody>
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
                     @empty
                         <tbody>
                         <tr>
@@ -624,9 +893,10 @@
 
     <aside class="panel-right">
 
-        <!-- Bagian 1: Ringkasan KPI -->
         <div class="panel-section-distinct">
-            <span class="section-heading">Ringkasan</span>
+            <div class="section-heading-row">
+                <h2 class="section-heading">Ringkasan</h2>
+            </div>
             <div class="kpi-grid">
                 <div class="kpi-box">
                     <span class="kpi-label">Antrean Resep</span>
@@ -650,6 +920,59 @@
             </div>
         </div>
 
+<<<<<<< HEAD
+        <div class="panel-section-distinct">
+            <div class="section-heading-row">
+                <h2 class="section-heading">Stok Menipis</h2>
+            </div>
+            <div class="side-list">
+                @forelse($stokKritis as $obat)
+                    <div class="side-list-item">
+                        <div class="side-item-main">
+                            <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                            <span class="side-item-sub font-monospace">{{ $obat->sku }}</span>
+                        </div>
+                        <span class="side-item-badge">
+                            {{ $obat->stok }} <small>/ {{ $obat->batas_minimum }} unit</small>
+                        </span>
+                    </div>
+                @empty
+                    <div class="empty-side-list">Semua stok obat aman.</div>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="panel-section-distinct flex-grow-1">
+            <div class="section-heading-row">
+                <h2 class="section-heading">Hampir Kedaluwarsa</h2>
+            </div>
+            <div class="side-list">
+                @forelse($mendekatiExpired as $obat)
+                    @php
+                        $tglExp       = \Carbon\Carbon::parse($obat->tanggal_kadaluwarsa)->startOfDay();
+                        $diffInDays   = (int) now()->startOfDay()->diffInDays($tglExp, false);
+                        $diffInMonths = (int) round($diffInDays / 30);
+                    @endphp
+                    <div class="side-list-item">
+                        <div class="side-item-main">
+                            <div class="side-item-title text-truncate">{{ $obat->nama_obat }}</div>
+                            <span class="side-item-sub">{{ $tglExp->format('d M Y') }}</span>
+                        </div>
+                        @if($diffInDays <= 0)
+                            <span class="side-item-badge expiry-urgent">Kedaluwarsa</span>
+                        @elseif($diffInMonths <= 3)
+                            <span class="side-item-badge expiry-urgent">{{ max(1, $diffInMonths) }} Bulan</span>
+                        @elseif($diffInMonths <= 6)
+                            <span class="side-item-badge expiry-warm">{{ $diffInMonths }} Bulan</span>
+                        @else
+                            <span class="side-item-badge expiry-normal">{{ $diffInMonths }} Bulan</span>
+                        @endif
+                    </div>
+                @empty
+                    <div class="empty-side-list">Tidak ada obat mendekati kedaluwarsa.</div>
+                @endforelse
+            </div>
+=======
         <!-- Bagian 2: Stok Menipis (Default tampil 3 item penuh) -->
         <div class="panel-section-distinct">
             <span class="section-heading">Stok Menipis</span>
@@ -719,12 +1042,15 @@
                     <span class="side-empty-text">Belum ada obat yang mendekati kadaluarsa.</span>
                 </div>
             @endif
+>>>>>>> 85f962df5a0200d198d0ed7bf464eef99e2064d9
         </div>
 
     </aside>
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
 <script>
     (function () {
         'use strict';

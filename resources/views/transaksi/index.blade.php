@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Terminal POS - Apotek USD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/system-popups.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -631,6 +632,7 @@
         }
         .btn-pay:active { transform: scale(0.99); }
         .btn-pay:disabled { opacity: 0.75; cursor: wait; }
+
     </style>
 </head>
 <body>
@@ -767,7 +769,7 @@
             </div>
         </div>
 
-        <div class="panel-section flex-grow-1 d-flex flex-column justify-content-between">
+   <div class="panel-section flex-grow-1 d-flex flex-column justify-content-between">
             <div>
                 <div class="total-display-box">
                     <span class="total-label" id="totalLabelText">Total Tagihan</span>
@@ -809,7 +811,52 @@
                         <span class="fw-bold text-muted" style="font-size: 1.02rem;" id="changeAmountDisplay">Rp 0</span>
                     </div>
                 </div>
+
+                 <div class="smooth-accordion" id="qrisCalcArea">
+                    <div>
+                        <label class="form-label fw-semibold text-muted mb-1" for="qrisReceivedInput" style="font-size: 0.86rem;">Uang Diterima</label>
+                        <div class="cash-input-group">
+                            <span class="cash-prefix">Rp</span>
+                            <input
+                                type="text"
+                                class="cash-input"
+                                id="qrisReceivedInput"
+                                placeholder="0"
+                                inputmode="numeric"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="change-box">
+                        <span class="text-muted fw-semibold">Kembalian</span>
+                        <span class="fw-bold text-muted" style="font-size: 1.02rem;" id="qrisChangeAmountDisplay">Rp 0</span>
+                    </div>
+                </div>
+
+                <div class="smooth-accordion" id="transferCalcArea">
+                    <div>
+                        <label class="form-label fw-semibold text-muted mb-1" for="transferReceivedInput" style="font-size: 0.86rem;">Uang Diterima</label>
+                        <div class="cash-input-group">
+                            <span class="cash-prefix">Rp</span>
+                            <input
+                                type="text"
+                                class="cash-input"
+                                id="transferReceivedInput"
+                                placeholder="0"
+                                inputmode="numeric"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="change-box">
+                        <span class="text-muted fw-semibold">Kembalian</span>
+                        <span class="fw-bold text-muted" style="font-size: 1.02rem;" id="transferChangeAmountDisplay">Rp 0</span>
+                    </div>
+                </div>
             </div>
+        </div>
 
             <div class="pt-3">
                 <button type="button" class="btn-pay" id="btnCompletePayment">
@@ -820,11 +867,22 @@
     </aside>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/system-popups.js') }}"></script>
 <script>
     const masterObatList = @json($obatList);
 
     let activeTransaction = [];
     let grandTotal = 0;
+
+    function showTransactionResult(title, message, success) {
+        AppPopup.alert(message, {
+            title: title,
+            icon: success ? 'bi-check-circle' : 'bi-exclamation-circle'
+        }).then(function () {
+            if (success) window.location.reload();
+        });
+    }
 
     const rupiahFormatter = new Intl.NumberFormat('id-ID');
     const formatRupiah = (val) => 'Rp ' + rupiahFormatter.format(Number(val) || 0);
@@ -847,6 +905,8 @@
     const tableBody = document.getElementById('transactionTableBody');
     const emptyRow = document.getElementById('emptyTableRow');
     const cashInput = document.getElementById('cashReceivedInput');
+    const qrisInput = document.getElementById('qrisReceivedInput');
+    const transferInput = document.getElementById('transferReceivedInput');
 
     /* ---------- Jam Header (WIB) ---------- */
     const clockEl = document.getElementById('headerLiveClock');
@@ -870,6 +930,8 @@
 
         const paymentSection = document.getElementById('paymentMethodSection');
         const cashArea = document.getElementById('cashCalcArea');
+        const qrisArea = document.getElementById('qrisCalcArea');
+        const transferArea = document.getElementById('transferCalcArea');
         const bluExpandable = document.getElementById('bluExpandableArea');
         const tanpaResepWrapper = document.getElementById('tanpaResepWrapper');
         const radioTanpaResep = document.getElementById('resep-non');
@@ -880,6 +942,8 @@
         if (isBlu) {
             paymentSection.classList.remove('active');
             cashArea.classList.remove('active');
+            qrisArea.classList.remove('active');
+            transferArea.classList.remove('active');
             document.getElementById('totalLabelText').textContent = 'Nilai Penjaminan BLU';
 
             tanpaResepWrapper.style.display = 'none';
@@ -889,11 +953,15 @@
             paymentSection.classList.add('active');
             document.getElementById('totalLabelText').textContent = 'Total Tagihan';
             cashArea.classList.toggle('active', selectedPayment === 'Cash');
+            qrisArea.classList.toggle('active', selectedPayment === 'QRIS');
+            transferArea.classList.toggle('active', selectedPayment === 'Transfer');
 
             tanpaResepWrapper.style.display = 'contents';
             radioTanpaResep.checked = true;
             toggleRecipeType();
         }
+
+        calculateChange();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1014,7 +1082,7 @@
     function addItemToTransaction(obat) {
         const maxStok = Number(obat.stok) || 0;
         if (maxStok <= 0) {
-            alert('Stok obat tidak tersedia.');
+            AppPopup.alert('Stok obat tidak tersedia.', { title: 'Stok tidak tersedia' });
             return;
         }
 
@@ -1023,7 +1091,7 @@
             if (exist.qty < maxStok) {
                 exist.qty += 1;
             } else {
-                alert('Jumlah melebihi stok tersedia.');
+                AppPopup.alert('Jumlah melebihi stok tersedia.', { title: 'Stok tidak mencukupi' });
             }
         } else {
             activeTransaction.push({
@@ -1106,7 +1174,7 @@
             removeItem(index);
             return;
         } else if (newQty > item.max_stok) {
-            alert('Jumlah melebihi stok tersedia.');
+            AppPopup.alert('Jumlah melebihi stok tersedia.', { title: 'Stok tidak mencukupi' });
         }
         renderTable();
     }
@@ -1116,8 +1184,11 @@
         renderTable();
     }
 
-    function clearTransaction() {
-        if (activeTransaction.length > 0 && confirm('Kosongkan seluruh item pada transaksi ini?')) {
+    async function clearTransaction() {
+        if (activeTransaction.length > 0 && await AppPopup.confirm('Kosongkan seluruh item pada transaksi ini?', {
+            title: 'Kosongkan transaksi?',
+            acceptText: 'Kosongkan'
+        })) {
             activeTransaction = [];
             renderTable();
         }
@@ -1130,9 +1201,16 @@
     }
 
     function calculateChange() {
-        const received = parseNominal(cashInput.value);
+        const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash';
+        const paymentInputs = {
+            Cash: { input: cashInput, display: document.getElementById('changeAmountDisplay') },
+            QRIS: { input: qrisInput, display: document.getElementById('qrisChangeAmountDisplay') },
+            Transfer: { input: transferInput, display: document.getElementById('transferChangeAmountDisplay') }
+        };
+        const payment = paymentInputs[selectedPayment] || paymentInputs.Cash;
+        const received = parseNominal(payment.input.value);
         const change = received - grandTotal;
-        const changeDisplay = document.getElementById('changeAmountDisplay');
+        const changeDisplay = payment.display;
 
         if (received >= grandTotal && grandTotal > 0) {
             changeDisplay.textContent = formatRupiah(change);
@@ -1146,25 +1224,30 @@
         }
     }
 
-    cashInput.addEventListener('input', function () {
-        const digitsBefore = this.value.slice(0, this.selectionStart).replace(/\D/g, '').length;
-        const digits = this.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+    [cashInput, qrisInput, transferInput].forEach(function (input) {
+        input.addEventListener('input', function () {
+            const digitsBefore = this.value.slice(0, this.selectionStart).replace(/\D/g, '').length;
+            const digits = this.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
 
-        this.value = digits ? rupiahFormatter.format(digits) : '';
+            this.value = digits ? rupiahFormatter.format(digits) : '';
 
-        let seen = 0, pos = 0;
-        while (pos < this.value.length && seen < digitsBefore) {
-            if (/\d/.test(this.value[pos])) seen++;
-            pos++;
-        }
-        this.setSelectionRange(pos, pos);
+            let seen = 0, pos = 0;
+            while (pos < this.value.length && seen < digitsBefore) {
+                if (/\d/.test(this.value[pos])) seen++;
+                pos++;
+            }
+            this.setSelectionRange(pos, pos);
 
-        calculateChange();
+            calculateChange();
+        });
     });
 
     /* ---------- Pintasan Keyboard ---------- */
     document.addEventListener('keydown', function (e) {
-        if (e.key === '/' && document.activeElement !== searchInput && document.activeElement !== cashInput) {
+        if (e.key === '/' && document.activeElement !== searchInput &&
+            document.activeElement !== cashInput &&
+            document.activeElement !== qrisInput &&
+            document.activeElement !== transferInput) {
             e.preventDefault();
             searchInput.focus();
         }
@@ -1181,7 +1264,7 @@
     /* ---------- Simpan Transaksi ---------- */
     document.getElementById('btnCompletePayment').addEventListener('click', async function () {
         if (activeTransaction.length === 0) {
-            alert('Belum ada item obat yang ditambahkan.');
+            AppPopup.alert('Belum ada item obat yang ditambahkan.', { title: 'Transaksi masih kosong' });
             return;
         }
 
@@ -1192,13 +1275,22 @@
         let cashReceived = 0;
         let changeAmount = 0;
 
-        if (patientType === 'Umum' && paymentMethod === 'Cash') {
-            cashReceived = parseNominal(cashInput.value);
+        if (patientType === 'Umum') {
+            const paymentInputs = {
+                Cash: cashInput,
+                QRIS: qrisInput,
+                Transfer: transferInput
+            };
+            const receivedInput = paymentInputs[paymentMethod] || cashInput;
+            cashReceived = parseNominal(receivedInput.value);
             changeAmount = cashReceived - grandTotal;
 
             if (cashReceived < grandTotal) {
-                alert('Nominal uang tunai kurang dari total tagihan.');
-                cashInput.focus();
+                AppPopup.alert('Nominal pembayaran kurang dari total tagihan.', {
+                    title: 'Pembayaran belum cukup'
+                }).then(function () {
+                    receivedInput.focus();
+                });
                 return;
             }
         } else {
@@ -1238,22 +1330,32 @@
 
             const result = await response.json();
             if (response.ok && result.success) {
-                alert('Transaksi berhasil disimpan.');
-                window.location.reload();
+                showTransactionResult(
+                    'Pembayaran berhasil!',
+                    'Transaksi berhasil disimpan dan tercatat pada sistem apotek.',
+                    true
+                );
             } else {
-                alert('Transaksi gagal diproses: ' + (result.message || 'Terjadi kesalahan pada server.'));
+                showTransactionResult(
+                    'Transaksi belum berhasil',
+                    result.message || 'Transaksi gagal diproses. Silakan coba kembali.',
+                    false
+                );
                 btn.innerHTML = originalBtnHTML;
                 btn.disabled = false;
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Terjadi kesalahan jaringan atau server.');
+            showTransactionResult(
+                'Koneksi bermasalah',
+                'Terjadi kesalahan jaringan atau server. Periksa koneksi, lalu coba kembali.',
+                false
+            );
             btn.innerHTML = originalBtnHTML;
             btn.disabled = false;
         }
     });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
